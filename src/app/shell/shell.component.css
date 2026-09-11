@@ -12,11 +12,16 @@
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border-bottom: 1px solid var(--hairline);
+  /* A header wider than the screen scrolls the whole page sideways, and a
+     sideways-scrolled page drags the fixed tab bar off-screen with it. The
+     brand is the only flexible part, so it yields first. */
+  overflow: hidden;
 }
 .brandmark {
   display: inline-flex;
   align-items: center;
   gap: 9px;
+  min-width: 0;
   text-decoration: none;
   color: var(--text);
 }
@@ -35,23 +40,35 @@
   height: 26px;
 }
 .brand-name {
+  min-width: 0;
   font-size: 19px;
   font-weight: 700;
   letter-spacing: -0.02em;
   white-space: nowrap;
-}
-.brand-admin {
-  padding: 3px 8px;
-  border-radius: var(--r-sm);
-  background: var(--accent-soft);
-  color: var(--tui-text-action);
-  font-size: 10.5px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .shell-spacer {
   flex: 1 1 auto;
+  min-width: 0;
+}
+/* Phones: tighter chrome so the controls never push past the viewport. */
+@media (max-width: 480px) {
+  .shell-header {
+    gap: 2px;
+    padding: 0 10px;
+  }
+  .brand-dot {
+    width: 34px;
+    height: 34px;
+  }
+  .brand-dot .ss-ic {
+    width: 23px;
+    height: 23px;
+  }
+  .brand-name {
+    font-size: 17px;
+  }
 }
 /* ── Body layout ─────────────────────────────────────────────────────────── */
 .shell-body {

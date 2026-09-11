@@ -266,6 +266,11 @@ body {
   font-family: var(--font);
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+  /* Safety net for the phone chrome: a page that scrolls sideways drags the
+     fixed tab bar off with it. `clip` (not `hidden`) trims a stray overhang
+     without turning <body> into a scroll container, so sticky headers and the
+     tables' own horizontal rails keep working. */
+  overflow-x: clip;
 }
 ::selection {
   background: var(--accent);
