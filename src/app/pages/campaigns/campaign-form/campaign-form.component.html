@@ -3,24 +3,28 @@
     <!-- THE live sentence: not copy to edit — the EXACT generated text players
          will read (docs/24 v2), rewritten on every keystroke. -->
     <div class="cf-preview" data-testid="campaign-preview">
-      <span class="cf-preview-eyebrow georgian-text" lang="ka">როგორ წაიკითხავს მოთამაშე</span>
+      <span class="cf-preview-eyebrow georgian-text" lang="ka">
+        {{ 'როგორ წაიკითხავს მოთამაშე' | t }}
+      </span>
       <p class="cf-preview-text georgian-text" lang="ka">{{ previewSentence() }}</p>
     </div>
 
     @if (termsLocked) {
       <div class="cf-lock georgian-text" lang="ka" data-testid="campaign-terms-locked">
-        მონაწილეები უკვე შეუერთდნენ — მიზანი და ჯილდო დაბლოკილია. შეგიძლიათ შეცვალოთ
-        მოედნები, პერიოდი და გამორთოთ კამპანია — ვინც უკვე თამაშობს, ბოლომდე მიიყვანს.
+        {{
+          'მონაწილეები უკვე შეუერთდნენ — მიზანი და ჯილდო დაბლოკილია. შეგიძლიათ შეცვალოთ მოედნები, პერიოდი და გამორთოთ კამპანია — ვინც უკვე თამაშობს, ბოლომდე მიიყვანს.'
+            | t
+        }}
       </div>
     }
 
     <!-- ── 1. The offer ─────────────────────────────────────────────────── -->
     <div class="cf-section">
-      <div class="cf-section-title georgian-text" lang="ka">შეთავაზება</div>
+      <div class="cf-section-title georgian-text" lang="ka">{{ 'შეთავაზება' | t }}</div>
       <div class="grid grid-cols-2 gap-4">
         <label class="ss-field">
           <span class="ss-label georgian-text" lang="ka">
-            მიზნის ტიპი <span class="text-red-500">*</span>
+            {{ 'მიზნის ტიპი' | t }} <span class="text-red-500">*</span>
           </span>
           <select class="ss-input georgian-text" lang="ka" formControlName="goalType">
             @for (option of goalTypeOptions; track option) {
@@ -32,7 +36,7 @@
         @if (goalType() === 'bookings') {
           <label class="ss-field">
             <span class="ss-label georgian-text" lang="ka">
-              რამდენჯერ <span class="text-red-500">*</span>
+              {{ 'რამდენჯერ' | t }} <span class="text-red-500">*</span>
             </span>
             <input
               class="ss-input"
@@ -46,13 +50,13 @@
               data-testid="campaign-goal-count"
             />
             @if (form.get('goalCount')?.touched && form.get('goalCount')?.invalid) {
-              <span class="ss-error georgian-text" lang="ka">შეიყვანეთ 1–200</span>
+              <span class="ss-error georgian-text" lang="ka">{{ 'შეიყვანეთ 1–200' | t }}</span>
             }
           </label>
         } @else {
           <label class="ss-field">
             <span class="ss-label georgian-text" lang="ka">
-              რა თანხა (₾) <span class="text-red-500">*</span>
+              {{ 'რა თანხა (₾)' | t }} <span class="text-red-500">*</span>
             </span>
             <input
               class="ss-input"
@@ -67,7 +71,9 @@
               data-testid="campaign-goal-gel"
             />
             @if (form.get('goalGel')?.touched && form.get('goalGel')?.invalid) {
-              <span class="ss-error georgian-text" lang="ka">შეიყვანეთ 1–50000 ₾</span>
+              <span class="ss-error georgian-text" lang="ka">
+                {{ 'შეიყვანეთ 1–50000 ₾' | t }}
+              </span>
             }
           </label>
         }
@@ -76,11 +82,11 @@
 
     <!-- ── 2. The reward ────────────────────────────────────────────────── -->
     <div class="cf-section">
-      <div class="cf-section-title georgian-text" lang="ka">ჯილდო</div>
+      <div class="cf-section-title georgian-text" lang="ka">{{ 'ჯილდო' | t }}</div>
       <div class="grid grid-cols-2 gap-4">
         <label class="ss-field">
           <span class="ss-label georgian-text" lang="ka">
-            ვაუჩერი (₾) <span class="text-red-500">*</span>
+            {{ 'ვაუჩერი (₾)' | t }} <span class="text-red-500">*</span>
           </span>
           <input
             class="ss-input"
@@ -95,50 +101,52 @@
             data-testid="campaign-reward-gel"
           />
           @if (form.get('rewardGel')?.touched && form.get('rewardGel')?.invalid) {
-            <span class="ss-error georgian-text" lang="ka">შეიყვანეთ 1–5000 ₾</span>
+            <span class="ss-error georgian-text" lang="ka">{{ 'შეიყვანეთ 1–5000 ₾' | t }}</span>
           }
         </label>
         <label class="ss-field">
-          <span class="ss-label georgian-text" lang="ka">ვაუჩერის ვადა (დღე)</span>
+          <span class="ss-label georgian-text" lang="ka">{{ 'ვაუჩერის ვადა (დღე)' | t }}</span>
           <input
             class="ss-input"
             formControlName="rewardValidDays"
             type="number"
             min="1"
             max="365"
-            placeholder="უვადო"
+            [placeholder]="'უვადო' | t"
           />
         </label>
       </div>
 
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">რამდენჯერ შეიძლება მოგება</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'რამდენჯერ შეიძლება მოგება' | t }}</span>
         <select
           class="ss-input georgian-text"
           lang="ka"
           formControlName="maxCompletionsPerUser"
         >
-          <option [ngValue]="1">ერთხელ</option>
-          <option [ngValue]="3">სამჯერ</option>
+          <option [ngValue]="1">{{ 'ერთხელ' | t }}</option>
+          <option [ngValue]="3">{{ 'სამჯერ' | t }}</option>
           @if (customCompletions !== null) {
-            <option [ngValue]="customCompletions">{{ customCompletions }}-ჯერ</option>
+            <option [ngValue]="customCompletions">
+              {{ customCompletions }}{{ '-ჯერ' | t }}
+            </option>
           }
-          <option [ngValue]="null">შეუზღუდავად</option>
+          <option [ngValue]="null">{{ 'შეუზღუდავად' | t }}</option>
         </select>
       </label>
     </div>
 
     <!-- ── 3. Where ─────────────────────────────────────────────────────── -->
     <div class="cf-section">
-      <div class="cf-section-title georgian-text" lang="ka">სად</div>
+      <div class="cf-section-title georgian-text" lang="ka">{{ 'სად' | t }}</div>
 
       @if (isSuperAdmin()) {
         <label class="ss-field">
-          <span class="ss-label georgian-text" lang="ka">აკადემია</span>
+          <span class="ss-label georgian-text" lang="ka">{{ 'აკადემია' | t }}</span>
           <ss-academy-select
             [academies]="academies()"
-            emptyLabel="პლატფორმა (ყველა აკადემია)"
-            ariaLabel="აკადემია"
+            [emptyLabel]="'პლატფორმა (ყველა აკადემია)' | t"
+            [ariaLabel]="'აკადემია' | t"
             formControlName="academyId"
           />
         </label>
@@ -151,7 +159,7 @@
           [class.is-active]="selectedFacilityIds().length === 0"
           (click)="selectAllFacilities()"
         >
-          <span class="georgian-text" lang="ka">ყველა მოედანი</span>
+          <span class="georgian-text" lang="ka">{{ 'ყველა მოედანი' | t }}</span>
         </button>
         @for (facility of facilities(); track facility._id) {
           <button
@@ -165,20 +173,20 @@
         }
       </div>
       <span class="ss-hint georgian-text" lang="ka">
-        არცერთის არჩევა = კამპანია ყველა მოედანზე მოქმედებს და ვაუჩერიც ყველგან იხარჯება.
+        {{ 'არცერთის არჩევა = კამპანია ყველა მოედანზე მოქმედებს და ვაუჩერიც ყველგან იხარჯება.' | t }}
       </span>
     </div>
 
     <!-- ── 4. When ──────────────────────────────────────────────────────── -->
     <div class="cf-section">
-      <div class="cf-section-title georgian-text" lang="ka">პერიოდი</div>
+      <div class="cf-section-title georgian-text" lang="ka">{{ 'პერიოდი' | t }}</div>
       <div class="grid grid-cols-2 gap-4">
         <label class="ss-field">
-          <span class="ss-label georgian-text" lang="ka">დაწყება</span>
+          <span class="ss-label georgian-text" lang="ka">{{ 'დაწყება' | t }}</span>
           <input class="ss-input" formControlName="startsAt" type="date" />
         </label>
         <label class="ss-field">
-          <span class="ss-label georgian-text" lang="ka">დასრულება (დედლაინი)</span>
+          <span class="ss-label georgian-text" lang="ka">{{ 'დასრულება (დედლაინი)' | t }}</span>
           <input
             class="ss-input"
             formControlName="endsAt"
@@ -188,22 +196,26 @@
         </label>
       </div>
       <span class="ss-hint georgian-text" lang="ka">
-        დასრულების თარიღი არის მოთამაშეების საერთო დედლაინი — ვინც ამ დღემდე შეასრულებს
-        პირობას, საჩუქარს მიიღებს. თარიღის გარეშე კამპანია გამორთვამდე გრძელდება.
+        {{
+          'დასრულების თარიღი არის მოთამაშეების საერთო დედლაინი — ვინც ამ დღემდე შეასრულებს პირობას, საჩუქარს მიიღებს. თარიღის გარეშე კამპანია გამორთვამდე გრძელდება.'
+            | t
+        }}
       </span>
       <label class="flex items-center gap-2 mt-2">
         <input class="ss-switch" type="checkbox" formControlName="active" />
-        <span class="georgian-text" lang="ka">აქტიური</span>
+        <span class="georgian-text" lang="ka">{{ 'აქტიური' | t }}</span>
       </label>
       <span class="ss-hint georgian-text" lang="ka">
-        გამორთვა აჩერებს ახალი მოთამაშეების შემოსვლას — ვინც უკვე თამაშობს, დედლაინამდე
-        აგრძელებს და საჩუქარსაც მიიღებს.
+        {{
+          'გამორთვა აჩერებს ახალი მოთამაშეების შემოსვლას — ვინც უკვე თამაშობს, დედლაინამდე აგრძელებს და საჩუქარსაც მიიღებს.'
+            | t
+        }}
       </span>
     </div>
 
     <div class="flex justify-end gap-3 pt-2">
       <button class="ss-btn ss-btn--outline" type="button" (click)="cancel()">
-        <span class="georgian-text" lang="ka">გაუქმება</span>
+        <span class="georgian-text" lang="ka">{{ 'გაუქმება' | t }}</span>
       </button>
       <button
         class="ss-btn ss-btn--primary"
@@ -211,7 +223,7 @@
         [disabled]="isSaving()"
         data-testid="campaign-submit"
       >
-        <span class="georgian-text" lang="ka">შენახვა</span>
+        <span class="georgian-text" lang="ka">{{ 'შენახვა' | t }}</span>
       </button>
     </div>
   </form>

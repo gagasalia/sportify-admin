@@ -23,6 +23,8 @@ import {
 
 import { SsToastService } from '../../../../shared/ui/toast.service';
 import { SS_DIALOG_CONTEXT, SsDialogContext, SsDialogService } from '../../../../shared/ui/dialog.service';
+import { tr } from '../../../../shared/i18n/lang';
+import { TPipe } from '../../../../shared/i18n/t.pipe';
 /**
  * Court create/edit form — Taiga-free template (ss-* kit, native selects). It
  * still RENDERS inside a SsDialogService dialog (SS_DIALOG_CONTEXT below);
@@ -31,7 +33,7 @@ import { SS_DIALOG_CONTEXT, SsDialogContext, SsDialogService } from '../../../..
 @Component({
   selector: 'app-court-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, TPipe],
   templateUrl: './court-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -100,15 +102,17 @@ export class CourtFormComponent implements OnInit {
 
     saveOperation.pipe(take(1)).subscribe({
       next: (savedCourt) => {
-        const message = editingCourt ? 'კორტი წარმატებით განახლდა!' : 'კორტი წარმატებით დაემატა!';
+        const message = editingCourt
+          ? tr('კორტი წარმატებით განახლდა!')
+          : tr('კორტი წარმატებით დაემატა!');
         this.alerts.open(message, { appearance: 'success' }).pipe(take(1)).subscribe();
         this.context.completeWith(savedCourt);
       },
       error: (error) => {
         console.error('Error saving court:', error);
         const message = editingCourt
-          ? 'შეცდომა კორტის განახლებისას.'
-          : 'შეცდომა კორტის დამატებისას.';
+          ? tr('შეცდომა კორტის განახლებისას.')
+          : tr('შეცდომა კორტის დამატებისას.');
         this.alerts.open(message, { appearance: 'error' }).pipe(take(1)).subscribe();
       },
     });

@@ -3,11 +3,11 @@
     <div
       class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 min-h-16"
     >
-      <h1 class="text-2xl font-semibold georgian-text" lang="ka">ობიექტები</h1>
+      <h1 class="text-2xl font-semibold georgian-text" lang="ka">{{ 'ობიექტები' | t }}</h1>
       @if (facilities().length > 0) {
         <button class="ss-btn ss-btn--primary" type="button" (click)="addFacility()">
           <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/plus.svg')"></i>
-          <span class="georgian-text" lang="ka">ობიექტის დამატება</span>
+          <span class="georgian-text" lang="ka">{{ 'ობიექტის დამატება' | t }}</span>
         </button>
       }
     </div>
@@ -16,10 +16,10 @@
   @if (facilities().length === 0 && !isLoading()) {
     <div class="flex flex-col items-center justify-center py-16">
       <img src="images/no-result.png" alt="No facilities" class="w-64 h-64 mb-6 opacity-50" />
-      <p class="text-lg text-gray-500 mb-6 georgian-text" lang="ka">ობიექტი დამატებული არ არის</p>
+      <p class="text-lg text-gray-500 mb-6 georgian-text" lang="ka">{{ 'ობიექტი დამატებული არ არის' | t }}</p>
       <button class="ss-btn ss-btn--primary" type="button" (click)="addFacility()">
         <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/plus.svg')"></i>
-        <span class="georgian-text" lang="ka">ობიექტის დამატება</span>
+        <span class="georgian-text" lang="ka">{{ 'ობიექტის დამატება' | t }}</span>
       </button>
     </div>
   } @else if (facilities().length > 0) {

@@ -18,6 +18,7 @@ import {
 
 import { SsToastService } from '../../../shared/ui/toast.service';
 import { SsDialogService } from '../../../shared/ui/dialog.service';
+import { TPipe } from '../../../shared/i18n/t.pipe';
 const facility: Facility = {
   _id: 'fac-1',
   name: 'Padel House',
@@ -73,7 +74,8 @@ describe('CourtsComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
     })
-      .overrideComponent(CourtsComponent, { set: { imports: [], schemas: [NO_ERRORS_SCHEMA] } })
+      // set:{imports} REPLACES the array — TPipe must ride along or `| t` is NG0302
+      .overrideComponent(CourtsComponent, { set: { imports: [TPipe], schemas: [NO_ERRORS_SCHEMA] } })
       .compileComponents();
 
     fixture = TestBed.createComponent(CourtsComponent);

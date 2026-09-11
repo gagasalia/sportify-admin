@@ -27,12 +27,14 @@ import { SsDialogService } from '../../../shared/ui/dialog.service';
 import { SsConfirmComponent, SsConfirmData } from '../../../shared/ui/confirm.component';
 import { SsAvatarComponent } from '../../../shared/ui/ss-avatar.component';
 import { formatMemberId, parseMemberId } from '../../../shared/utils/member-id.util';
+import { tr } from '../../../shared/i18n/lang';
+import { TPipe } from '../../../shared/i18n/t.pipe';
 const DEFAULT_PAGE_SIZE = 20;
 
 @Component({
   selector: 'app-user-management',
   standalone: true,
-  imports: [DatePipe, FormsModule, SsAvatarComponent],
+  imports: [DatePipe, FormsModule, SsAvatarComponent, TPipe],
   templateUrl: './user-management.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -236,7 +238,7 @@ export class UserManagementComponent implements OnInit {
   protected addUser(): void {
     this.dialogs
       .open<User | null>(UserFormComponent, {
-        label: 'მომხმარებლის დამატება',
+        label: tr('მომხმარებლის დამატება'),
         size: 'l',
         dismissible: true,
         closable: true,
@@ -253,7 +255,7 @@ export class UserManagementComponent implements OnInit {
   protected editUser(user: User): void {
     this.dialogs
       .open<User | null>(UserFormComponent, {
-        label: 'მომხმარებლის რედაქტირება',
+        label: tr('მომხმარებლის რედაქტირება'),
         size: 'l',
         dismissible: true,
         closable: true,
@@ -273,7 +275,7 @@ export class UserManagementComponent implements OnInit {
 
     this.dialogs
       .open<void>(UserBalanceComponent, {
-        label: 'ბალანსის მართვა',
+        label: tr('ბალანსის მართვა'),
         size: 'l',
         dismissible: true,
         closable: true,
@@ -290,12 +292,12 @@ export class UserManagementComponent implements OnInit {
 
     this.dialogs
       .open<boolean>(SsConfirmComponent, {
-        label: 'მომხმარებლის წაშლა',
+        label: tr('მომხმარებლის წაშლა'),
         size: 's',
         data: {
-          content: `ნამდვილად გსურთ ${name} - ის წაშლა?`,
-          yes: 'წაშლა',
-          no: 'გაუქმება',
+          content: `${tr('ნამდვილად გსურთ')} ${name}${tr(' - ის წაშლა?')}`,
+          yes: tr('წაშლა'),
+          no: tr('გაუქმება'),
         } as SsConfirmData,
       })
       .pipe(
@@ -308,7 +310,7 @@ export class UserManagementComponent implements OnInit {
         next: () => {
           this.users.update((users) => users.filter((u) => u._id !== user._id));
           this.alerts
-            .open('მომხმარებელი წარმატებით წაიშალა!', { appearance: 'success' })
+            .open(tr('მომხმარებელი წარმატებით წაიშალა!'), { appearance: 'success' })
             .pipe(take(1))
             .subscribe();
         },

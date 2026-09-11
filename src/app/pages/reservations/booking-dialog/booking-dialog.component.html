@@ -4,7 +4,8 @@
     <div class="flex justify-between items-center gap-2 flex-wrap">
       <span class="georgian-text font-medium" lang="ka">{{ data.courtLabel }}</span>
       <span class="text-sm" style="color: var(--tui-text-secondary)">
-        {{ data.date }} · {{ data.start }}–{{ data.end }} · {{ data.durationMinutes }} წთ
+        {{ data.date }} · {{ data.start }}–{{ data.end }} · {{ data.durationMinutes }}
+        {{ 'წთ' | t }}
       </span>
     </div>
     @if (priceGel() !== null && mode() === 'booking') {
@@ -24,7 +25,7 @@
       [disabled]="!data.allowBooking"
       (click)="setMode('booking')"
     >
-      <span class="georgian-text" lang="ka">ჯავშანი</span>
+      <span class="georgian-text" lang="ka">{{ 'ჯავშანი' | t }}</span>
     </button>
     <button
       type="button"
@@ -33,11 +34,11 @@
       "
       (click)="setMode('block')"
     >
-      <span class="georgian-text" lang="ka">დაბლოკვა</span>
+      <span class="georgian-text" lang="ka">{{ 'დაბლოკვა' | t }}</span>
     </button>
     @if (!data.allowBooking) {
       <span class="text-xs georgian-text" lang="ka" style="color: var(--tui-text-secondary)">
-        ჯავშანი შესაძლებელია მხოლოდ 60/90/120 წთ-ზე
+        {{ 'ჯავშანი შესაძლებელია მხოლოდ 60/90/120 წთ-ზე' | t }}
       </span>
     }
   </div>
@@ -47,7 +48,7 @@
       <!-- Customer name (required; defaults to "ჯავშანი ადმინის მიერ") -->
       <label class="ss-field">
         <span class="ss-label georgian-text" lang="ka">
-          სახელი <span class="text-red-500">*</span>
+          {{ 'სახელი' | t }} <span class="text-red-500">*</span>
         </span>
         <input
           class="ss-input georgian-text"
@@ -58,13 +59,13 @@
           formControlName="customerName"
         />
         @if (form.get('customerName')?.touched && form.get('customerName')?.hasError('required')) {
-          <span class="ss-error georgian-text" lang="ka">სახელი სავალდებულოა</span>
+          <span class="ss-error georgian-text" lang="ka">{{ 'სახელი სავალდებულოა' | t }}</span>
         }
       </label>
 
       <!-- Customer phone (optional, Georgian mask) -->
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">ტელეფონი</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'ტელეფონი' | t }}</span>
         <input
           class="ss-input"
           type="tel"
@@ -74,7 +75,7 @@
         />
         @if (form.get('customerPhone')?.touched && form.get('customerPhone')?.hasError('pattern')) {
           <span class="ss-error georgian-text" lang="ka">
-            ნომერი უნდა იწყებოდეს 5-ით და იყოს 9 ციფრი
+            {{ 'ნომერი უნდა იწყებოდეს 5-ით და იყოს 9 ციფრი' | t }}
           </span>
         }
       </label>
@@ -82,17 +83,17 @@
 
     <!-- Note (both modes; block prefills "დაბლოკვა ადმინის მიერ") -->
     <label class="ss-field">
-      <span class="ss-label georgian-text" lang="ka">შენიშვნა</span>
+      <span class="ss-label georgian-text" lang="ka">{{ 'შენიშვნა' | t }}</span>
       <textarea class="ss-input georgian-text" lang="ka" rows="3" formControlName="note"></textarea>
     </label>
 
     <div class="flex justify-end gap-2 mt-6">
       <button class="ss-btn ss-btn--flat" type="button" (click)="cancel()">
-        <span class="georgian-text" lang="ka">გაუქმება</span>
+        <span class="georgian-text" lang="ka">{{ 'გაუქმება' | t }}</span>
       </button>
       <button class="ss-btn ss-btn--primary" type="submit" [disabled]="submitting()">
         <span class="georgian-text" lang="ka">{{
-          mode() === 'booking' ? 'დაჯავშნა' : 'დაბლოკვა'
+          (mode() === 'booking' ? 'დაჯავშნა' : 'დაბლოკვა') | t
         }}</span>
       </button>
     </div>

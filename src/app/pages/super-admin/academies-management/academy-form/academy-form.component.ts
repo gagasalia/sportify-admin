@@ -12,13 +12,15 @@ import { UserManagementService } from '../../../../services/http-services/user-m
 import { Academy, AcademyStatus } from '../../../../shared/models/academy.model';
 import { User, UserType } from '../../../../shared/models/user.model';
 import { arrayRequiredValidator } from '../../../../shared/validators/array-required.validator';
+import { tr } from '../../../../shared/i18n/lang';
+import { TPipe } from '../../../../shared/i18n/t.pipe';
 
 import { SsToastService } from '../../../../shared/ui/toast.service';
 import { SS_DIALOG_CONTEXT, SsDialogContext } from '../../../../shared/ui/dialog.service';
 @Component({
   selector: 'app-academy-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, TPipe],
   templateUrl: './academy-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -133,14 +135,14 @@ export class AcademyFormComponent implements OnInit {
         .subscribe({
           next: (saved) => {
             this.alerts
-              .open('აკადემია წარმატებით განახლდა!', { appearance: 'success' })
+              .open(tr('აკადემია წარმატებით განახლდა!'), { appearance: 'success' })
               .pipe(take(1))
               .subscribe();
             this.context.completeWith(saved);
           },
           error: () => {
             this.alerts
-              .open('შეცდომა აკადემიის განახლებისას.', { appearance: 'error' })
+              .open(tr('შეცდომა აკადემიის განახლებისას.'), { appearance: 'error' })
               .pipe(take(1))
               .subscribe();
           },
@@ -155,14 +157,14 @@ export class AcademyFormComponent implements OnInit {
         .subscribe({
           next: (saved) => {
             this.alerts
-              .open('აკადემია წარმატებით დაემატა!', { appearance: 'success' })
+              .open(tr('აკადემია წარმატებით დაემატა!'), { appearance: 'success' })
               .pipe(take(1))
               .subscribe();
             this.context.completeWith(saved);
           },
           error: () => {
             this.alerts
-              .open('შეცდომა აკადემიის დამატებისას.', { appearance: 'error' })
+              .open(tr('შეცდომა აკადემიის დამატებისას.'), { appearance: 'error' })
               .pipe(take(1))
               .subscribe();
           },

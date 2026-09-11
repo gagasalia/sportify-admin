@@ -3,6 +3,7 @@ import { inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { catchError, throwError } from 'rxjs';
 import { environment } from '../../../environments/environment';
+import { tr } from '../i18n/lang';
 import { AuthService } from '../services/auth.service';
 import { TenantService } from '../services/tenant.service';
 import { SsToastService } from '../ui/toast.service';
@@ -42,7 +43,7 @@ export const errorInterceptor: HttpInterceptorFn = (req, next) => {
       // SKIP_ERROR_TOAST opts a request out so its caller can show its own alert).
       if (!isLoginRequest && !req.context.get(SKIP_ERROR_TOAST)) {
         alerts
-          .open('მოხდა შეცდომა, გთხოვთ სცადოთ მოგვიანებით.', {
+          .open(tr('მოხდა შეცდომა, გთხოვთ სცადოთ მოგვიანებით.'), {
             appearance: 'error',
           })
           .subscribe();

@@ -51,6 +51,8 @@ import { SsConfirmComponent, SsConfirmData } from '../../shared/ui/confirm.compo
 import { SsDialogService } from '../../shared/ui/dialog.service';
 import { ReservationListComponent } from './reservation-list/reservation-list.component';
 import { bookingDisplayName, bookingPlayer } from './booking-display.util';
+import { TPipe } from '../../shared/i18n/t.pipe';
+import { isEnglish, liveList, tr } from '../../shared/i18n/lang';
 type CalendarTab = 'day' | 'week' | 'list';
 
 /** One chip on the horizontal date rail. */
@@ -63,8 +65,28 @@ interface DateOption {
 /** Days shown on the date rail (today + 13). Further dates use the datepicker. */
 const DATE_RAIL_DAYS = 14;
 
-/** Georgian 3-letter weekday names, Monday=0. */
+/**
+ * Georgian 3-letter weekday names, Monday=0. RAW on purpose — the rail labels
+ * are STORED in `dateOptions`, so translating here would bake the language in.
+ * Both readers translate at render time with the `t` pipe.
+ */
 const WEEKDAY_SHORT = ['ორშ', 'სამ', 'ოთხ', 'ხუთ', 'პარ', 'შაბ', 'კვი'];
+
+/** Georgian 3-letter month names — read only at render, so live-translated. */
+const MONTH_SHORT = liveList([
+  'იან',
+  'თებ',
+  'მარ',
+  'აპრ',
+  'მაი',
+  'ივნ',
+  'ივლ',
+  'აგვ',
+  'სექ',
+  'ოქტ',
+  'ნოე',
+  'დეკ',
+]);
 
 /**
  * Operator calendar. Day view is the primary surface: a CSS-table of active
@@ -79,7 +101,7 @@ const WEEKDAY_SHORT = ['ორშ', 'სამ', 'ოთხ', 'ხუთ', 'პ�
 @Component({
   selector: 'app-reservations',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ReservationListComponent],
+  imports: [CommonModule, ReactiveFormsModule, ReservationListComponent, TPipe],
   templateUrl: './reservations.component.html',
   styleUrl: './reservations.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -197,7 +219,7 @@ export class ReservationsComponent implements OnInit {
   }
 
   facilityLabel(f: Facility): string {
-    return f.name || f.description || 'უსახელო ობიექტი';
+    return f.name || f.description || tr('უსახელო ობიექტი');
   }
 
   constructor() {
@@ -223,6 +245,15 @@ export class ReservationsComponent implements OnInit {
 
   private checkMobile(): void {
     this.isMobile.set(typeof window !== 'undefined' && window.innerWidth <= 768);
+  }
+
+  /**
+   * Sense override: the dictionary maps 'კვირა' to Sunday (weekday labels),
+   * but this tab means the week view. isEnglish() reads the language signal,
+   * so the label stays live across a toggle.
+   */
+  protected weekWord(): string {
+    return isEnglish() ? 'Week' : 'კვირა';
   }
 
   setTab(tab: CalendarTab): void {
@@ -513,23 +544,23 @@ export class ReservationsComponent implements OnInit {
 
   private openBookingActions(booking: Booking): void {
     if (booking.type === 'block') {
-      this.confirmCancel(booking, 'ბლოკის მოხსნა გსურთ?');
+      this.confirmCancel(booking, tr('ბლოკის მოხსნა გსურთ?'));
       return;
     }
     // For bookings, offer cancel; mark-paid is a separate cell action button.
-    this.confirmCancel(booking, 'ჯავშნის გაუქმება გსურთ?');
+    this.confirmCancel(booking, tr('ჯავშნის გაუქმება გსურთ?'));
   }
 
   confirmCancel(booking: Booking, content: string): void {
     const data: SsConfirmData = {
       content,
-      yes: 'დიახ',
-      no: 'არა',
+      yes: tr('დიახ'),
+      no: tr('არა'),
       appearance: 'destructive',
     };
     this.dialogs
       .open<boolean>(SsConfirmComponent, {
-        label: 'დადასტურება',
+        label: tr('დადასტურება'),
         size: 's',
         data,
       })
@@ -545,12 +576,12 @@ export class ReservationsComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: () => {
-          this.alerts.open('გაუქმებულია', { appearance: 'success' }).pipe(take(1)).subscribe();
+          this.alerts.open(tr('გაუქმებულია'), { appearance: 'success' }).pipe(take(1)).subscribe();
           this.refreshActive();
         },
         error: () => {
           this.alerts
-            .open('შეცდომა გაუქმებისას.', { appearance: 'error' })
+            .open(tr('შეცდომა გაუქმებისას.'), { appearance: 'error' })
             .pipe(take(1))
             .subscribe();
         },
@@ -560,13 +591,13 @@ export class ReservationsComponent implements OnInit {
   markPaid(booking: Booking, event?: Event): void {
     event?.stopPropagation();
     const data: SsConfirmData = {
-      content: 'ჯავშანი მოინიშნოს გადახდილად?',
-      yes: 'დიახ',
-      no: 'არა',
+      content: tr('ჯავშანი მოინიშნოს გადახდილად?'),
+      yes: tr('დიახ'),
+      no: tr('არა'),
     };
     this.dialogs
       .open<boolean>(SsConfirmComponent, {
-        label: 'გადახდის დადასტურება',
+        label: tr('გადახდის დადასტურება'),
         size: 's',
         data,
       })
@@ -582,12 +613,12 @@ export class ReservationsComponent implements OnInit {
       .pipe(take(1))
       .subscribe({
         next: () => {
-          this.alerts.open('გადახდილია', { appearance: 'success' }).pipe(take(1)).subscribe();
+          this.alerts.open(tr('გადახდილია'), { appearance: 'success' }).pipe(take(1)).subscribe();
           this.refreshActive();
         },
         error: () => {
           this.alerts
-            .open('შეცდომა გადახდის აღნიშვნისას.', { appearance: 'error' })
+            .open(tr('შეცდომა გადახდის აღნიშვნისას.'), { appearance: 'error' })
             .pipe(take(1))
             .subscribe();
         },
@@ -609,8 +640,9 @@ export class ReservationsComponent implements OnInit {
   cellLabel(cell: GridCell): string {
     const b = cell.booking;
     if (!b) return '';
-    if (b.type === 'block') return 'დაბლოკილია';
-    return this.displayName(b) ?? 'ჯავშანი';
+    if (b.type === 'block') return tr('დაბლოკილია');
+    // The customer/player name is DATA — only the fallback label translates.
+    return this.displayName(b) ?? tr('ჯავშანი');
   }
 
   // ── player identity (populated on operator reads) ────────────────────────────
@@ -665,11 +697,10 @@ export class ReservationsComponent implements OnInit {
     return cell.booking?.paymentStatus === 'paid';
   }
 
-  /** "31 ივლ" — compact week-column header. */
+  /** "31 ივლ" / "31 Jul" — compact week-column header (built per render). */
   weekDayLabel(iso: string): string {
     const [, m, d] = iso.split('-').map(Number);
-    const months = ['იან', 'თებ', 'მარ', 'აპრ', 'მაი', 'ივნ', 'ივლ', 'აგვ', 'სექ', 'ოქტ', 'ნოე', 'დეკ'];
-    return `${d} ${months[m - 1]}`;
+    return `${d} ${MONTH_SHORT[m - 1]}`;
   }
 
   weekdayShortOf(iso: string): string {

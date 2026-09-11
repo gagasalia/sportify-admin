@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { TPipe } from '../i18n/t.pipe';
 import { SS_DIALOG_CONTEXT, SsDialogContext } from './dialog.service';
 
 /** Payload for {@link SsConfirmComponent} — mirrors the old `TuiConfirmData`. */
@@ -23,6 +24,7 @@ export interface SsConfirmData {
 @Component({
   selector: 'ss-confirm',
   standalone: true,
+  imports: [TPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="ss-confirm">
@@ -44,14 +46,14 @@ export interface SsConfirmData {
       <p class="ss-confirm-msg georgian-text" lang="ka">{{ data.content }}</p>
       <div class="ss-confirm-actions">
         <button class="ss-btn ss-btn--outline" type="button" (click)="context.completeWith(false)">
-          <span class="georgian-text" lang="ka">{{ data.no ?? 'არა' }}</span>
+          <span class="georgian-text" lang="ka">{{ data.no ?? ('არა' | t) }}</span>
         </button>
         <button
           [class]="destructive ? 'ss-btn ss-btn--danger' : 'ss-btn ss-btn--primary'"
           type="button"
           (click)="context.completeWith(true)"
         >
-          <span class="georgian-text" lang="ka">{{ data.yes ?? 'დიახ' }}</span>
+          <span class="georgian-text" lang="ka">{{ data.yes ?? ('დიახ' | t) }}</span>
         </button>
       </div>
     </div>

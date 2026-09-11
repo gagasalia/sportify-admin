@@ -17,6 +17,7 @@ import {
 } from '../../../shared/models/campaign.model';
 import { tetriToGel } from '../../../shared/utils/money.util';
 import { formatMemberId } from '../../../shared/utils/member-id.util';
+import { TPipe } from '../../../shared/i18n/t.pipe';
 import { SS_DIALOG_CONTEXT, SsDialogContext } from '../../../shared/ui/dialog.service';
 
 /**
@@ -27,7 +28,7 @@ import { SS_DIALOG_CONTEXT, SsDialogContext } from '../../../shared/ui/dialog.se
 @Component({
   selector: 'app-campaign-participants-dialog',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TPipe],
   templateUrl: './campaign-participants-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

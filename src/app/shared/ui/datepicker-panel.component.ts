@@ -10,9 +10,12 @@ import {
   input,
   signal,
 } from '@angular/core';
+import { liveList, tr } from '../i18n/lang';
+import { TPipe } from '../i18n/t.pipe';
 import { SS_DATEPICKER_TRIGGER, SsDatepickerService } from './datepicker.service';
 
-const MONTHS_KA = [
+// RAW Georgian; `liveList` translates each indexed read on the fly.
+const MONTHS_KA = liveList([
   'იანვარი',
   'თებერვალი',
   'მარტი',
@@ -25,9 +28,9 @@ const MONTHS_KA = [
   'ოქტომბერი',
   'ნოემბერი',
   'დეკემბერი',
-];
+]);
 
-const WEEKDAYS_KA = ['ორშ', 'სამ', 'ოთხ', 'ხუთ', 'პარ', 'შაბ', 'კვი'];
+const WEEKDAYS_KA = liveList(['ორშ', 'სამ', 'ოთხ', 'ხუთ', 'პარ', 'შაბ', 'კვი']);
 
 interface DayCell {
   iso: string;
@@ -53,11 +56,13 @@ function toIso(d: Date): string {
 @Component({
   selector: 'ss-datepicker-panel',
   standalone: true,
+  imports: [TPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
     class: 'ss-pop',
     role: 'dialog',
-    'aria-label': 'კალენდარი',
+    // Host bindings can't use pipes — `tr()` in a computed is the equivalent.
+    '[attr.aria-label]': 'calendarLabel()',
     '[style.top.px]': 'top()',
     '[style.left.px]': 'left()',
     '(mousedown)': '$event.preventDefault()',
@@ -68,7 +73,7 @@ function toIso(d: Date): string {
         class="ss-icon-btn ss-icon-btn--s"
         type="button"
         tabindex="-1"
-        aria-label="წინა თვე"
+        [attr.aria-label]="'წინა თვე' | t"
         (click)="prevMonth()"
       >
         <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/chevron-left.svg')"></i>
@@ -78,7 +83,7 @@ function toIso(d: Date): string {
         class="ss-icon-btn ss-icon-btn--s"
         type="button"
         tabindex="-1"
-        aria-label="შემდეგი თვე"
+        [attr.aria-label]="'შემდეგი თვე' | t"
         (click)="nextMonth()"
       >
         <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/chevron-right.svg')"></i>
@@ -108,10 +113,10 @@ function toIso(d: Date): string {
 
     <div class="ss-pop-foot">
       <button class="ss-btn ss-btn--flat ss-btn--s" type="button" tabindex="-1" (click)="pickToday()">
-        <span class="georgian-text" lang="ka">დღეს</span>
+        <span class="georgian-text" lang="ka">{{ 'დღეს' | t }}</span>
       </button>
       <button class="ss-btn ss-btn--flat ss-btn--s" type="button" tabindex="-1" (click)="clear()">
-        <span class="georgian-text" lang="ka">გასუფთავება</span>
+        <span class="georgian-text" lang="ka">{{ 'გასუფთავება' | t }}</span>
       </button>
     </div>
   `,
@@ -124,6 +129,9 @@ export class SsDatepickerPanelComponent implements OnDestroy {
   private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
 
   protected readonly weekdays = WEEKDAYS_KA;
+
+  /** Live host aria-label — recomputes when the language flips. */
+  protected readonly calendarLabel = computed(() => tr('კალენდარი'));
 
   /** Off-screen until the first reposition to avoid a corner flash. */
   protected readonly top = signal(-9999);

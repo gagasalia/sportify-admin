@@ -1,21 +1,21 @@
 <div class="pt-8 p-0 sm:p-8">
   <header class="mb-6 flex items-center justify-between">
-    <h1 class="text-2xl font-semibold georgian-text" lang="ka">ტურნირები</h1>
+    <h1 class="text-2xl font-semibold georgian-text" lang="ka">{{ 'ტურნირები' | t }}</h1>
     <button class="ss-btn ss-btn--primary" type="button" (click)="addTournament()">
       <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/plus.svg')"></i>
-      <span class="georgian-text" lang="ka">დამატება</span>
+      <span class="georgian-text" lang="ka">{{ 'დამატება' | t }}</span>
     </button>
   </header>
 
   @if (isLoading()) {
     <div class="flex justify-center items-center py-16">
-      <div class="text-lg georgian-text" lang="ka">იტვირთება...</div>
+      <div class="text-lg georgian-text" lang="ka">{{ 'იტვირთება...' | t }}</div>
     </div>
   } @else if (tournaments().length === 0) {
     <div class="ss-card p-10 text-center">
-      <p class="georgian-text mb-4" lang="ka">ტურნირები ჯერ არ გაქვთ</p>
+      <p class="georgian-text mb-4" lang="ka">{{ 'ტურნირები ჯერ არ გაქვთ' | t }}</p>
       <button class="ss-btn ss-btn--primary" type="button" (click)="addTournament()">
-        <span class="georgian-text" lang="ka">პირველი ტურნირის შექმნა</span>
+        <span class="georgian-text" lang="ka">{{ 'პირველი ტურნირის შექმნა' | t }}</span>
       </button>
     </div>
   } @else {
@@ -25,12 +25,12 @@
         <table class="ss-table">
           <thead>
             <tr>
-              <th class="georgian-text" lang="ka">ტურნირი</th>
-              <th class="georgian-text" lang="ka">თარიღი</th>
-              <th class="georgian-text" lang="ka">ტიპი</th>
-              <th class="georgian-text" lang="ka">საფასური</th>
-              <th class="georgian-text" lang="ka">ადგილები</th>
-              <th class="georgian-text" lang="ka">სტატუსი</th>
+              <th class="georgian-text" lang="ka">{{ 'ტურნირი' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'თარიღი' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'ტიპი' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'საფასური' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'ადგილები' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'სტატუსი' | t }}</th>
               <th></th>
             </tr>
           </thead>
@@ -77,8 +77,8 @@
                       <button
                         class="ss-icon-btn"
                         type="button"
-                        aria-label="გამოქვეყნება"
-                        title="გამოქვეყნება"
+                        [attr.aria-label]="'გამოქვეყნება' | t"
+                        [title]="'გამოქვეყნება' | t"
                         (click)="publish(t)"
                       >
                         <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/rocket.svg')"></i>
@@ -88,8 +88,8 @@
                       <button
                         class="ss-icon-btn"
                         type="button"
-                        aria-label="დასრულება"
-                        title="დასრულება"
+                        [attr.aria-label]="'დასრულება' | t"
+                        [title]="'დასრულება' | t"
                         (click)="complete(t)"
                       >
                         <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/flag.svg')"></i>
@@ -98,8 +98,8 @@
                     <button
                       class="ss-icon-btn"
                       type="button"
-                      aria-label="რეგისტრაციები"
-                      title="რეგისტრაციები"
+                      [attr.aria-label]="'რეგისტრაციები' | t"
+                      [title]="'რეგისტრაციები' | t"
                       (click)="openRegistrations(t)"
                     >
                       <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/users.svg')"></i>
@@ -108,7 +108,7 @@
                       <button
                         class="ss-icon-btn"
                         type="button"
-                        aria-label="რედაქტირება"
+                        [attr.aria-label]="'რედაქტირება' | t"
                         (click)="editTournament(t)"
                       >
                         <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/pencil.svg')"></i>
@@ -118,8 +118,8 @@
                       <button
                         class="ss-icon-btn ss-icon-btn--danger"
                         type="button"
-                        aria-label="გაუქმება"
-                        title="გაუქმება"
+                        [attr.aria-label]="'გაუქმება' | t"
+                        [title]="'გაუქმება' | t"
                         (click)="cancel(t)"
                       >
                         <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/circle-x.svg')"></i>
@@ -129,7 +129,7 @@
                       <button
                         class="ss-icon-btn ss-icon-btn--danger"
                         type="button"
-                        aria-label="წაშლა"
+                        [attr.aria-label]="'წაშლა' | t"
                         (click)="deleteTournament(t)"
                       >
                         <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/trash-2.svg')"></i>
@@ -180,7 +180,7 @@
                 <button
                   class="ss-icon-btn"
                   type="button"
-                  aria-label="გამოქვეყნება"
+                  [attr.aria-label]="'გამოქვეყნება' | t"
                   (click)="publish(t)"
                 >
                   <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/rocket.svg')"></i>
@@ -190,7 +190,7 @@
                 <button
                   class="ss-icon-btn"
                   type="button"
-                  aria-label="დასრულება"
+                  [attr.aria-label]="'დასრულება' | t"
                   (click)="complete(t)"
                 >
                   <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/flag.svg')"></i>
@@ -199,7 +199,7 @@
               <button
                 class="ss-icon-btn"
                 type="button"
-                aria-label="რეგისტრაციები"
+                [attr.aria-label]="'რეგისტრაციები' | t"
                 (click)="openRegistrations(t)"
               >
                 <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/users.svg')"></i>
@@ -208,7 +208,7 @@
                 <button
                   class="ss-icon-btn"
                   type="button"
-                  aria-label="რედაქტირება"
+                  [attr.aria-label]="'რედაქტირება' | t"
                   (click)="editTournament(t)"
                 >
                   <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/pencil.svg')"></i>
@@ -218,7 +218,7 @@
                 <button
                   class="ss-icon-btn ss-icon-btn--danger"
                   type="button"
-                  aria-label="გაუქმება"
+                  [attr.aria-label]="'გაუქმება' | t"
                   (click)="cancel(t)"
                 >
                   <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/circle-x.svg')"></i>
@@ -228,7 +228,7 @@
                 <button
                   class="ss-icon-btn ss-icon-btn--danger"
                   type="button"
-                  aria-label="წაშლა"
+                  [attr.aria-label]="'წაშლა' | t"
                   (click)="deleteTournament(t)"
                 >
                   <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/trash-2.svg')"></i>
@@ -249,7 +249,7 @@
           [disabled]="page() === 1"
           (click)="onPageChange(page() - 1)"
         >
-          <span class="georgian-text" lang="ka">წინა</span>
+          <span class="georgian-text" lang="ka">{{ 'წინა' | t }}</span>
         </button>
         <span class="text-sm" style="color: var(--tui-text-secondary)">
           {{ page() }} / {{ totalPages() }}
@@ -260,7 +260,7 @@
           [disabled]="page() >= totalPages()"
           (click)="onPageChange(page() + 1)"
         >
-          <span class="georgian-text" lang="ka">შემდეგი</span>
+          <span class="georgian-text" lang="ka">{{ 'შემდეგი' | t }}</span>
         </button>
       </div>
     }

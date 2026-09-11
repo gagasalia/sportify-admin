@@ -17,6 +17,8 @@ import { Facility } from '../../../shared/models/facility.model';
 import { CourtFormComponent } from './court-form/court-form.component';
 import { CourtCardComponent } from './court-card/court-card.component';
 import { CommonModule } from '@angular/common';
+import { tr } from '../../../shared/i18n/lang';
+import { TPipe } from '../../../shared/i18n/t.pipe';
 
 import { SsToastService } from '../../../shared/ui/toast.service';
 import { SsDialogService } from '../../../shared/ui/dialog.service';
@@ -28,7 +30,7 @@ import { SsDialogService } from '../../../shared/ui/dialog.service';
 @Component({
   selector: 'app-courts',
   standalone: true,
-  imports: [CourtCardComponent, CommonModule],
+  imports: [CourtCardComponent, CommonModule, TPipe],
   templateUrl: './courts.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -54,7 +56,9 @@ export class CourtsComponent implements OnInit {
   }
 
   facilityLabel(f: Facility): string {
-    return f.name || f.description || 'უსახელო ობიექტი';
+    // The facility's own name is DATA (never translated); only the fallback is UI
+    // copy, translated at render time so a language flip re-renders the chip.
+    return f.name || f.description || tr('უსახელო ობიექტი');
   }
 
   ngOnInit(): void {
@@ -152,7 +156,7 @@ export class CourtsComponent implements OnInit {
 
     this.dialogs
       .open(CourtFormComponent, {
-        label: 'კორტის დამატება',
+        label: tr('კორტის დამატება'),
         size: 'l',
         dismissible: true,
         closable: true,
@@ -186,7 +190,7 @@ export class CourtsComponent implements OnInit {
     const facilityId = court.facility ?? court.facilityId ?? this.selectedFacilityId();
     this.dialogs
       .open(CourtFormComponent, {
-        label: 'რედაქტირება',
+        label: tr('რედაქტირება'),
         size: 'l',
         dismissible: true,
         closable: true,
@@ -217,11 +221,13 @@ export class CourtsComponent implements OnInit {
       .subscribe({
         next: () => {
           this.loadCourts(facilityId);
-          this.alerts.open('კორტი წარმატებით წაიშალა', { appearance: 'success' }).subscribe();
+          this.alerts
+            .open(tr('კორტი წარმატებით წაიშალა'), { appearance: 'success' })
+            .subscribe();
         },
         error: (error) => {
           console.error('Error deleting court:', error);
-          this.alerts.open('წაშლის დროს მოხდა შეცდომა', { appearance: 'error' }).subscribe();
+          this.alerts.open(tr('წაშლის დროს მოხდა შეცდომა'), { appearance: 'error' }).subscribe();
         },
       });
   }

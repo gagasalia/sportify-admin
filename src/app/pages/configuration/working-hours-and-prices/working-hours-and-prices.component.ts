@@ -32,6 +32,8 @@ import {
 } from '../../../shared/models/schedule.model';
 import { Facility } from '../../../shared/models/facility.model';
 import { Day, DAY_LABELS } from '../../../shared/enums/day.enum';
+import { tr } from '../../../shared/i18n/lang';
+import { TPipe } from '../../../shared/i18n/t.pipe';
 
 import { SsToastService } from '../../../shared/ui/toast.service';
 /** Validates that a group's `endHour:endMinute` is strictly after `startHour:startMinute`. */
@@ -62,7 +64,7 @@ function endAfterStartValidator(
 @Component({
   selector: 'app-working-hours-and-prices',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, FormsModule],
+  imports: [ReactiveFormsModule, CommonModule, FormsModule, TPipe],
   templateUrl: './working-hours-and-prices.component.html',
   styleUrls: ['./working-hours-and-prices.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -90,7 +92,9 @@ export class WorkingHoursAndPricesComponent implements OnInit {
   }
 
   facilityLabel(f: Facility): string {
-    return f.name || f.description || 'უსახელო ობიექტი';
+    // The facility's own name is DATA (never translated); only the fallback is UI
+    // copy, translated at render time so a language flip re-renders the chip.
+    return f.name || f.description || tr('უსახელო ობიექტი');
   }
 
   // Picked holiday dates as sorted 'YYYY-MM-DD' strings; the server holiday
@@ -124,7 +128,8 @@ export class WorkingHoursAndPricesComponent implements OnInit {
     this.holidays = this.holidays.filter((d) => d !== iso);
   }
 
-  // Group days: Weekdays (Mon-Fri), Saturday, Sunday
+  // Group days: Weekdays (Mon-Fri), Saturday, Sunday. Labels stay RAW Georgian —
+  // the template renders them through `| t` (never bake a translation in).
   readonly dayGroups = [
     {
       key: 'weekdays',
@@ -245,7 +250,7 @@ export class WorkingHoursAndPricesComponent implements OnInit {
           console.error('Error loading schedule:', error);
           this.isLoading.set(false);
           this.alerts
-            .open('შეცდომა გრაფიკის ჩატვირთვისას', { appearance: 'error' })
+            .open(tr('შეცდომა გრაფიკის ჩატვირთვისას'), { appearance: 'error' })
             .pipe(take(1))
             .subscribe();
         },
@@ -399,7 +404,7 @@ export class WorkingHoursAndPricesComponent implements OnInit {
           this.schedule.set(updated);
           this.isLoading.set(false);
           this.alerts
-            .open('გრაფიკი წარმატებით შეინახა!', { appearance: 'success' })
+            .open(tr('გრაფიკი წარმატებით შეინახა!'), { appearance: 'success' })
             .pipe(take(1))
             .subscribe();
         },
@@ -407,7 +412,7 @@ export class WorkingHoursAndPricesComponent implements OnInit {
           console.error('Error saving schedule:', error);
           this.isLoading.set(false);
           this.alerts
-            .open('შეცდომა გრაფიკის შენახვისას', { appearance: 'error' })
+            .open(tr('შეცდომა გრაფიკის შენახვისას'), { appearance: 'error' })
             .pipe(take(1))
             .subscribe();
         },
@@ -440,9 +445,10 @@ export class WorkingHoursAndPricesComponent implements OnInit {
     undeletable.forEach((h) => console.warn('Holiday missing _id, cannot delete', h));
     if (undeletable.length > 0) {
       this.alerts
-        .open('ზოგიერთი დასვენების დღის წაშლა ვერ მოხერხდა — გვერდი შესაძლოა არ ემთხვეოდეს სერვერს.', {
-          appearance: 'warning',
-        })
+        .open(
+          tr('ზოგიერთი დასვენების დღის წაშლა ვერ მოხერხდა — გვერდი შესაძლოა არ ემთხვეოდეს სერვერს.'),
+          { appearance: 'warning' },
+        )
         .pipe(take(1))
         .subscribe();
     }
@@ -459,7 +465,7 @@ export class WorkingHoursAndPricesComponent implements OnInit {
 
     if (ops.length === 0) {
       this.alerts
-        .open('დასვენების დღეები წარმატებით შეინახა!', { appearance: 'success' })
+        .open(tr('დასვენების დღეები წარმატებით შეინახა!'), { appearance: 'success' })
         .pipe(take(1))
         .subscribe();
       return;
@@ -482,7 +488,7 @@ export class WorkingHoursAndPricesComponent implements OnInit {
           this.schedule.set(schedule);
           this.applyHolidays(schedule);
           this.alerts
-            .open('დასვენების დღეები წარმატებით შეინახა!', { appearance: 'success' })
+            .open(tr('დასვენების დღეები წარმატებით შეინახა!'), { appearance: 'success' })
             .pipe(take(1))
             .subscribe();
         }
@@ -490,7 +496,7 @@ export class WorkingHoursAndPricesComponent implements OnInit {
       error: (error) => {
         console.error('Error saving holidays:', error);
         this.alerts
-          .open('შეცდომა დასვენების დღეების შენახვისას', { appearance: 'error' })
+          .open(tr('შეცდომა დასვენების დღეების შენახვისას'), { appearance: 'error' })
           .pipe(take(1))
           .subscribe();
       },
@@ -523,7 +529,7 @@ export class WorkingHoursAndPricesComponent implements OnInit {
     // (a zeroed/equal window means "no off-peak").
     if (!hasOffPeak && (v.offPeakPrice > 0 || v.offPeakEndHour > 0 || v.offPeakEndMinute > 0)) {
       this.alerts
-        .open('არაპიკური ფანჯრის დასასრული უნდა იყოს დაწყების შემდეგ', { appearance: 'error' })
+        .open(tr('არაპიკური ფანჯრის დასასრული უნდა იყოს დაწყების შემდეგ'), { appearance: 'error' })
         .pipe(take(1))
         .subscribe();
       return;
@@ -552,7 +558,7 @@ export class WorkingHoursAndPricesComponent implements OnInit {
           this.schedule.set(updated);
           this.isLoading.set(false);
           this.alerts
-            .open('ფასები წარმატებით შეინახა!', { appearance: 'success' })
+            .open(tr('ფასები წარმატებით შეინახა!'), { appearance: 'success' })
             .pipe(take(1))
             .subscribe();
         },
@@ -560,7 +566,7 @@ export class WorkingHoursAndPricesComponent implements OnInit {
           console.error('Error saving prices:', error);
           this.isLoading.set(false);
           this.alerts
-            .open('შეცდომა ფასების შენახვისას', { appearance: 'error' })
+            .open(tr('შეცდომა ფასების შენახვისას'), { appearance: 'error' })
             .pipe(take(1))
             .subscribe();
         },

@@ -1,9 +1,9 @@
 <div class="pt-8 p-0 sm:p-8">
   <header class="mb-6 flex items-center justify-between">
-    <h1 class="text-2xl font-semibold georgian-text" lang="ka">იუზერები</h1>
+    <h1 class="text-2xl font-semibold georgian-text" lang="ka">{{ 'იუზერები' | t }}</h1>
     <button class="ss-btn ss-btn--primary" type="button" (click)="addUser()">
       <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/plus.svg')"></i>
-      <span class="georgian-text" lang="ka">დამატება</span>
+      <span class="georgian-text" lang="ka">{{ 'დამატება' | t }}</span>
     </button>
   </header>
 
@@ -22,7 +22,7 @@
       </label>
 
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">სახელი</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'სახელი' | t }}</span>
         <input
           class="ss-input"
           type="text"
@@ -32,7 +32,7 @@
       </label>
 
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">ელ. ფოსტა</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'ელ. ფოსტა' | t }}</span>
         <input
           class="ss-input"
           type="text"
@@ -42,7 +42,7 @@
       </label>
 
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">ტელეფონი</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'ტელეფონი' | t }}</span>
         <input
           class="ss-input"
           type="text"
@@ -52,7 +52,7 @@
       </label>
 
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">პირადი ნომერი</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'პირადი ნომერი' | t }}</span>
         <input
           class="ss-input"
           type="text"
@@ -62,14 +62,14 @@
       </label>
 
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">როლი</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'როლი' | t }}</span>
         <select
           class="ss-input georgian-text"
           lang="ka"
           [ngModel]="filterRole()"
           (ngModelChange)="filterRole.set($event)"
         >
-          <option [ngValue]="null">ყველა</option>
+          <option [ngValue]="null">{{ 'ყველა' | t }}</option>
           @for (role of roleOptions; track role) {
             <option [ngValue]="role">{{ role }}</option>
           }
@@ -78,7 +78,7 @@
 
       <div class="flex items-end">
         <button class="ss-btn ss-btn--flat ss-btn--block" type="button" (click)="clearFilters()">
-          <span class="georgian-text" lang="ka">გასუფთავება</span>
+          <span class="georgian-text" lang="ka">{{ 'გასუფთავება' | t }}</span>
         </button>
       </div>
     </div>
@@ -86,7 +86,7 @@
 
   @if (isLoading()) {
     <div class="flex justify-center items-center py-16">
-      <div class="text-lg georgian-text" lang="ka">იტვირთება...</div>
+      <div class="text-lg georgian-text" lang="ka">{{ 'იტვირთება...' | t }}</div>
     </div>
   } @else {
     <!-- Desktop Table View -->
@@ -96,14 +96,14 @@
           <thead>
             <tr>
               <th></th>
-              <th class="georgian-text" lang="ka">სახელი</th>
+              <th class="georgian-text" lang="ka">{{ 'სახელი' | t }}</th>
               <th>ID</th>
-              <th class="georgian-text" lang="ka">ელ. ფოსტა</th>
+              <th class="georgian-text" lang="ka">{{ 'ელ. ფოსტა' | t }}</th>
               <!-- players show phone, admins show their login username -->
-              <th class="georgian-text" lang="ka">ტელეფონი / სახელი</th>
-              <th class="georgian-text" lang="ka">პირადი ნომერი</th>
-              <th class="georgian-text" lang="ka">დაბადების თარიღი</th>
-              <th class="georgian-text" lang="ka">როლი</th>
+              <th class="georgian-text" lang="ka">{{ 'ტელეფონი / სახელი' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'პირადი ნომერი' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'დაბადების თარიღი' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'როლი' | t }}</th>
               <th></th>
             </tr>
           </thead>
@@ -142,7 +142,7 @@
                     <button
                       class="ss-icon-btn"
                       type="button"
-                      aria-label="ბალანსი"
+                      [attr.aria-label]="'ბალანსი' | t"
                       (click)="manageBalance(user)"
                     >
                       <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/wallet.svg')"></i>
@@ -150,7 +150,7 @@
                     <button
                       class="ss-icon-btn"
                       type="button"
-                      aria-label="რედაქტირება"
+                      [attr.aria-label]="'რედაქტირება' | t"
                       (click)="editUser(user)"
                     >
                       <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/pencil.svg')"></i>
@@ -158,7 +158,7 @@
                     <button
                       class="ss-icon-btn ss-icon-btn--danger"
                       type="button"
-                      aria-label="წაშლა"
+                      [attr.aria-label]="'წაშლა' | t"
                       (click)="deleteUser(user)"
                     >
                       <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/trash-2.svg')"></i>
@@ -169,7 +169,7 @@
             } @empty {
               <tr>
                 <td colspan="9" class="px-4 py-8 text-center georgian-text" lang="ka">
-                  იუზერები ვერ მოიძებნა
+                  {{ 'იუზერები ვერ მოიძებნა' | t }}
                 </td>
               </tr>
             }
@@ -195,7 +195,7 @@
                 <button
                   class="ss-icon-btn"
                   type="button"
-                  aria-label="ბალანსი"
+                  [attr.aria-label]="'ბალანსი' | t"
                   (click)="manageBalance(user)"
                 >
                   <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/wallet.svg')"></i>
@@ -203,7 +203,7 @@
                 <button
                   class="ss-icon-btn"
                   type="button"
-                  aria-label="რედაქტირება"
+                  [attr.aria-label]="'რედაქტირება' | t"
                   (click)="editUser(user)"
                 >
                   <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/pencil.svg')"></i>
@@ -211,7 +211,7 @@
                 <button
                   class="ss-icon-btn ss-icon-btn--danger"
                   type="button"
-                  aria-label="წაშლა"
+                  [attr.aria-label]="'წაშლა' | t"
                   (click)="deleteUser(user)"
                 >
                   <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/trash-2.svg')"></i>
@@ -270,7 +270,7 @@
           </div>
         } @empty {
           <div class="ss-card p-6 text-center">
-            <p class="georgian-text" lang="ka">იუზერები ვერ მოიძებნა</p>
+            <p class="georgian-text" lang="ka">{{ 'იუზერები ვერ მოიძებნა' | t }}</p>
           </div>
         }
       </div>
@@ -285,7 +285,7 @@
           [disabled]="page() === 1"
           (click)="onPageChange(page() - 2)"
         >
-          <span class="georgian-text" lang="ka">წინა</span>
+          <span class="georgian-text" lang="ka">{{ 'წინა' | t }}</span>
         </button>
         <span class="text-sm" style="color: var(--tui-text-secondary)">
           {{ page() }} / {{ totalPages() }}
@@ -296,7 +296,7 @@
           [disabled]="page() >= totalPages()"
           (click)="onPageChange(page())"
         >
-          <span class="georgian-text" lang="ka">შემდეგი</span>
+          <span class="georgian-text" lang="ka">{{ 'შემდეგი' | t }}</span>
         </button>
       </div>
     }

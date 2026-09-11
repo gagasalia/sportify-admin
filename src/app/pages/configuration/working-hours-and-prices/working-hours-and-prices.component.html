@@ -1,6 +1,8 @@
 <div class="pt-8 p-0 sm:p-8">
   <header class="mb-6">
-    <h1 class="text-2xl font-semibold georgian-text" lang="ka">სამუშაო საათები და ფასები</h1>
+    <h1 class="text-2xl font-semibold georgian-text" lang="ka">
+      {{ 'სამუშაო საათები და ფასები' | t }}
+    </h1>
   </header>
 
   <!-- Facility chips (single-select, first selected by default) -->
@@ -10,14 +12,14 @@
       <div class="flex flex-col items-center justify-center py-16">
         <img src="images/no-result.png" alt="No facilities" class="w-64 h-64 mb-6 opacity-50" />
         <p class="text-lg text-gray-500 mb-6 georgian-text" lang="ka">
-          სამუშაო საათებისა და ფასების დასაყენებლად დაამატეთ ობიექტი
+          {{ 'სამუშაო საათებისა და ფასების დასაყენებლად დაამატეთ ობიექტი' | t }}
         </p>
         <button class="ss-btn ss-btn--primary" type="button" (click)="navigateToFacilities()">
-          <span class="georgian-text" lang="ka">დაამატე ობიექტი</span>
+          <span class="georgian-text" lang="ka">{{ 'დაამატე ობიექტი' | t }}</span>
         </button>
       </div>
     } @else {
-      <div class="ss-chip-rail mb-6" role="tablist" aria-label="ობიექტები">
+      <div class="ss-chip-rail mb-6" role="tablist" [attr.aria-label]="'ობიექტები' | t">
         @for (facility of facilities(); track facility._id ?? facility.id) {
           <button
             type="button"
@@ -38,19 +40,21 @@
   @if (selectedFacilityId()) {
     @if (isLoading()) {
       <div class="flex justify-center items-center py-16">
-        <div class="text-lg georgian-text" lang="ka">იტვირთება...</div>
+        <div class="text-lg georgian-text" lang="ka">{{ 'იტვირთება...' | t }}</div>
       </div>
     } @else if (scheduleForm) {
       <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
         <!-- Working Hours Column -->
         <div class="space-y-4">
           <div class="ss-card p-6">
-            <h2 class="text-lg font-semibold georgian-text mb-4" lang="ka">სამუშაო საათები</h2>
+            <h2 class="text-lg font-semibold georgian-text mb-4" lang="ka">
+              {{ 'სამუშაო საათები' | t }}
+            </h2>
             <form [formGroup]="scheduleForm" class="space-y-4">
               @for (group of dayGroups; track group.key) {
                 <div class="space-y-3">
                   <h3 class="text-base font-semibold georgian-text whitespace-nowrap" lang="ka">
-                    {{ group.label }}
+                    {{ group.label | t }}
                   </h3>
 
                   <div
@@ -92,7 +96,7 @@
                   </div>
                   @if (scheduleForm.get(group.key)?.hasError('endNotAfterStart')) {
                     <span class="ss-error georgian-text" lang="ka">
-                      დასრულება უნდა იყოს დაწყების შემდეგ
+                      {{ 'დასრულება უნდა იყოს დაწყების შემდეგ' | t }}
                     </span>
                   }
                 </div>
@@ -107,7 +111,7 @@
                 (click)="onSave()"
                 [disabled]="!scheduleForm.valid"
               >
-                <span class="georgian-text" lang="ka">შენახვა</span>
+                <span class="georgian-text" lang="ka">{{ 'შენახვა' | t }}</span>
               </button>
             </div>
           </div>
@@ -115,11 +119,15 @@
 
         <!-- Holidays Column -->
         <div class="ss-card p-6">
-          <h2 class="text-lg font-semibold georgian-text mb-4" lang="ka">დასვენების დღეები</h2>
+          <h2 class="text-lg font-semibold georgian-text mb-4" lang="ka">
+            {{ 'დასვენების დღეები' | t }}
+          </h2>
 
           <div class="flex items-end gap-2">
             <label class="ss-field flex-1">
-              <span class="ss-label georgian-text" lang="ka">დაამატეთ დასვენების დღე</span>
+              <span class="ss-label georgian-text" lang="ka">
+                {{ 'დაამატეთ დასვენების დღე' | t }}
+              </span>
               <input class="ss-input" type="date" [(ngModel)]="holidayInput" />
             </label>
             <button
@@ -128,7 +136,7 @@
               (click)="addHoliday()"
               [disabled]="!holidayInput"
             >
-              <span class="georgian-text" lang="ka">დამატება</span>
+              <span class="georgian-text" lang="ka">{{ 'დამატება' | t }}</span>
             </button>
           </div>
 
@@ -141,7 +149,7 @@
                     type="button"
                     class="hol-x"
                     (click)="removeHoliday(iso)"
-                    [attr.aria-label]="'წაშლა ' + iso"
+                    [attr.aria-label]="('წაშლა' | t) + ' ' + iso"
                   >
                     ×
                   </button>
@@ -150,14 +158,14 @@
             </div>
           } @else {
             <p class="text-sm mt-4 georgian-text" lang="ka" style="color: var(--tui-text-secondary)">
-              დასვენების დღეები არ არის მითითებული
+              {{ 'დასვენების დღეები არ არის მითითებული' | t }}
             </p>
           }
 
           <!-- Holiday Actions -->
           <div class="flex justify-end mt-6 pt-4 border-t" style="border-color: var(--tui-border-normal)">
             <button class="ss-btn ss-btn--primary" type="button" (click)="onSaveHolidays()">
-              <span class="georgian-text" lang="ka">შენახვა</span>
+              <span class="georgian-text" lang="ka">{{ 'შენახვა' | t }}</span>
             </button>
           </div>
         </div>
@@ -165,15 +173,15 @@
         <!-- Prices Column -->
         <div>
           <div class="ss-card p-6">
-            <h2 class="text-lg font-semibold georgian-text mb-1" lang="ka">ფასები</h2>
+            <h2 class="text-lg font-semibold georgian-text mb-1" lang="ka">{{ 'ფასები' | t }}</h2>
             <p class="text-sm georgian-text mb-4" lang="ka" style="color: var(--tui-text-secondary)">
-              ფასები მითითებულია ერთ საათზე — ჯავშნის ღირებულება ითვლება ხანგრძლივობის მიხედვით
+              {{ 'ფასები მითითებულია ერთ საათზე — ჯავშნის ღირებულება ითვლება ხანგრძლივობის მიხედვით' | t }}
             </p>
 
             <form [formGroup]="pricesForm" class="space-y-6">
               <!-- General Price -->
               <label class="ss-field">
-                <span class="ss-label georgian-text" lang="ka">ზოგადი ფასი (საათში)</span>
+                <span class="ss-label georgian-text" lang="ka">{{ 'ზოგადი ფასი (საათში)' | t }}</span>
                 <input
                   class="ss-input"
                   type="number"
@@ -184,10 +192,12 @@
 
               <!-- Off-Peak Hours -->
               <div class="space-y-3">
-                <h3 class="text-base font-semibold georgian-text" lang="ka">არაპიკური საათები</h3>
+                <h3 class="text-base font-semibold georgian-text" lang="ka">
+                  {{ 'არაპიკური საათები' | t }}
+                </h3>
 
                 <div class="space-y-3">
-                  <span class="ss-label georgian-text" lang="ka">დროის შუალედი</span>
+                  <span class="ss-label georgian-text" lang="ka">{{ 'დროის შუალედი' | t }}</span>
                   <div class="flex flex-wrap lg:flex-nowrap items-center gap-3">
                     <!-- Off-Peak Start Time -->
                     <div class="flex items-center gap-2">
@@ -226,7 +236,9 @@
 
                 <!-- Off-Peak Price -->
                 <label class="ss-field">
-                  <span class="ss-label georgian-text" lang="ka">არაპიკური ფასი (საათში)</span>
+                  <span class="ss-label georgian-text" lang="ka">
+                    {{ 'არაპიკური ფასი (საათში)' | t }}
+                  </span>
                   <input
                     class="ss-input"
                     type="number"
@@ -245,14 +257,16 @@
                 (click)="onSavePrices()"
                 [disabled]="!pricesForm.valid"
               >
-                <span class="georgian-text" lang="ka">შენახვა</span>
+                <span class="georgian-text" lang="ka">{{ 'შენახვა' | t }}</span>
               </button>
             </div>
           </div>
         </div>
         <!-- Working Days Section - Below Holidays -->
         <div class="ss-card p-6">
-          <h2 class="text-lg font-semibold georgian-text mb-4" lang="ka">კვირის სამუშაო დღეები</h2>
+          <h2 class="text-lg font-semibold georgian-text mb-4" lang="ka">
+            {{ 'კვირის სამუშაო დღეები' | t }}
+          </h2>
           <div
             class="grid grid-cols-1 min-[450px]:grid-cols-2 min-[766px]:grid-cols-3 min-[1550px]:grid-cols-4 gap-3"
           >
@@ -265,7 +279,7 @@
                   (change)="toggleWorkingDay(day)"
                 />
                 <span class="georgian-text text-sm font-medium" lang="ka">{{
-                  dayLabels[day]
+                  dayLabels[day] | t
                 }}</span>
               </label>
             }
@@ -274,7 +288,7 @@
           <!-- Action Button -->
           <div class="flex justify-end mt-6 pt-4 border-t" style="border-color: var(--tui-border-normal)">
             <button class="ss-btn ss-btn--primary" type="button" (click)="onSaveWorkingDays()">
-              <span class="georgian-text" lang="ka">შენახვა</span>
+              <span class="georgian-text" lang="ka">{{ 'შენახვა' | t }}</span>
             </button>
           </div>
         </div>

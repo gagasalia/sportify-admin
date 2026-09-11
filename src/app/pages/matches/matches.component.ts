@@ -22,32 +22,34 @@ import {
 import { tetriToGel } from '../../shared/utils/money.util';
 import { MatchPlayersDialogComponent } from './match-players-dialog.component';
 
+import { liveLabels, tr } from '../../shared/i18n/lang';
+import { TPipe } from '../../shared/i18n/t.pipe';
 import { SsToastService } from '../../shared/ui/toast.service';
 import { SsDialogService } from '../../shared/ui/dialog.service';
 import { SsConfirmComponent, SsConfirmData } from '../../shared/ui/confirm.component';
-const STATUS_LABELS: Record<MatchStatus, string> = {
+const STATUS_LABELS: Record<MatchStatus, string> = liveLabels({
   open: 'ღია',
   cancelled: 'გაუქმებული',
-};
+});
 const STATUS_CLASSES: Record<MatchStatus, string> = {
   open: 'ss-badge ss-badge--positive',
   cancelled: 'ss-badge ss-badge--negative',
 };
-const VISIBILITY_LABELS: Record<MatchVisibility, string> = {
+const VISIBILITY_LABELS: Record<MatchVisibility, string> = liveLabels({
   public: 'საჯარო',
   private: 'პრივატული',
-};
-const LEVEL_LABELS: Record<MatchLevel, string> = {
+});
+const LEVEL_LABELS: Record<MatchLevel, string> = liveLabels({
   any: 'ნებისმიერი',
   beginner: 'დამწყები',
   intermediate: 'საშუალო',
   advanced: 'გამოცდილი',
-};
-const CATEGORY_LABELS: Record<MatchCategory, string> = {
+});
+const CATEGORY_LABELS: Record<MatchCategory, string> = liveLabels({
   men: 'კაცები',
   women: 'ქალები',
   mixed: 'შერეული',
-};
+});
 
 /**
  * Operator moderation of player-organized matches (docs/15 §5): read-only
@@ -58,7 +60,7 @@ const CATEGORY_LABELS: Record<MatchCategory, string> = {
 @Component({
   selector: 'app-matches',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TPipe],
   templateUrl: './matches.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -112,7 +114,7 @@ export class MatchesComponent implements OnInit {
       .open<void>(
         MatchPlayersDialogComponent,
         {
-          label: `მოთამაშეები · ${match.facilityName ?? ''} ${match.date} ${match.startTime}`,
+          label: `${tr('მოთამაშეები')} · ${match.facilityName ?? ''} ${match.date} ${match.startTime}`,
           size: 'l',
           dismissible: true,
           closable: true,
@@ -126,12 +128,12 @@ export class MatchesComponent implements OnInit {
   protected cancel(match: AdminMatch): void {
     this.dialogs
       .open<boolean>(SsConfirmComponent, {
-        label: 'თამაშის გაუქმება',
+        label: tr('თამაშის გაუქმება'),
         size: 's',
         data: {
-          content: `გავაუქმოთ ${match.date} ${match.startTime} თამაში (${match.facilityName ?? ''})? მოთამაშეები დაინახავენ რომ ადმინისტრაციამ გააუქმა.`,
-          yes: 'გაუქმება',
-          no: 'არა',
+          content: `${tr('გავაუქმოთ')} ${match.date} ${match.startTime} ${tr('თამაში')} (${match.facilityName ?? ''})? ${tr('მოთამაშეები დაინახავენ რომ ადმინისტრაციამ გააუქმა.')}`,
+          yes: tr('გაუქმება'),
+          no: tr('არა'),
         } as SsConfirmData,
       })
       .pipe(take(1), filter(Boolean))
@@ -145,7 +147,7 @@ export class MatchesComponent implements OnInit {
                 list.map((m) => (m._id === updated._id ? updated : m)),
               );
               this.alerts
-                .open('თამაში გაუქმდა', { appearance: 'success' })
+                .open(tr('თამაში გაუქმდა'), { appearance: 'success' })
                 .pipe(take(1))
                 .subscribe();
             },
@@ -180,7 +182,7 @@ export class MatchesComponent implements OnInit {
       return '—';
     }
     return m.pricePerPlayerTetri === 0
-      ? 'უფასო'
-      : `${tetriToGel(m.pricePerPlayerTetri)} ₾/კაცი`;
+      ? tr('უფასო')
+      : `${tetriToGel(m.pricePerPlayerTetri)} ${tr('₾/კაცი')}`;
   }
 }

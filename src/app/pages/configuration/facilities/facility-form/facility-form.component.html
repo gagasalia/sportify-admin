@@ -7,13 +7,13 @@
         style="color: var(--tui-text-secondary)"
         lang="ka"
       >
-        ძირითადი ინფო
+        {{ 'ძირითადი ინფო' | t }}
       </h3>
 
       <!-- Name -->
       <label class="ss-field">
         <span class="ss-label georgian-text" lang="ka">
-          სახელი <span class="text-red-500">*</span>
+          {{ 'სახელი' | t }} <span class="text-red-500">*</span>
         </span>
         <input
           class="ss-input"
@@ -21,36 +21,36 @@
           formControlName="name"
         />
         @if (facilityForm.get('name')?.touched && facilityForm.get('name')?.hasError('required')) {
-          <span class="ss-error georgian-text" lang="ka">სახელი სავალდებულოა</span>
+          <span class="ss-error georgian-text" lang="ka">{{ 'სახელი სავალდებულოა' | t }}</span>
         }
       </label>
 
       <!-- Country -->
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">ქვეყანა</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'ქვეყანა' | t }}</span>
         <select class="ss-input georgian-text" lang="ka" formControlName="country">
           @for (country of countries; track country.id) {
-            <option [value]="country.id">{{ country.name }}</option>
+            <option [value]="country.id">{{ country.name | t }}</option>
           }
         </select>
       </label>
 
       <!-- City -->
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">ქალაქი</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'ქალაქი' | t }}</span>
         <select class="ss-input georgian-text" lang="ka" formControlName="city">
           @for (city of cities; track city.id) {
-            <option [value]="city.id">{{ city.name }}</option>
+            <option [value]="city.id">{{ city.name | t }}</option>
           }
         </select>
       </label>
 
       <!-- District -->
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">უბანი</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'უბანი' | t }}</span>
         <select class="ss-input georgian-text" lang="ka" formControlName="district">
           @for (district of districts; track district.id) {
-            <option [value]="district.id">{{ district.name }}</option>
+            <option [value]="district.id">{{ district.name | t }}</option>
           }
         </select>
       </label>
@@ -63,7 +63,7 @@
 
       <!-- Description -->
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">აღწერა</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'აღწერა' | t }}</span>
         <textarea class="ss-input georgian-text" lang="ka" formControlName="description" rows="4"></textarea>
       </label>
       <!-- Description (English) -->
@@ -82,23 +82,23 @@
           style="color: var(--tui-text-secondary)"
           lang="ka"
         >
-          მისამართი
+          {{ 'მისამართი' | t }}
         </h3>
 
         <div formGroupName="address" class="space-y-3">
           <!-- Street (manual entry) -->
           <label class="ss-field">
-            <span class="ss-label georgian-text" lang="ka">ქუჩა / მისამართი</span>
+            <span class="ss-label georgian-text" lang="ka">{{ 'ქუჩა / მისამართი' | t }}</span>
             <input class="ss-input georgian-text" lang="ka" formControlName="street" />
           </label>
 
           <div class="grid grid-cols-2 gap-4">
             <label class="ss-field">
-              <span class="ss-label georgian-text" lang="ka">განედი (Latitude)</span>
+              <span class="ss-label georgian-text" lang="ka">{{ 'განედი (Latitude)' | t }}</span>
               <input class="ss-input" formControlName="lat" />
             </label>
             <label class="ss-field">
-              <span class="ss-label georgian-text" lang="ka">გრძედი (Longitude)</span>
+              <span class="ss-label georgian-text" lang="ka">{{ 'გრძედი (Longitude)' | t }}</span>
               <input class="ss-input" formControlName="lng" />
             </label>
           </div>
@@ -112,16 +112,16 @@
           style="color: var(--tui-text-secondary)"
           lang="ka"
         >
-          საკონტაქტო ინფო
+          {{ 'საკონტაქტო ინფო' | t }}
         </h3>
 
         <div class="grid grid-cols-2 gap-4">
           <label class="ss-field">
-            <span class="ss-label georgian-text" lang="ka">ელ. ფოსტა</span>
+            <span class="ss-label georgian-text" lang="ka">{{ 'ელ. ფოსტა' | t }}</span>
             <input class="ss-input" type="email" formControlName="email" />
           </label>
           <label class="ss-field">
-            <span class="ss-label georgian-text" lang="ka">ტელეფონი</span>
+            <span class="ss-label georgian-text" lang="ka">{{ 'ტელეფონი' | t }}</span>
             <input class="ss-input" type="tel" formControlName="phone" />
           </label>
         </div>
@@ -132,7 +132,7 @@
         </label>
 
         <h3 class="text-sm font-semibold" style="color: var(--tui-text-secondary)">
-          სოციალური ქსელები
+          {{ 'სოციალური ქსელები' | t }}
         </h3>
         <div class="grid grid-cols-2 gap-4">
           <label class="ss-field">
@@ -150,7 +150,7 @@
 
     <!-- Media Upload -->
     <div>
-      <span class="ss-label georgian-text mb-3" lang="ka">მედია (ფოტოები)</span>
+      <span class="ss-label georgian-text mb-3" lang="ka">{{ 'მედია (ფოტოები)' | t }}</span>
 
       <div
         class="border-2 border-dashed rounded-lg p-6 text-center transition-colors"
@@ -164,7 +164,7 @@
           style="--ss-ic: url('assets/taiga-ui/icons/upload.svg'); color: var(--tui-text-tertiary)"
         ></i>
         <p class="mb-2 georgian-text" lang="ka" style="color: var(--tui-text-secondary)">
-          გადმოწიეთ ფოტოები აქ ან დააჭირეთ ასარჩევად
+          {{ 'გადმოწიეთ ფოტოები აქ ან დააჭირეთ ასარჩევად' | t }}
         </p>
         <input
           type="file"
@@ -181,7 +181,7 @@
           [disabled]="isUploadingMedia()"
         >
           <span class="georgian-text" lang="ka">{{
-            isUploadingMedia() ? 'იტვირთება...' : 'ფოტოების არჩევა'
+            (isUploadingMedia() ? 'იტვირთება...' : 'ფოტოების არჩევა') | t
           }}</span>
         </button>
       </div>
@@ -192,7 +192,7 @@
             <div class="relative group">
               <img
                 [src]="item.thumbUrl || item.url"
-                [alt]="'ფოტო ' + (i + 1)"
+                [alt]="('ფოტო' | t) + ' ' + (i + 1)"
                 loading="lazy"
                 decoding="async"
                 class="w-full h-24 object-cover rounded border"
@@ -202,7 +202,7 @@
                 type="button"
                 (click)="removeMedia(i)"
                 class="absolute top-1 right-1 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
-                [attr.aria-label]="'წაშლა'"
+                [attr.aria-label]="'წაშლა' | t"
               >
                 <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/x.svg'); width: 12px; height: 12px"></i>
               </button>
@@ -214,7 +214,7 @@
 
     <!-- Amenities -->
     <div>
-      <span class="ss-label georgian-text mb-3" lang="ka">მახასიათებლები</span>
+      <span class="ss-label georgian-text mb-3" lang="ka">{{ 'მახასიათებლები' | t }}</span>
       <div formArrayName="amenities" class="grid grid-cols-1 md:grid-cols-2 gap-2 mt-2">
         @for (amenity of amenities; track amenity; let i = $index) {
           <label class="flex items-center gap-2 cursor-pointer">
@@ -224,7 +224,7 @@
               [style.--ss-ic]="amenityIconUrl(amenity)"
               style="color: var(--tui-text-secondary)"
             ></i>
-            <span class="georgian-text text-sm" lang="ka">{{ amenityLabels[amenity] }}</span>
+            <span class="georgian-text text-sm" lang="ka">{{ amenityLabels[amenity] | t }}</span>
           </label>
         }
       </div>
@@ -233,10 +233,10 @@
     <!-- Action Buttons -->
     <div class="flex justify-end gap-2 mt-6">
       <button class="ss-btn ss-btn--flat" type="button" (click)="onCancel()">
-        <span class="georgian-text" lang="ka">გაუქმება</span>
+        <span class="georgian-text" lang="ka">{{ 'გაუქმება' | t }}</span>
       </button>
       <button class="ss-btn ss-btn--primary" type="submit" [disabled]="facilityForm.invalid">
-        <span class="georgian-text" lang="ka">შენახვა</span>
+        <span class="georgian-text" lang="ka">{{ 'შენახვა' | t }}</span>
       </button>
     </div>
   </form>

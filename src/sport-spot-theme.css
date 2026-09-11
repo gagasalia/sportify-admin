@@ -1265,3 +1265,72 @@ select.ss-input {
     opacity: 1;
   }
 }
+
+/* ── Language toggle — GE/UK flag slider, ported from the webapp header ──── */
+.toggle {
+  width: 52px;
+  height: 30px;
+  border-radius: var(--r-pill);
+  background: var(--surface-3);
+  border: 1px solid var(--hairline);
+  position: relative;
+  overflow: hidden;
+  transition: background var(--dur-2) var(--ease);
+  box-sizing: border-box;
+  flex: 0 0 auto;
+  cursor: pointer;
+  padding: 0;
+}
+.toggle .knob {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur-3) var(--ease-emph);
+}
+.toggle.on .knob {
+  transform: translateX(22px);
+}
+.toggle .t-ic {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: grid;
+  place-items: center;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.55;
+  transition: opacity var(--dur-2) var(--ease);
+}
+.toggle .t-ic.left {
+  left: 6px;
+}
+.toggle .t-ic.right {
+  right: 6px;
+}
+/* language: flags stay full-color on the active side, dim otherwise */
+.toggle.lang .t-ic .flag {
+  width: 16px;
+  height: 12px;
+  border-radius: 2.5px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.25);
+}
+.toggle.lang .t-ic {
+  opacity: 0.4;
+  filter: saturate(0.5);
+}
+.toggle.lang:not(.on) .t-ic.left,
+.toggle.lang.on .t-ic.right {
+  opacity: 1;
+  filter: none;
+}
+/* the flag reads better on a neutral knob than on the accent */
+.toggle.lang .knob {
+  background: var(--surface);
+  border: 1px solid var(--hairline-2);
+  box-sizing: border-box;
+}

@@ -5,6 +5,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideHttpClient } from '@angular/common/http';
 import { provideHttpClientTesting } from '@angular/common/http/testing';
 import { App } from './app';
+import { TPipe } from './shared/i18n/t.pipe';
 
 describe('App', () => {
   beforeEach(async () => {
@@ -18,7 +19,8 @@ describe('App', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
     })
-      .overrideComponent(App, { set: { imports: [], schemas: [NO_ERRORS_SCHEMA] } })
+      // The template uses `| t`, so the pipe must survive the imports override.
+      .overrideComponent(App, { set: { imports: [TPipe], schemas: [NO_ERRORS_SCHEMA] } })
       .compileComponents();
   });
 

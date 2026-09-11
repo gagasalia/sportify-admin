@@ -9,6 +9,7 @@ import { AcademyService } from '../../services/http-services/academy.service';
 import { FacilityService } from '../../services/http-services/facility.service';
 import { CourtService } from '../../services/http-services/court.service';
 import { StatsService } from '../../services/http-services/stats.service';
+import { TPipe } from '../../shared/i18n/t.pipe';
 import {
   StatsOverview,
   StatsRevenue,
@@ -98,7 +99,9 @@ describe('StatisticsComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(StatisticsComponent, {
-        set: { imports: [], schemas: [NO_ERRORS_SCHEMA] },
+        // The override REPLACES the component's imports — the template's `| t`
+        // still needs the pipe (NO_ERRORS_SCHEMA does not cover unknown pipes).
+        set: { imports: [TPipe], schemas: [NO_ERRORS_SCHEMA] },
       })
       .compileComponents();
 

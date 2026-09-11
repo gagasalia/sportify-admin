@@ -1,7 +1,7 @@
 <router-outlet />
 <ss-ui-outlet />
 @if (loading()) {
-  <div class="ss-loading-overlay" role="progressbar" aria-label="იტვირთება">
+  <div class="ss-loading-overlay" role="progressbar" [attr.aria-label]="'იტვირთება' | t">
     <div class="ss-spinner"></div>
   </div>
 }

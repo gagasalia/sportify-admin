@@ -6,6 +6,8 @@
  * edge (`gelToTetri`/`tetriToGel`).
  */
 
+import { liveLabels } from '../i18n/lang';
+
 export type PromoDiscountType = 'percent' | 'fixed';
 
 export type PromoEligibility = 'everyone' | 'first_booking' | 'booking_count_range';
@@ -19,19 +21,21 @@ export type PromoDerivedStatus = 'inactive' | 'expired' | 'scheduled' | 'deplete
 /** `code` wire format: 3–24 chars, A–Z 0–9 dashes, alphanumeric at both ends. */
 export const PROMO_CODE_RE = /^[A-Z0-9][A-Z0-9-]{1,22}[A-Z0-9]$/;
 
-export const ELIGIBILITY_LABELS: Record<PromoEligibility, string> = {
+// Values stay RAW Georgian — `liveLabels` translates on every read, so a
+// language flip re-renders instead of going stale (i18n rule: never bake).
+export const ELIGIBILITY_LABELS: Record<PromoEligibility, string> = liveLabels({
   everyone: 'ყველასთვის',
   first_booking: 'პირველი ჯავშნისთვის',
   booking_count_range: 'ჯავშნების რაოდენობით',
-};
+});
 
-export const PROMO_STATUS_LABELS: Record<PromoDerivedStatus, string> = {
+export const PROMO_STATUS_LABELS: Record<PromoDerivedStatus, string> = liveLabels({
   inactive: 'გამორთული',
   expired: 'ვადაგასული',
   scheduled: 'დაგეგმილი',
   depleted: 'ამოწურული',
   active: 'აქტიური',
-};
+});
 
 // Theme-aware ss-badge variants (mirrors the tournaments STATUS_CLASSES map).
 export const PROMO_STATUS_CLASSES: Record<PromoDerivedStatus, string> = {

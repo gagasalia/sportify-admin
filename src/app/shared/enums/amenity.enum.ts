@@ -1,3 +1,5 @@
+import { liveLabels } from '../i18n/lang';
+
 export enum Amenity {
   Restrooms = 'restrooms',
   Showers = 'showers',
@@ -9,7 +11,8 @@ export enum Amenity {
   VendingMachines = 'vending_machines',
 }
 
-export const AMENITY_LABELS: Record<Amenity, string> = {
+/** Labels stay RAW Georgian; `liveLabels` translates on every read. */
+export const AMENITY_LABELS: Record<Amenity, string> = liveLabels({
   [Amenity.Restrooms]: 'საპირფარეშო',
   [Amenity.Showers]: 'შხაპი',
   [Amenity.ChangingRooms]: 'გამოსაცვლელი ოთახი',
@@ -18,7 +21,7 @@ export const AMENITY_LABELS: Record<Amenity, string> = {
   [Amenity.PaidParking]: 'ფასიანი პარკინგი',
   [Amenity.HairDryers]: 'თმის ფენი',
   [Amenity.VendingMachines]: 'ვენდინგ მანქანა',
-};
+});
 
 export const AMENITY_ICONS: Record<Amenity, string> = {
   [Amenity.Restrooms]: '@lucide.toilet',

@@ -3,7 +3,7 @@
     <!-- Name -->
     <label class="ss-field">
       <span class="ss-label georgian-text" lang="ka">
-        სახელი <span class="text-red-500">*</span>
+        {{ 'სახელი' | t }} <span class="text-red-500">*</span>
       </span>
       <input
         class="ss-input"
@@ -12,7 +12,7 @@
         placeholder="Summer Open 2026"
       />
       @if (form.get('name')?.touched && form.get('name')?.invalid) {
-        <span class="ss-error georgian-text" lang="ka">მინიმუმ 3 სიმბოლო</span>
+        <span class="ss-error georgian-text" lang="ka">{{ 'მინიმუმ 3 სიმბოლო' | t }}</span>
       }
     </label>
     <!-- Name (English) -->
@@ -24,9 +24,13 @@
     <!-- Facility (single-select chips, first facility preselected on create) -->
     <div class="ss-field">
       <span class="ss-label georgian-text" lang="ka">
-        ობიექტი <span class="text-red-500">*</span>
+        {{ 'ობიექტი' | t }} <span class="text-red-500">*</span>
       </span>
-      <div class="ss-chip-rail ss-chip-rail--wrap" role="radiogroup" aria-label="ობიექტი">
+      <div
+        class="ss-chip-rail ss-chip-rail--wrap"
+        role="radiogroup"
+        [attr.aria-label]="'ობიექტი' | t"
+      >
         @for (facility of facilities(); track facilityId(facility)) {
           <button
             type="button"
@@ -45,7 +49,9 @@
     <!-- Type + Format -->
     <div class="grid grid-cols-2 gap-4">
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">ტიპი <span class="text-red-500">*</span></span>
+        <span class="ss-label georgian-text" lang="ka">
+          {{ 'ტიპი' | t }} <span class="text-red-500">*</span>
+        </span>
         <select class="ss-input georgian-text" lang="ka" formControlName="type">
           @for (option of typeOptions; track option) {
             <option [value]="option">{{ stringifyType(option) }}</option>
@@ -54,7 +60,7 @@
       </label>
       <label class="ss-field">
         <span class="ss-label georgian-text" lang="ka">
-          ფორმატი <span class="text-red-500">*</span>
+          {{ 'ფორმატი' | t }} <span class="text-red-500">*</span>
         </span>
         <select class="ss-input georgian-text" lang="ka" formControlName="format">
           @for (option of formatOptions; track option) {
@@ -67,7 +73,7 @@
     <!-- Level + Category -->
     <div class="grid grid-cols-2 gap-4">
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">დონე</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'დონე' | t }}</span>
         <select class="ss-input georgian-text" lang="ka" formControlName="level">
           @for (option of levelOptions; track option) {
             <option [value]="option">{{ stringifyLevel(option) }}</option>
@@ -75,7 +81,7 @@
         </select>
       </label>
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">კატეგორია</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'კატეგორია' | t }}</span>
         <select class="ss-input georgian-text" lang="ka" formControlName="category">
           @for (option of categoryOptions; track option) {
             <option [value]="option">{{ stringifyCategory(option) }}</option>
@@ -88,13 +94,13 @@
     <div class="grid grid-cols-2 gap-4">
       <label class="ss-field">
         <span class="ss-label georgian-text" lang="ka">
-          დაწყების თარიღი <span class="text-red-500">*</span>
+          {{ 'დაწყების თარიღი' | t }} <span class="text-red-500">*</span>
         </span>
         <input class="ss-input" type="date" formControlName="startDate" />
       </label>
       <label class="ss-field">
         <span class="ss-label georgian-text" lang="ka">
-          დაწყების დრო <span class="text-red-500">*</span>
+          {{ 'დაწყების დრო' | t }} <span class="text-red-500">*</span>
         </span>
         <input class="ss-input" type="time" formControlName="startTime" />
       </label>
@@ -103,14 +109,14 @@
     <!-- End date + registration deadline -->
     <div class="grid grid-cols-2 gap-4">
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">დასრულების თარიღი</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'დასრულების თარიღი' | t }}</span>
         <input class="ss-input" type="date" formControlName="endDate" />
       </label>
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">რეგისტრაციის დედლაინი</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'რეგისტრაციის დედლაინი' | t }}</span>
         <input class="ss-input" type="datetime-local" formControlName="registrationDeadline" />
         <span class="text-xs georgian-text" style="color: var(--tui-text-secondary)" lang="ka">
-          ცარიელი = დაწყების მომენტამდე
+          {{ 'ცარიელი = დაწყების მომენტამდე' | t }}
         </span>
       </label>
     </div>
@@ -119,26 +125,30 @@
     <div class="grid grid-cols-2 gap-4">
       <label class="ss-field">
         <span class="ss-label georgian-text" lang="ka">
-          საფასური (₾) <span class="text-red-500">*</span>
+          {{ 'საფასური (₾)' | t }} <span class="text-red-500">*</span>
         </span>
         <input class="ss-input" type="number" min="0" step="0.5" formControlName="entryFeeGel" />
-        <span class="text-xs georgian-text" style="color: var(--tui-text-secondary)" lang="ka">0 = უფასო</span>
+        <span class="text-xs georgian-text" style="color: var(--tui-text-secondary)" lang="ka">{{ '0 = უფასო' | t }}</span>
       </label>
       <label class="ss-field">
         <span class="ss-label georgian-text" lang="ka">
-          ადგილები <span class="text-red-500">*</span>
+          {{ 'ადგილები' | t }} <span class="text-red-500">*</span>
         </span>
         <input class="ss-input" type="number" min="2" max="512" formControlName="maxParticipants" />
         <span class="text-xs georgian-text" style="color: var(--tui-text-secondary)" lang="ka">
-          წყვილებისთვის — წყვილების რაოდენობა
+          {{ 'წყვილებისთვის — წყვილების რაოდენობა' | t }}
         </span>
       </label>
     </div>
 
     <!-- Prize -->
     <label class="ss-field">
-      <span class="ss-label georgian-text" lang="ka">პრიზი</span>
-      <input class="ss-input" formControlName="prizeDescription" placeholder="₾1000 + თასები" />
+      <span class="ss-label georgian-text" lang="ka">{{ 'პრიზი' | t }}</span>
+      <input
+        class="ss-input"
+        formControlName="prizeDescription"
+        [placeholder]="'₾1000 + თასები' | t"
+      />
     </label>
     <!-- Prize (English) -->
     <label class="ss-field">
@@ -148,7 +158,7 @@
 
     <!-- Description -->
     <label class="ss-field">
-      <span class="ss-label georgian-text" lang="ka">აღწერა</span>
+      <span class="ss-label georgian-text" lang="ka">{{ 'აღწერა' | t }}</span>
       <textarea class="ss-input georgian-text" lang="ka" formControlName="description" rows="3"></textarea>
     </label>
     <!-- Description (English) -->
@@ -160,10 +170,10 @@
     <!-- Actions -->
     <div class="flex justify-end gap-2 pt-2">
       <button class="ss-btn ss-btn--flat" type="button" (click)="cancel()">
-        <span class="georgian-text" lang="ka">გაუქმება</span>
+        <span class="georgian-text" lang="ka">{{ 'გაუქმება' | t }}</span>
       </button>
       <button class="ss-btn ss-btn--primary" type="submit" [disabled]="isSaving()">
-        <span class="georgian-text" lang="ka">{{ isEditMode ? 'შენახვა' : 'შექმნა' }}</span>
+        <span class="georgian-text" lang="ka">{{ (isEditMode ? 'შენახვა' : 'შექმნა') | t }}</span>
       </button>
     </div>
   </form>

@@ -11,6 +11,7 @@ import {
 } from '@angular/core';
 import { NG_VALUE_ACCESSOR, ControlValueAccessor } from '@angular/forms';
 import { Academy } from '../models/academy.model';
+import { TPipe } from '../i18n/t.pipe';
 
 /**
  * Academy dropdown that renders each academy's LOGO next to its name — a
@@ -22,6 +23,7 @@ import { Academy } from '../models/academy.model';
 @Component({
   selector: 'ss-academy-select',
   standalone: true,
+  imports: [TPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
     {
@@ -36,7 +38,7 @@ import { Academy } from '../models/academy.model';
       class="ss-input as-trigger"
       role="combobox"
       [attr.aria-expanded]="open()"
-      [attr.aria-label]="ariaLabel || null"
+      [attr.aria-label]="ariaLabel ? (ariaLabel | t) : null"
       [disabled]="disabled()"
       (click)="toggle()"
       (keydown)="onTriggerKeydown($event)"
@@ -49,7 +51,7 @@ import { Academy } from '../models/academy.model';
         }
         <span class="as-label georgian-text" lang="ka">{{ academy.name }}</span>
       } @else {
-        <span class="as-label as-label--empty georgian-text" lang="ka">{{ emptyLabel }}</span>
+        <span class="as-label as-label--empty georgian-text" lang="ka">{{ (emptyLabel ?? '') | t }}</span>
       }
       <svg class="as-chevron" width="14" height="14" viewBox="0 0 24 24" fill="none"
         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
@@ -71,7 +73,7 @@ import { Academy } from '../models/academy.model';
             (mouseenter)="activeIndex.set(0)"
           >
             <span class="as-logo as-monogram as-monogram--all" aria-hidden="true">✳</span>
-            <span class="as-label georgian-text" lang="ka">{{ emptyLabel }}</span>
+            <span class="as-label georgian-text" lang="ka">{{ emptyLabel | t }}</span>
           </button>
         }
         @for (academy of academies; track academy._id; let i = $index) {
@@ -187,7 +189,11 @@ import { Academy } from '../models/academy.model';
 export class AcademySelectComponent implements ControlValueAccessor {
   /** Academies to offer (with `logo` when the API returned one). */
   @Input() academies: Academy[] = [];
-  /** Label for the '' choice (e.g. "ყველა აკადემია"); null = no empty choice. */
+  /**
+   * Label for the '' choice (e.g. "ყველა აკადემია"); null = no empty choice.
+   * Callers pass RAW Georgian — the template runs it through `| t`, so it
+   * follows the live language (already-English text passes through unchanged).
+   */
   @Input() emptyLabel: string | null = null;
   @Input() ariaLabel = '';
 

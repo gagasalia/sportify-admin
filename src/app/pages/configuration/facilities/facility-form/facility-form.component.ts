@@ -20,6 +20,8 @@ import { Amenity, AMENITY_LABELS, AMENITY_ICONS } from '../../../../shared/enums
 import { CITY_OPTIONS } from '../../../../shared/enums/city.enum';
 import { DISTRICT_OPTIONS } from '../../../../shared/enums/district.enum';
 import { TenantService } from '../../../../shared/services/tenant.service';
+import { tr } from '../../../../shared/i18n/lang';
+import { TPipe } from '../../../../shared/i18n/t.pipe';
 
 import { SsToastService } from '../../../../shared/ui/toast.service';
 import { SS_DIALOG_CONTEXT, SsDialogContext, SsDialogService } from '../../../../shared/ui/dialog.service';
@@ -36,7 +38,7 @@ interface CountryItem {
 @Component({
   selector: 'app-facility-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, TPipe],
   templateUrl: './facility-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -45,6 +47,8 @@ export class FacilityFormComponent implements OnInit {
 
   protected readonly mediaItems = signal<IMedia[]>([]);
 
+  // RAW Georgian labels — the template translates them at render time (`| t`);
+  // the `id` is the value sent to the API and never translated.
   readonly countries: readonly CountryItem[] = [{ id: 'Georgia', name: 'საქართველო' }];
   readonly cities = CITY_OPTIONS;
   readonly districts = DISTRICT_OPTIONS;
@@ -183,20 +187,20 @@ export class FacilityFormComponent implements OnInit {
           error: (error) => {
             if (error instanceof MediaUnconfiguredError) {
               this.alerts
-                .open('სურათების ატვირთვა ამ გარემოში არ არის კონფიგურირებული', {
+                .open(tr('სურათების ატვირთვა ამ გარემოში არ არის კონფიგურირებული'), {
                   appearance: 'error',
                 })
                 .pipe(take(1))
                 .subscribe();
             } else if (error instanceof MediaFileTooLargeError) {
               this.alerts
-                .open('ფაილი ძალიან დიდია. მაქსიმალური ზომაა 10 MB.', { appearance: 'error' })
+                .open(tr('ფაილი ძალიან დიდია. მაქსიმალური ზომაა 10 MB.'), { appearance: 'error' })
                 .pipe(take(1))
                 .subscribe();
             } else {
               console.error('Error uploading media:', error);
               this.alerts
-                .open('შეცდომა სურათის ატვირთვისას', { appearance: 'error' })
+                .open(tr('შეცდომა სურათის ატვირთვისას'), { appearance: 'error' })
                 .pipe(take(1))
                 .subscribe();
             }
@@ -215,7 +219,7 @@ export class FacilityFormComponent implements OnInit {
     if (this.facilityForm.invalid) {
       this.facilityForm.markAllAsTouched();
       this.alerts
-        .open('გთხოვთ შეავსოთ ყველა სავალდებულო ველი', { appearance: 'error' })
+        .open(tr('გთხოვთ შეავსოთ ყველა სავალდებულო ველი'), { appearance: 'error' })
         .pipe(take(1))
         .subscribe();
       return;
@@ -226,7 +230,7 @@ export class FacilityFormComponent implements OnInit {
     // be orphaned. Block the submit and surface a Georgian error instead.
     if (!owner) {
       this.alerts
-        .open('აკადემია ვერ მოიძებნა', { appearance: 'error' })
+        .open(tr('აკადემია ვერ მოიძებნა'), { appearance: 'error' })
         .pipe(take(1))
         .subscribe();
       return;
@@ -268,14 +272,16 @@ export class FacilityFormComponent implements OnInit {
 
     saveOperation.pipe(take(1)).subscribe({
       next: (savedFacility) => {
-        const message = facilityId ? 'ობიექტი წარმატებით განახლდა!' : 'ობიექტი წარმატებით დაემატა!';
+        const message = tr(
+          facilityId ? 'ობიექტი წარმატებით განახლდა!' : 'ობიექტი წარმატებით დაემატა!',
+        );
         this.alerts.open(message, { appearance: 'success' }).pipe(take(1)).subscribe();
         this.context.completeWith(savedFacility);
       },
       error: () => {
-        const message = facilityId
-          ? 'შეცდომა ობიექტის განახლებისას.'
-          : 'შეცდომა ობიექტის დამატებისას.';
+        const message = tr(
+          facilityId ? 'შეცდომა ობიექტის განახლებისას.' : 'შეცდომა ობიექტის დამატებისას.',
+        );
         this.alerts.open(message, { appearance: 'error' }).pipe(take(1)).subscribe();
       },
     });

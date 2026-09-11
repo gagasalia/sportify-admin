@@ -16,6 +16,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { defaultIfEmpty, take } from 'rxjs';
 import { FacilityService } from '../../../../services/http-services/facility.service';
+import { tr } from '../../../../shared/i18n/lang';
+import { TPipe } from '../../../../shared/i18n/t.pipe';
 
 import { SsDialogService } from '../../../../shared/ui/dialog.service';
 import { SsToastService } from '../../../../shared/ui/toast.service';
@@ -23,7 +25,7 @@ import { SsConfirmComponent, SsConfirmData } from '../../../../shared/ui/confirm
 @Component({
   selector: 'app-facility-card',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterLink],
+  imports: [CommonModule, FormsModule, RouterLink, TPipe],
   templateUrl: './facility-card.component.html',
   styleUrls: ['./facility-card.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -64,11 +66,21 @@ export class FacilityCardComponent implements OnChanges {
   }
 
   // Single-country MVP — the country stays hard-coded; the city comes from the
-  // facility (თბილისი / წყნეთი).
+  // facility (თბილისი / წყნეთი). Both stay RAW Georgian here — the template
+  // translates them at render time (`| t`).
   get cityName(): string {
     return cityDisplayName(this.facility.city);
   }
   readonly countryName = 'საქართველო';
+
+  /**
+   * `tr()` on a confirm message plus the `{name}` fill-in: the facility name is
+   * DATA (never translated) and the placeholder keeps it wherever the translated
+   * sentence puts it.
+   */
+  private withName(message: string): string {
+    return tr(message).replace('{name}', () => this.facility.name ?? '');
+  }
 
   onToggleState(checked: boolean): void {
     const facilityId = this.facility._id ?? this.facility.id;
@@ -82,20 +94,20 @@ export class FacilityCardComponent implements OnChanges {
 
     const data: SsConfirmData = checked
       ? {
-          content: `გამოვაქვეყნოთ „${this.facility.name}"? ის ხილული გახდება მოთამაშეებისთვის.`,
-          yes: 'გამოქვეყნება',
-          no: 'გაუქმება',
+          content: this.withName('გამოვაქვეყნოთ „{name}"? ის ხილული გახდება მოთამაშეებისთვის.'),
+          yes: tr('გამოქვეყნება'),
+          no: tr('გაუქმება'),
         }
       : {
-          content: `მოვხსნათ „${this.facility.name}" გამოქვეყნებიდან? მოთამაშეები მას ვეღარ ნახავენ.`,
-          yes: 'მოხსნა',
-          no: 'გაუქმება',
+          content: this.withName('მოვხსნათ „{name}" გამოქვეყნებიდან? მოთამაშეები მას ვეღარ ნახავენ.'),
+          yes: tr('მოხსნა'),
+          no: tr('გაუქმება'),
           appearance: 'destructive',
         };
 
     this.dialogs
       .open<boolean>(SsConfirmComponent, {
-        label: checked ? 'ობიექტის გამოქვეყნება' : 'გამოქვეყნების მოხსნა',
+        label: tr(checked ? 'ობიექტის გამოქვეყნება' : 'გამოქვეყნების მოხსნა'),
         size: 's',
         data,
       })
@@ -135,12 +147,12 @@ export class FacilityCardComponent implements OnChanges {
     event.stopPropagation();
     this.dialogs
       .open<boolean>(SsConfirmComponent, {
-        label: 'ობიექტის წაშლა',
+        label: tr('ობიექტის წაშლა'),
         size: 's',
         data: {
-          content: `ნამდვილად წავშალოთ „${this.facility.name}"?`,
-          yes: 'წაშლა',
-          no: 'გაუქმება',
+          content: this.withName('ნამდვილად წავშალოთ „{name}"?'),
+          yes: tr('წაშლა'),
+          no: tr('გაუქმება'),
           appearance: 'destructive',
         },
       })
@@ -165,7 +177,7 @@ export class FacilityCardComponent implements OnChanges {
 
     if (Number.isNaN(lat) || Number.isNaN(lng)) {
       this.alerts
-        .open('ობიექტის მისამართი დამატებული არაა', { appearance: 'error' })
+        .open(tr('ობიექტის მისამართი დამატებული არაა'), { appearance: 'error' })
         .pipe(take(1))
         .subscribe();
       return;

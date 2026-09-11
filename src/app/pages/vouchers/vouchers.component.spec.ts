@@ -5,6 +5,7 @@ import { of, throwError } from 'rxjs';
 import { HttpErrorResponse } from '@angular/common/http';
 
 import { VouchersComponent } from './vouchers.component';
+import { TPipe } from '../../shared/i18n/t.pipe';
 import { VoucherService } from '../../services/http-services/voucher.service';
 import { FacilityService } from '../../services/http-services/facility.service';
 import { AcademyService } from '../../services/http-services/academy.service';
@@ -102,7 +103,9 @@ describe('VouchersComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(VouchersComponent, {
-        set: { imports: [], schemas: [NO_ERRORS_SCHEMA] },
+        // The template translates through the impure `t` pipe — an override that
+        // replaces `imports` must keep it or the view fails with NG0302.
+        set: { imports: [TPipe], schemas: [NO_ERRORS_SCHEMA] },
       })
       .compileComponents();
 

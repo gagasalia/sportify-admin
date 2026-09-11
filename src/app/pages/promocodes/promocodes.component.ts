@@ -26,6 +26,8 @@ import {
   Promocode,
 } from '../../shared/models/promocode.model';
 import { tetriToGel } from '../../shared/utils/money.util';
+import { tr } from '../../shared/i18n/lang';
+import { TPipe } from '../../shared/i18n/t.pipe';
 import { SsToastService } from '../../shared/ui/toast.service';
 import { SsDialogService } from '../../shared/ui/dialog.service';
 import { SsConfirmComponent, SsConfirmData } from '../../shared/ui/confirm.component';
@@ -44,7 +46,7 @@ const PAGE_SIZE = 20;
 @Component({
   selector: 'app-promocodes',
   standalone: true,
-  imports: [CommonModule, FormsModule, AcademySelectComponent],
+  imports: [CommonModule, FormsModule, AcademySelectComponent, TPipe],
   templateUrl: './promocodes.component.html',
   styleUrl: './promocodes.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -169,7 +171,7 @@ export class PromocodesComponent implements OnInit {
   protected addPromocode(): void {
     this.dialogs
       .open<Promocode | null>(PromocodeFormComponent, {
-        label: 'პრომოკოდის დამატება',
+        label: tr('პრომოკოდის დამატება'),
         size: 'l',
         dismissible: true,
         closable: true,
@@ -179,7 +181,7 @@ export class PromocodesComponent implements OnInit {
       .subscribe((result) => {
         if (result) {
           this.load();
-          this.alerts.open('შეიქმნა', { appearance: 'success' }).pipe(take(1)).subscribe();
+          this.alerts.open(tr('შეიქმნა'), { appearance: 'success' }).pipe(take(1)).subscribe();
         }
       });
   }
@@ -187,7 +189,7 @@ export class PromocodesComponent implements OnInit {
   protected editPromocode(promo: Promocode): void {
     this.dialogs
       .open<Promocode | null>(PromocodeFormComponent, {
-        label: 'პრომოკოდის რედაქტირება',
+        label: tr('პრომოკოდის რედაქტირება'),
         size: 'l',
         dismissible: true,
         closable: true,
@@ -197,7 +199,7 @@ export class PromocodesComponent implements OnInit {
       .subscribe((result) => {
         if (result) {
           this.load();
-          this.alerts.open('შეინახა', { appearance: 'success' }).pipe(take(1)).subscribe();
+          this.alerts.open(tr('შეინახა'), { appearance: 'success' }).pipe(take(1)).subscribe();
         }
       });
   }
@@ -205,7 +207,7 @@ export class PromocodesComponent implements OnInit {
   protected openRedemptions(promo: Promocode): void {
     this.dialogs
       .open<void>(PromoRedemptionsDialogComponent, {
-        label: `გამოყენებები · ${promo.code}`,
+        label: `${tr('გამოყენებები')} · ${promo.code}`,
         size: 'l',
         dismissible: true,
         closable: true,
@@ -218,12 +220,12 @@ export class PromocodesComponent implements OnInit {
   protected deletePromocode(promo: Promocode): void {
     this.dialogs
       .open<boolean>(SsConfirmComponent, {
-        label: 'პრომოკოდის წაშლა',
+        label: tr('პრომოკოდის წაშლა'),
         size: 's',
         data: {
-          content: `ნამდვილად წავშალოთ პრომოკოდი „${promo.code}"?`,
-          yes: 'წაშლა',
-          no: 'გაუქმება',
+          content: `${tr('ნამდვილად წავშალოთ პრომოკოდი')} „${promo.code}"?`,
+          yes: tr('წაშლა'),
+          no: tr('გაუქმება'),
           appearance: 'destructive',
         } as SsConfirmData,
       })
@@ -236,11 +238,11 @@ export class PromocodesComponent implements OnInit {
       .subscribe({
         next: () => {
           this.load();
-          this.alerts.open('წაიშალა', { appearance: 'success' }).pipe(take(1)).subscribe();
+          this.alerts.open(tr('წაიშალა'), { appearance: 'success' }).pipe(take(1)).subscribe();
         },
         error: () => {
           this.alerts
-            .open('წაშლა ვერ მოხერხდა, სცადეთ თავიდან', { appearance: 'error' })
+            .open(tr('წაშლა ვერ მოხერხდა, სცადეთ თავიდან'), { appearance: 'error' })
             .pipe(take(1))
             .subscribe();
         },
@@ -264,14 +266,14 @@ export class PromocodesComponent implements OnInit {
           this.rows.update((list) =>
             list.map((p) => (p._id === updated._id ? updated : p)),
           );
-          this.alerts.open('შეინახა', { appearance: 'success' }).pipe(take(1)).subscribe();
+          this.alerts.open(tr('შეინახა'), { appearance: 'success' }).pipe(take(1)).subscribe();
         },
         error: () => {
           this.rows.update((list) =>
             list.map((p) => (p._id === promo._id ? { ...p, active: previous } : p)),
           );
           this.alerts
-            .open('შენახვა ვერ მოხერხდა, სცადეთ თავიდან', { appearance: 'error' })
+            .open(tr('შენახვა ვერ მოხერხდა, სცადეთ თავიდან'), { appearance: 'error' })
             .pipe(take(1))
             .subscribe();
         },
@@ -315,21 +317,24 @@ export class PromocodesComponent implements OnInit {
   /** 'მაქს. X ₾' cap hint for capped percent discounts, or null. */
   protected maxDiscountHint(p: Promocode): string | null {
     return p.discountType === 'percent' && p.maxDiscountTetri != null
-      ? `მაქს. ${tetriToGel(p.maxDiscountTetri)} ₾`
+      ? `${tr('მაქს.')} ${tetriToGel(p.maxDiscountTetri)} ₾`
       : null;
   }
 
   protected eligibilityLabel(p: Promocode): string {
     if (p.eligibility === 'booking_count_range') {
       const min = p.minBookings ?? 0;
-      return p.maxBookings != null ? `${min}–${p.maxBookings} ჯავშანი` : `${min}+ ჯავშანი`;
+      const bookings = tr('ჯავშანი');
+      return p.maxBookings != null
+        ? `${min}–${p.maxBookings} ${bookings}`
+        : `${min}+ ${bookings}`;
     }
     return ELIGIBILITY_LABELS[p.eligibility] ?? p.eligibility;
   }
 
   /** 'DD.MM.YY – DD.MM.YY' validity window, or 'უვადო' when unbounded. */
   protected windowLabel(p: Promocode): string {
-    if (!p.startsAt && !p.expiresAt) return 'უვადო';
+    if (!p.startsAt && !p.expiresAt) return tr('უვადო');
     const from = p.startsAt ? this.fmtDate(p.startsAt) : '…';
     const to = p.expiresAt ? this.fmtDate(p.expiresAt) : '…';
     return `${from} – ${to}`;

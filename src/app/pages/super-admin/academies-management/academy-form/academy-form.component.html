@@ -7,13 +7,13 @@
         style="color: var(--tui-text-secondary)"
         lang="ka"
       >
-        ძირითადი ინფო
+        {{ 'ძირითადი ინფო' | t }}
       </h3>
 
       <!-- Name -->
       <label class="ss-field">
         <span class="ss-label georgian-text" lang="ka">
-          სახელი <span class="text-red-500">*</span>
+          {{ 'სახელი' | t }} <span class="text-red-500">*</span>
         </span>
         <input
           class="ss-input georgian-text"
@@ -24,14 +24,14 @@
           formControlName="name"
         />
         @if (academyForm.get('name')?.touched && academyForm.get('name')?.hasError('required')) {
-          <span class="ss-error georgian-text" lang="ka">სახელი სავალდებულოა</span>
+          <span class="ss-error georgian-text" lang="ka">{{ 'სახელი სავალდებულოა' | t }}</span>
         }
       </label>
 
       <!-- Admins (both modes) — checkbox list over admin/superadmin users -->
       <div class="ss-field">
         <span class="ss-label georgian-text" lang="ka">
-          ადმინ(ებ)ი <span class="text-red-500">*</span>
+          {{ 'ადმინ(ებ)ი' | t }} <span class="text-red-500">*</span>
         </span>
         @if (isLoadingUsers()) {
           <div
@@ -39,7 +39,7 @@
             style="color: var(--tui-text-secondary)"
             lang="ka"
           >
-            იტვირთება...
+            {{ 'იტვირთება...' | t }}
           </div>
         } @else {
           <div class="flex flex-col gap-2 mt-1 max-h-48 overflow-y-auto pr-1">
@@ -59,7 +59,7 @@
                 style="color: var(--tui-text-secondary)"
                 lang="ka"
               >
-                ადმინები ვერ მოიძებნა
+                {{ 'ადმინები ვერ მოიძებნა' | t }}
               </div>
             }
           </div>
@@ -67,7 +67,7 @@
         @if (
           academyForm.get('admins')?.touched && academyForm.get('admins')?.hasError('required')
         ) {
-          <span class="ss-error georgian-text" lang="ka">ადმინ(ებ)ი სავალდებულოა</span>
+          <span class="ss-error georgian-text" lang="ka">{{ 'ადმინ(ებ)ი სავალდებულოა' | t }}</span>
         }
       </div>
 
@@ -75,11 +75,11 @@
       @if (isEditMode) {
         <label class="ss-field">
           <span class="ss-label georgian-text" lang="ka">
-            სტატუსი <span class="text-red-500">*</span>
+            {{ 'სტატუსი' | t }} <span class="text-red-500">*</span>
           </span>
           <select class="ss-input georgian-text" lang="ka" formControlName="status">
             @for (option of statusOptions; track option) {
-              <option [ngValue]="option">{{ stringifyStatus(option) }}</option>
+              <option [ngValue]="option">{{ stringifyStatus(option) | t }}</option>
             }
           </select>
         </label>
@@ -89,10 +89,12 @@
     <!-- Action Buttons -->
     <div class="flex justify-end gap-2 pt-2">
       <button class="ss-btn ss-btn--flat" type="button" (click)="onCancel()">
-        <span class="georgian-text" lang="ka">გაუქმება</span>
+        <span class="georgian-text" lang="ka">{{ 'გაუქმება' | t }}</span>
       </button>
       <button class="ss-btn ss-btn--primary" type="submit" [disabled]="!academyForm.valid">
-        <span class="georgian-text" lang="ka">{{ isEditMode ? 'განახლება' : 'დამატება' }}</span>
+        <span class="georgian-text" lang="ka">{{
+          (isEditMode ? 'განახლება' : 'დამატება') | t
+        }}</span>
       </button>
     </div>
   </form>

@@ -13,6 +13,7 @@ import { SsToastService } from '../../../shared/ui/toast.service';
 import { SsDialogService } from '../../../shared/ui/dialog.service';
 import { Booking } from '../../../shared/models/booking.model';
 import { GridCourt } from '../calendar-grid';
+import { TPipe } from '../../../shared/i18n/t.pipe';
 
 const courts: GridCourt[] = [{ id: 'court-1', name: 'კორტი 1', label: 'კორტი 1' }];
 
@@ -63,7 +64,7 @@ describe('ReservationListComponent', () => {
     })
       .overrideComponent(ReservationListComponent, {
         // Keep the pipes/directives; only the ss-avatar child is stubbed out.
-        set: { imports: [CommonModule, ReactiveFormsModule], schemas: [NO_ERRORS_SCHEMA] },
+        set: { imports: [CommonModule, ReactiveFormsModule, TPipe], schemas: [NO_ERRORS_SCHEMA] },
       })
       .compileComponents();
 

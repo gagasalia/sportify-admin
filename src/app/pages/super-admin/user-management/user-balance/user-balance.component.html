@@ -11,7 +11,7 @@
     data-testid="balance-card"
   >
     <span class="georgian-text text-sm" lang="ka" style="color: var(--tui-text-secondary)">
-      ბალანსი
+      {{ 'ბალანსი' | t }}
     </span>
     @if (isLoading()) {
       <span class="text-2xl font-bold">…</span>
@@ -26,11 +26,11 @@
     class="rounded-xl border p-4 flex flex-col gap-3"
     style="border-color: var(--tui-border-normal)"
   >
-    <span class="georgian-text text-sm font-semibold" lang="ka">ბალანსის ცვლილება</span>
+    <span class="georgian-text text-sm font-semibold" lang="ka">{{ 'ბალანსის ცვლილება' | t }}</span>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">თანხა (₾)</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'თანხა (₾)' | t }}</span>
         <input
           class="ss-input"
           type="number"
@@ -42,12 +42,12 @@
       </label>
 
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">მიზეზი</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'მიზეზი' | t }}</span>
         <input
           class="ss-input"
           type="text"
             formControlName="note"
-            placeholder="რატომ იცვლება ბალანსი"
+            [placeholder]="'რატომ იცვლება ბალანსი' | t"
             data-testid="adjust-note"
           />
       </label>
@@ -55,7 +55,7 @@
 
     @if (form.touched && form.invalid) {
       <p class="text-xs m-0 georgian-text" lang="ka" style="color: var(--tui-text-negative)">
-        შეიყვანე თანხა (0.01–10 000 ₾) და მიზეზი (მინ. 3 სიმბოლო)
+        {{ 'შეიყვანე თანხა (0.01–10 000 ₾) და მიზეზი (მინ. 3 სიმბოლო)' | t }}
       </p>
     }
 
@@ -67,7 +67,7 @@
         (click)="adjust(1)"
         data-testid="adjust-credit"
       >
-        <span class="georgian-text" lang="ka">დარიცხვა</span>
+        <span class="georgian-text" lang="ka">{{ 'დარიცხვა' | t }}</span>
       </button>
       <button
         class="ss-btn ss-btn--danger"
@@ -76,7 +76,7 @@
         (click)="adjust(-1)"
         data-testid="adjust-debit"
       >
-        <span class="georgian-text" lang="ka">ჩამოჭრა</span>
+        <span class="georgian-text" lang="ka">{{ 'ჩამოჭრა' | t }}</span>
       </button>
     </div>
   </form>
@@ -88,12 +88,12 @@
       lang="ka"
       style="border-color: var(--tui-border-normal); background: var(--tui-background-base-alt)"
     >
-      ისტორია
+      {{ 'ისტორია' | t }}
     </div>
 
     @if (transactions().length === 0 && !txLoading()) {
       <p class="px-4 py-6 text-center text-sm georgian-text m-0" lang="ka" data-testid="tx-empty">
-        ოპერაციები ჯერ არ არის
+        {{ 'ოპერაციები ჯერ არ არის' | t }}
       </p>
     } @else {
       <ul class="m-0 p-0 list-none" data-testid="tx-list">
@@ -122,7 +122,7 @@
                   style="color: var(--tui-text-action)"
                   data-testid="tx-tip"
                 >
-                  💜 თიფი: {{ tipGelLabel(tx) }}
+                  💜 {{ 'თიფი' | t }}: {{ tipGelLabel(tx) }}
                 </div>
               }
             </div>
@@ -150,7 +150,7 @@
             (click)="loadTransactions()"
             data-testid="tx-loadmore"
           >
-            <span class="georgian-text" lang="ka">მეტის ნახვა</span>
+            <span class="georgian-text" lang="ka">{{ 'მეტის ნახვა' | t }}</span>
           </button>
         </div>
       }
@@ -160,7 +160,7 @@
   <!-- footer -->
   <div class="flex justify-end">
     <button class="ss-btn ss-btn--flat" type="button" (click)="close()">
-      <span class="georgian-text" lang="ka">დახურვა</span>
+      <span class="georgian-text" lang="ka">{{ 'დახურვა' | t }}</span>
     </button>
   </div>
 </div>

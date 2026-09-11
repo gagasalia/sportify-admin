@@ -27,6 +27,8 @@ import {
   UpdateCampaignDto,
 } from '../../../shared/models/campaign.model';
 import { gelToTetri, tetriToGel } from '../../../shared/utils/money.util';
+import { tr } from '../../../shared/i18n/lang';
+import { TPipe } from '../../../shared/i18n/t.pipe';
 import { SsToastService } from '../../../shared/ui/toast.service';
 import { SS_DIALOG_CONTEXT, SsDialogContext } from '../../../shared/ui/dialog.service';
 
@@ -68,7 +70,7 @@ interface CampaignFormValue {
 @Component({
   selector: 'app-campaign-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AcademySelectComponent],
+  imports: [CommonModule, ReactiveFormsModule, AcademySelectComponent, TPipe],
   templateUrl: './campaign-form.component.html',
   styleUrl: './campaign-form.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -130,23 +132,30 @@ export class CampaignFormComponent implements OnInit {
     if (!v) return '';
     const goal =
       v.goalType === 'spend'
-        ? `დახარჯე ${v.goalGel ?? '…'} ₾`
-        : `ითამაშე ${v.goalCount ?? '…'}-ჯერ`;
+        ? tr('დახარჯე %s ₾').replace('%s', String(v.goalGel ?? '…'))
+        : tr('ითამაშე %s-ჯერ').replace('%s', String(v.goalCount ?? '…'));
     const ids = this.selectedFacilityIds();
     const names = this.facilities()
       .filter((f) => ids.includes(f._id))
       .map((f) => f.name);
+    // Georgian glues the venue names with a postposition, English needs a
+    // preposition — so the clause is ONE translatable pattern with %s/%n
+    // placeholders instead of a concatenation whose word order is fixed.
     const where =
       names.length === 0
-        ? 'ჩვენს მოედნებზე'
+        ? tr('ჩვენს მოედნებზე')
         : names.length <= 2
-          ? `${names.join(' / ')}-ზე`
-          : `${names[0]} და კიდევ ${names.length - 1} მოედანზე`;
+          ? tr('%s-ზე').replace('%s', () => names.join(' / '))
+          : tr('%s და კიდევ %n მოედანზე')
+              .replace('%s', () => names[0])
+              .replace('%n', String(names.length - 1));
     // The deadline in the sentence IS the campaign end date (docs/24 v2).
-    const until = v.endsAt ? ` ${this.fmtDate(v.endsAt)}-მდე` : '';
-    const reward = v.rewardGel ?? '…';
-    const validity = v.rewardValidDays ? ` (ვადა ${v.rewardValidDays} დღე)` : '';
-    return `${goal} ${where}${until} და მიიღე ${reward} ₾ ვაუჩერი${validity}`;
+    const until = v.endsAt ? ` ${tr('%s-მდე').replace('%s', this.fmtDate(v.endsAt))}` : '';
+    const reward = tr('და მიიღე %s ₾ ვაუჩერი').replace('%s', String(v.rewardGel ?? '…'));
+    const validity = v.rewardValidDays
+      ? ` (${tr('ვადა %s დღე').replace('%s', String(v.rewardValidDays))})`
+      : '';
+    return `${goal} ${where}${until} ${reward}${validity}`;
   });
 
   ngOnInit(): void {
@@ -314,8 +323,8 @@ export class CampaignFormComponent implements OnInit {
         this.alerts
           .open(
             err.status === 409
-              ? 'პირობები დაბლოკილია — მონაწილეები უკვე შეუერთდნენ'
-              : 'შენახვა ვერ მოხერხდა, სცადეთ თავიდან',
+              ? tr('პირობები დაბლოკილია — მონაწილეები უკვე შეუერთდნენ')
+              : tr('შენახვა ვერ მოხერხდა, სცადეთ თავიდან'),
             { appearance: 'error' },
           )
           .pipe(take(1))

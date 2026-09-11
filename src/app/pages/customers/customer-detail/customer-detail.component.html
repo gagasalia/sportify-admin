@@ -1,14 +1,14 @@
 <div class="pt-8 p-0 sm:p-8">
   <a class="back-link mb-4" routerLink="/customers">
     <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/chevron-down.svg'); transform: rotate(90deg)"></i>
-    <span class="georgian-text" lang="ka">მომხმარებლები</span>
+    <span class="georgian-text" lang="ka">{{ 'მომხმარებლები' | t }}</span>
   </a>
 
   @if (hasError()) {
     <div class="ss-card p-6 text-center">
-      <p class="georgian-text mb-3" lang="ka">მომხმარებელი ვერ მოიძებნა</p>
+      <p class="georgian-text mb-3" lang="ka">{{ 'მომხმარებელი ვერ მოიძებნა' | t }}</p>
       <button class="ss-btn ss-btn--outline ss-btn--s" type="button" (click)="load()">
-        <span class="georgian-text" lang="ka">თავიდან ცდა</span>
+        <span class="georgian-text" lang="ka">{{ 'თავიდან ცდა' | t }}</span>
       </button>
     </div>
   } @else if (isLoading() || !detail()) {
@@ -25,7 +25,7 @@
       <div class="mod-banner mod-banner--danger mb-4" automation-id="banned-banner">
         <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/shield.svg')"></i>
         <div>
-          <div class="font-semibold georgian-text" lang="ka">ანგარიში დაბლოკილია</div>
+          <div class="font-semibold georgian-text" lang="ka">{{ 'ანგარიში დაბლოკილია' | t }}</div>
           <div class="text-sm georgian-text" lang="ka">
             {{ d.moderation.banReason || '—' }}
             @if (d.moderation.bannedAt) {
@@ -38,7 +38,7 @@
       <div class="mod-banner mod-banner--warning mb-4" automation-id="flagged-banner">
         <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/info.svg')"></i>
         <div>
-          <div class="font-semibold georgian-text" lang="ka">მონიშნული მომხმარებელი</div>
+          <div class="font-semibold georgian-text" lang="ka">{{ 'მონიშნული მომხმარებელი' | t }}</div>
           <div class="text-sm georgian-text" lang="ka">{{ d.moderation.flagReason || '—' }}</div>
         </div>
       </div>
@@ -60,20 +60,24 @@
             }
             @if (d.profile.createdAt) {
               <span class="georgian-text" lang="ka">
-                წევრია {{ d.profile.createdAt | date: 'dd/MM/yyyy' }}-დან
+                {{ 'წევრია' | t }} {{ d.profile.createdAt | date: 'dd/MM/yyyy' }}{{ '-დან' | t }}
               </span>
             }
           </div>
           <div class="flex flex-wrap gap-1 mt-2">
             @if (d.profile.emailVerified) {
-              <span class="ss-badge ss-badge--info georgian-text" lang="ka">ელ. ფოსტა ✓</span>
+              <span class="ss-badge ss-badge--info georgian-text" lang="ka">
+                {{ 'ელ. ფოსტა ✓' | t }}
+              </span>
             }
             @if (d.profile.phoneVerified) {
-              <span class="ss-badge ss-badge--info georgian-text" lang="ka">ტელეფონი ✓</span>
+              <span class="ss-badge ss-badge--info georgian-text" lang="ka">
+                {{ 'ტელეფონი ✓' | t }}
+              </span>
             }
             @if (isSuperAdmin() && d.profile.balanceTetri != null) {
               <span class="ss-badge georgian-text" lang="ka">
-                ბალანსი: {{ gel(d.profile.balanceTetri) }}
+                {{ 'ბალანსი' | t }}: {{ gel(d.profile.balanceTetri) }}
               </span>
             }
           </div>
@@ -88,12 +92,12 @@
               (click)="editContact()"
             >
               <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/pencil.svg')"></i>
-              <span class="georgian-text" lang="ka">შესწორება</span>
+              <span class="georgian-text" lang="ka">{{ 'შესწორება' | t }}</span>
             </button>
           }
           @if (d.moderation.flagged) {
             <button class="ss-btn ss-btn--outline ss-btn--s" type="button" (click)="unflag()">
-              <span class="georgian-text" lang="ka">მონიშვნის მოხსნა</span>
+              <span class="georgian-text" lang="ka">{{ 'მონიშვნის მოხსნა' | t }}</span>
             </button>
           } @else {
             <button
@@ -103,7 +107,7 @@
               (click)="flagCustomer()"
             >
               <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/info.svg')"></i>
-              <span class="georgian-text" lang="ka">მონიშვნა</span>
+              <span class="georgian-text" lang="ka">{{ 'მონიშვნა' | t }}</span>
             </button>
           }
           @if (d.moderation.banned) {
@@ -113,7 +117,7 @@
               type="button"
               (click)="unban()"
             >
-              <span class="georgian-text" lang="ka">განბლოკვა</span>
+              <span class="georgian-text" lang="ka">{{ 'განბლოკვა' | t }}</span>
             </button>
           } @else {
             <button
@@ -122,12 +126,12 @@
               type="button"
               (click)="ban()"
             >
-              <span class="georgian-text" lang="ka">დაბლოკვა</span>
+              <span class="georgian-text" lang="ka">{{ 'დაბლოკვა' | t }}</span>
             </button>
           }
           @if (isSuperAdmin()) {
             <button class="ss-btn ss-btn--flat ss-btn--s" type="button" (click)="openFullAccount()">
-              <span class="georgian-text" lang="ka">სრული ანგარიში</span>
+              <span class="georgian-text" lang="ka">{{ 'სრული ანგარიში' | t }}</span>
             </button>
           }
         </div>
@@ -136,13 +140,13 @@
 
     <!-- KPI cards -->
     <div class="kpi-grid mb-6">
-      <ss-kpi-card label="ჯავშნები" [value]="num(d.stats.bookings)" hint="ამ სივრცეში" />
-      <ss-kpi-card label="გაუქმებები" [value]="num(d.stats.cancelled)" [hint]="pct(d.stats.cancelRate)" />
-      <ss-kpi-card label="არ გამოცხადდა" [value]="num(d.stats.noShows)" [hint]="pct(d.stats.noShowRate)" />
-      <ss-kpi-card label="დახარჯული" [value]="gel(d.stats.spentTetri)" hint="წმინდა" />
-      <ss-kpi-card label="მომავალი ჯავშნები" [value]="num(d.stats.upcoming)" />
+      <ss-kpi-card [label]="'ჯავშნები' | t" [value]="num(d.stats.bookings)" [hint]="'ამ სივრცეში' | t" />
+      <ss-kpi-card [label]="'გაუქმებები' | t" [value]="num(d.stats.cancelled)" [hint]="pct(d.stats.cancelRate)" />
+      <ss-kpi-card [label]="'არ გამოცხადდა' | t" [value]="num(d.stats.noShows)" [hint]="pct(d.stats.noShowRate)" />
+      <ss-kpi-card [label]="'დახარჯული' | t" [value]="gel(d.stats.spentTetri)" [hint]="'წმინდა' | t" />
+      <ss-kpi-card [label]="'მომავალი ჯავშნები' | t" [value]="num(d.stats.upcoming)" />
       <ss-kpi-card
-        label="ბოლო ჯავშანი"
+        [label]="'ბოლო ჯავშანი' | t"
         [value]="d.stats.lastBookingAt ? (d.stats.lastBookingAt | date: 'dd/MM/yyyy') ?? '—' : '—'"
       />
     </div>
@@ -150,7 +154,9 @@
     <div class="detail-grid">
       <!-- Booking history -->
       <div class="ss-card p-4 history-card">
-        <h2 class="text-lg font-semibold mb-3 georgian-text" lang="ka">ჯავშნების ისტორია</h2>
+        <h2 class="text-lg font-semibold mb-3 georgian-text" lang="ka">
+          {{ 'ჯავშნების ისტორია' | t }}
+        </h2>
         @if (bookingsLoading()) {
           <div class="space-y-2 animate-pulse">
             @for (n of [1, 2, 3, 4]; track n) {
@@ -159,19 +165,19 @@
           </div>
         } @else if (bookingRows().length === 0) {
           <p class="py-6 text-center georgian-text" lang="ka" style="color: var(--tui-text-secondary)">
-            ჯავშნები არ მოიძებნა
+            {{ 'ჯავშნები არ მოიძებნა' | t }}
           </p>
         } @else {
           <div class="overflow-x-auto">
             <table class="ss-table">
               <thead>
                 <tr>
-                  <th class="georgian-text" lang="ka">თარიღი</th>
-                  <th class="georgian-text" lang="ka">დრო</th>
-                  <th class="georgian-text" lang="ka">ობიექტი</th>
-                  <th class="georgian-text" lang="ka">ფასი</th>
-                  <th class="georgian-text" lang="ka">გადახდა</th>
-                  <th class="georgian-text" lang="ka">სტატუსი</th>
+                  <th class="georgian-text" lang="ka">{{ 'თარიღი' | t }}</th>
+                  <th class="georgian-text" lang="ka">{{ 'დრო' | t }}</th>
+                  <th class="georgian-text" lang="ka">{{ 'ობიექტი' | t }}</th>
+                  <th class="georgian-text" lang="ka">{{ 'ფასი' | t }}</th>
+                  <th class="georgian-text" lang="ka">{{ 'გადახდა' | t }}</th>
+                  <th class="georgian-text" lang="ka">{{ 'სტატუსი' | t }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -184,11 +190,11 @@
                       @if (row.courtName) {
                         · {{ row.courtName }}
                       } @else if (row.courtNumber != null) {
-                        · კორტი {{ row.courtNumber }}
+                        · {{ 'კორტი' | t }} {{ row.courtNumber }}
                       }
                     </td>
                     <td class="whitespace-nowrap">{{ gel(row.priceTetri) }}</td>
-                    <td class="text-sm georgian-text" lang="ka">{{ paymentLabel(row) }}</td>
+                    <td class="text-sm georgian-text" lang="ka">{{ paymentLabel(row) | t }}</td>
                     <td>
                       <span [class]="statusBadgeClass(row.status)">
                         <span class="georgian-text" lang="ka">
@@ -209,7 +215,7 @@
                 [disabled]="bookingsPage() === 1"
                 (click)="loadBookings(bookingsPage() - 1)"
               >
-                <span class="georgian-text" lang="ka">წინა</span>
+                <span class="georgian-text" lang="ka">{{ 'წინა' | t }}</span>
               </button>
               <span class="text-sm" style="color: var(--tui-text-secondary)">
                 {{ bookingsPage() }} / {{ bookingsPages() }}
@@ -220,7 +226,7 @@
                 [disabled]="bookingsPage() >= bookingsPages()"
                 (click)="loadBookings(bookingsPage() + 1)"
               >
-                <span class="georgian-text" lang="ka">შემდეგი</span>
+                <span class="georgian-text" lang="ka">{{ 'შემდეგი' | t }}</span>
               </button>
             </div>
           }
@@ -229,10 +235,12 @@
 
       <!-- Moderation history -->
       <div class="ss-card p-4 modlog-card">
-        <h2 class="text-lg font-semibold mb-3 georgian-text" lang="ka">მოდერაციის ისტორია</h2>
+        <h2 class="text-lg font-semibold mb-3 georgian-text" lang="ka">
+          {{ 'მოდერაციის ისტორია' | t }}
+        </h2>
         @if (d.moderation.history.length === 0) {
           <p class="py-6 text-center georgian-text" lang="ka" style="color: var(--tui-text-secondary)">
-            ჩანაწერები არ არის
+            {{ 'ჩანაწერები არ არის' | t }}
           </p>
         } @else {
           <ol class="modlog">

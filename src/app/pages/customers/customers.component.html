@@ -1,18 +1,18 @@
 <div class="pt-8 p-0 sm:p-8">
   <header class="mb-6 flex items-center justify-between">
-    <h1 class="text-2xl font-semibold georgian-text" lang="ka">მომხმარებლები</h1>
+    <h1 class="text-2xl font-semibold georgian-text" lang="ka">{{ 'მომხმარებლები' | t }}</h1>
   </header>
 
   <!-- Filters -->
   <div class="ss-card p-4 mb-6">
     <div class="filter-row">
       <label class="ss-field search-field">
-        <span class="ss-label georgian-text" lang="ka">ძებნა</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'ძებნა' | t }}</span>
         <input
           automation-id="customers-search"
           class="ss-input"
           type="text"
-          placeholder="სახელი, ტელეფონი ან ID"
+          [placeholder]="'სახელი, ტელეფონი ან ID' | t"
           [ngModel]="q()"
           (ngModelChange)="onSearchChange($event)"
         />
@@ -20,12 +20,12 @@
 
       @if (isSuperAdmin()) {
         <label class="ss-field academy-field">
-          <span class="ss-label georgian-text" lang="ka">აკადემია</span>
+          <span class="ss-label georgian-text" lang="ka">{{ 'აკადემია' | t }}</span>
           <ss-academy-select
             automation-id="customers-academy"
             [academies]="academies()"
-            emptyLabel="ყველა"
-            ariaLabel="აკადემია"
+            [emptyLabel]="'ყველა' | t"
+            [ariaLabel]="'აკადემია' | t"
             [ngModel]="academyId()"
             (ngModelChange)="onAcademyChange($event)"
           />
@@ -39,7 +39,7 @@
           [class.is-active]="flag() === null"
           (click)="setFlag(null)"
         >
-          <span class="georgian-text" lang="ka">ყველა</span>
+          <span class="georgian-text" lang="ka">{{ 'ყველა' | t }}</span>
         </button>
         <button
           automation-id="customers-flag-flagged"
@@ -48,7 +48,7 @@
           [class.is-active]="flag() === 'flagged'"
           (click)="setFlag('flagged')"
         >
-          <span class="georgian-text" lang="ka">მონიშნული</span>
+          <span class="georgian-text" lang="ka">{{ 'მონიშნული' | t }}</span>
         </button>
         <button
           automation-id="customers-flag-banned"
@@ -57,7 +57,7 @@
           [class.is-active]="flag() === 'banned'"
           (click)="setFlag('banned')"
         >
-          <span class="georgian-text" lang="ka">დაბლოკილი</span>
+          <span class="georgian-text" lang="ka">{{ 'დაბლოკილი' | t }}</span>
         </button>
       </div>
     </div>
@@ -65,9 +65,9 @@
 
   @if (hasError()) {
     <div class="ss-card p-6 text-center">
-      <p class="georgian-text mb-3" lang="ka">მონაცემების ჩატვირთვა ვერ მოხერხდა</p>
+      <p class="georgian-text mb-3" lang="ka">{{ 'მონაცემების ჩატვირთვა ვერ მოხერხდა' | t }}</p>
       <button class="ss-btn ss-btn--outline ss-btn--s" type="button" (click)="retry()">
-        <span class="georgian-text" lang="ka">თავიდან ცდა</span>
+        <span class="georgian-text" lang="ka">{{ 'თავიდან ცდა' | t }}</span>
       </button>
     </div>
   } @else if (isLoading()) {
@@ -84,15 +84,15 @@
           <thead>
             <tr>
               <th></th>
-              <th class="georgian-text" lang="ka">მომხმარებელი</th>
+              <th class="georgian-text" lang="ka">{{ 'მომხმარებელი' | t }}</th>
               <th>ID</th>
-              <th class="georgian-text" lang="ka">ტელეფონი</th>
-              <th class="georgian-text num-col" lang="ka">ჯავშნები</th>
-              <th class="georgian-text num-col" lang="ka">გაუქმება</th>
-              <th class="georgian-text num-col" lang="ka">არ გამოცხადდა</th>
-              <th class="georgian-text num-col" lang="ka">დახარჯული</th>
-              <th class="georgian-text" lang="ka">ბოლო ჯავშანი</th>
-              <th class="georgian-text" lang="ka">სტატუსი</th>
+              <th class="georgian-text" lang="ka">{{ 'ტელეფონი' | t }}</th>
+              <th class="georgian-text num-col" lang="ka">{{ 'ჯავშნები' | t }}</th>
+              <th class="georgian-text num-col" lang="ka">{{ 'გაუქმებები' | t }}</th>
+              <th class="georgian-text num-col" lang="ka">{{ 'არ გამოცხადდა' | t }}</th>
+              <th class="georgian-text num-col" lang="ka">{{ 'დახარჯული' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'ბოლო ჯავშანი' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'სტატუსი' | t }}</th>
             </tr>
           </thead>
           <tbody>
@@ -126,17 +126,17 @@
                   <div class="flex flex-wrap gap-1">
                     @if (row.banned) {
                       <span class="ss-badge ss-badge--negative" [attr.title]="row.banReason || null">
-                        <span class="georgian-text" lang="ka">დაბლოკილი</span>
+                        <span class="georgian-text" lang="ka">{{ 'დაბლოკილი' | t }}</span>
                       </span>
                     }
                     @if (row.flagged) {
                       <span class="ss-badge ss-badge--warning" [attr.title]="row.flagReason || null">
-                        <span class="georgian-text" lang="ka">მონიშნული</span>
+                        <span class="georgian-text" lang="ka">{{ 'მონიშნული' | t }}</span>
                       </span>
                     }
                     @if (!row.banned && !row.flagged) {
                       <span class="ss-badge ss-badge--positive">
-                        <span class="georgian-text" lang="ka">აქტიური</span>
+                        <span class="georgian-text" lang="ka">{{ 'აქტიური' | t }}</span>
                       </span>
                     }
                   </div>
@@ -146,9 +146,9 @@
               <tr>
                 <td colspan="10" class="px-4 py-8 text-center georgian-text" lang="ka">
                   @if (q().trim() || flag()) {
-                    ამ ფილტრით მომხმარებლები ვერ მოიძებნა
+                    {{ 'ამ ფილტრით მომხმარებლები ვერ მოიძებნა' | t }}
                   } @else {
-                    მომხმარებლები ჯერ არ არიან
+                    {{ 'მომხმარებლები ჯერ არ არიან' | t }}
                   }
                 </td>
               </tr>
@@ -173,24 +173,28 @@
               </div>
               @if (row.banned) {
                 <span class="ss-badge ss-badge--negative">
-                  <span class="georgian-text" lang="ka">დაბლოკილი</span>
+                  <span class="georgian-text" lang="ka">{{ 'დაბლოკილი' | t }}</span>
                 </span>
               } @else if (row.flagged) {
                 <span class="ss-badge ss-badge--warning">
-                  <span class="georgian-text" lang="ka">მონიშნული</span>
+                  <span class="georgian-text" lang="ka">{{ 'მონიშნული' | t }}</span>
                 </span>
               }
             </div>
             <div class="grid grid-cols-2 gap-1 text-sm">
-              <span class="georgian-text" lang="ka">ჯავშნები: {{ row.bookings }}</span>
-              <span class="georgian-text" lang="ka">გაუქმება: {{ row.cancelled }}</span>
-              <span class="georgian-text" lang="ka">არ გამოცხადდა: {{ row.noShows }}</span>
-              <span class="georgian-text" lang="ka">დახარჯული: {{ gel(row.spentTetri) }}</span>
+              <span class="georgian-text" lang="ka">{{ 'ჯავშნები' | t }}: {{ row.bookings }}</span>
+              <span class="georgian-text" lang="ka">{{ 'გაუქმებები' | t }}: {{ row.cancelled }}</span>
+              <span class="georgian-text" lang="ka">
+                {{ 'არ გამოცხადდა' | t }}: {{ row.noShows }}
+              </span>
+              <span class="georgian-text" lang="ka">
+                {{ 'დახარჯული' | t }}: {{ gel(row.spentTetri) }}
+              </span>
             </div>
           </div>
         } @empty {
           <div class="ss-card p-6 text-center">
-            <p class="georgian-text" lang="ka">მომხმარებლები ვერ მოიძებნა</p>
+            <p class="georgian-text" lang="ka">{{ 'მომხმარებლები ვერ მოიძებნა' | t }}</p>
           </div>
         }
       </div>
@@ -205,7 +209,7 @@
           [disabled]="page() === 1"
           (click)="onPageChange(page() - 1)"
         >
-          <span class="georgian-text" lang="ka">წინა</span>
+          <span class="georgian-text" lang="ka">{{ 'წინა' | t }}</span>
         </button>
         <span class="text-sm" style="color: var(--tui-text-secondary)">
           {{ page() }} / {{ totalPages() }}
@@ -216,7 +220,7 @@
           [disabled]="page() >= totalPages()"
           (click)="onPageChange(page() + 1)"
         >
-          <span class="georgian-text" lang="ka">შემდეგი</span>
+          <span class="georgian-text" lang="ka">{{ 'შემდეგი' | t }}</span>
         </button>
       </div>
     }

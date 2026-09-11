@@ -26,13 +26,16 @@ import {
   UpdatePromocodeDto,
 } from '../../../shared/models/promocode.model';
 import { gelToTetri, tetriToGel } from '../../../shared/utils/money.util';
+import { liveLabels, tr } from '../../../shared/i18n/lang';
+import { TPipe } from '../../../shared/i18n/t.pipe';
 import { SsToastService } from '../../../shared/ui/toast.service';
 import { SS_DIALOG_CONTEXT, SsDialogContext } from '../../../shared/ui/dialog.service';
 
-export const DISCOUNT_TYPE_LABELS: Record<PromoDiscountType, string> = {
+// RAW Georgian behind `liveLabels` — translated on read, never baked.
+export const DISCOUNT_TYPE_LABELS: Record<PromoDiscountType, string> = liveLabels({
   percent: 'პროცენტული',
   fixed: 'ფიქსირებული',
-};
+});
 
 /** The raw shape of the promocode form (GEL at the edges, tetri on the wire). */
 interface PromoFormValue {
@@ -66,7 +69,7 @@ interface PromoFormValue {
 @Component({
   selector: 'app-promocode-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AcademySelectComponent],
+  imports: [CommonModule, ReactiveFormsModule, AcademySelectComponent, TPipe],
   templateUrl: './promocode-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -236,13 +239,13 @@ export class PromocodeFormComponent implements OnInit {
         if (err.status === 409 && !this.isEditMode) {
           this.form.get('code')?.setErrors({ conflict: true });
           this.alerts
-            .open('ეს კოდი უკვე არსებობს', { appearance: 'error' })
+            .open(tr('ეს კოდი უკვე არსებობს'), { appearance: 'error' })
             .pipe(take(1))
             .subscribe();
           return;
         }
         this.alerts
-          .open('შენახვა ვერ მოხერხდა, სცადეთ თავიდან', { appearance: 'error' })
+          .open(tr('შენახვა ვერ მოხერხდა, სცადეთ თავიდან'), { appearance: 'error' })
           .pipe(take(1))
           .subscribe();
       },

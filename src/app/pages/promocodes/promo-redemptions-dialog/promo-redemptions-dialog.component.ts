@@ -12,6 +12,7 @@ import { PromocodeService } from '../../../services/http-services/promocode.serv
 import { PromoRedemption, Promocode } from '../../../shared/models/promocode.model';
 import { tetriToGel } from '../../../shared/utils/money.util';
 import { formatMemberId } from '../../../shared/utils/member-id.util';
+import { TPipe } from '../../../shared/i18n/t.pipe';
 import { SS_DIALOG_CONTEXT, SsDialogContext } from '../../../shared/ui/dialog.service';
 
 /**
@@ -21,7 +22,7 @@ import { SS_DIALOG_CONTEXT, SsDialogContext } from '../../../shared/ui/dialog.se
 @Component({
   selector: 'app-promo-redemptions-dialog',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, TPipe],
   templateUrl: './promo-redemptions-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

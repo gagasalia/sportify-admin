@@ -4,7 +4,7 @@
     <div class="grid grid-cols-2 gap-4">
       <label class="ss-field">
         <span class="ss-label georgian-text" lang="ka">
-          კოდი <span class="text-red-500">*</span>
+          {{ 'კოდი' | t }} <span class="text-red-500">*</span>
         </span>
         <input
           class="ss-input font-mono"
@@ -14,15 +14,15 @@
           autocomplete="off"
         />
         @if (form.get('code')?.touched && form.get('code')?.hasError('conflict')) {
-          <span class="ss-error georgian-text" lang="ka">ეს კოდი უკვე არსებობს</span>
+          <span class="ss-error georgian-text" lang="ka">{{ 'ეს კოდი უკვე არსებობს' | t }}</span>
         } @else if (form.get('code')?.touched && form.get('code')?.invalid) {
           <span class="ss-error georgian-text" lang="ka">
-            3–24 სიმბოლო: A–Z, 0–9, ტირე; დასაწყისი და დასასრული ასო-ციფრით
+            {{ '3–24 სიმბოლო: A–Z, 0–9, ტირე; დასაწყისი და დასასრული ასო-ციფრით' | t }}
           </span>
         }
       </label>
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">სახელი</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'სახელი' | t }}</span>
         <input class="ss-input georgian-text" lang="ka" formControlName="name" />
       </label>
     </div>
@@ -30,11 +30,11 @@
     <!-- Academy scope (superadmin only; admins are scoped server-side) -->
     @if (isSuperAdmin()) {
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">აკადემია</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'აკადემია' | t }}</span>
         <ss-academy-select
           [academies]="academies()"
-          emptyLabel="პლატფორმა (ყველა აკადემია)"
-          ariaLabel="აკადემია"
+          [emptyLabel]="'პლატფორმა (ყველა აკადემია)' | t"
+          [ariaLabel]="'აკადემია' | t"
           formControlName="academyId"
         />
       </label>
@@ -44,7 +44,7 @@
     <div class="grid grid-cols-2 gap-4">
       <label class="ss-field">
         <span class="ss-label georgian-text" lang="ka">
-          ფასდაკლების ტიპი <span class="text-red-500">*</span>
+          {{ 'ფასდაკლების ტიპი' | t }} <span class="text-red-500">*</span>
         </span>
         <select class="ss-input georgian-text" lang="ka" formControlName="discountType">
           @for (option of discountTypeOptions; track option) {
@@ -55,7 +55,7 @@
       @if (discountType() === 'percent') {
         <label class="ss-field">
           <span class="ss-label georgian-text" lang="ka">
-            პროცენტი (%) <span class="text-red-500">*</span>
+            {{ 'პროცენტი (%)' | t }} <span class="text-red-500">*</span>
           </span>
           <input
             class="ss-input"
@@ -68,13 +68,13 @@
             max="100"
           />
           @if (form.get('percentOff')?.touched && form.get('percentOff')?.invalid) {
-            <span class="ss-error georgian-text" lang="ka">შეიყვანეთ 1–100</span>
+            <span class="ss-error georgian-text" lang="ka">{{ 'შეიყვანეთ 1–100' | t }}</span>
           }
         </label>
       } @else {
         <label class="ss-field">
           <span class="ss-label georgian-text" lang="ka">
-            თანხა (₾) <span class="text-red-500">*</span>
+            {{ 'თანხა (₾)' | t }} <span class="text-red-500">*</span>
           </span>
           <input
             class="ss-input"
@@ -88,7 +88,9 @@
             step="0.5"
           />
           @if (form.get('amountGel')?.touched && form.get('amountGel')?.invalid) {
-            <span class="ss-error georgian-text" lang="ka">შეიყვანეთ დადებითი თანხა</span>
+            <span class="ss-error georgian-text" lang="ka">
+              {{ 'შეიყვანეთ დადებითი თანხა' | t }}
+            </span>
           }
         </label>
       }
@@ -97,7 +99,7 @@
     <div class="grid grid-cols-2 gap-4">
       @if (discountType() === 'percent') {
         <label class="ss-field">
-          <span class="ss-label georgian-text" lang="ka">მაქს. ფასდაკლება (₾)</span>
+          <span class="ss-label georgian-text" lang="ka">{{ 'მაქს. ფასდაკლება (₾)' | t }}</span>
           <input
             class="ss-input"
             formControlName="maxDiscountGel"
@@ -109,7 +111,7 @@
         </label>
       }
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">მინ. ჯავშნის ფასი (₾)</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'მინ. ჯავშნის ფასი (₾)' | t }}</span>
         <input
           class="ss-input"
           formControlName="minPriceGel"
@@ -123,13 +125,13 @@
 
     @if (discountLocked) {
       <p class="text-xs georgian-text" lang="ka" style="color: var(--tui-text-secondary)">
-        ფასდაკლების პირობები დაბლოკილია — კოდი უკვე გამოყენებულია
+        {{ 'ფასდაკლების პირობები დაბლოკილია — კოდი უკვე გამოყენებულია' | t }}
       </p>
     }
 
     <!-- Eligibility -->
     <label class="ss-field">
-      <span class="ss-label georgian-text" lang="ka">ვისთვის</span>
+      <span class="ss-label georgian-text" lang="ka">{{ 'ვისთვის' | t }}</span>
       <select class="ss-input georgian-text" lang="ka" formControlName="eligibility">
         @for (option of eligibilityOptions; track option) {
           <option [value]="option">{{ stringifyEligibility(option) }}</option>
@@ -141,7 +143,7 @@
       <div class="grid grid-cols-2 gap-4">
         <label class="ss-field">
           <span class="ss-label georgian-text" lang="ka">
-            მინ. ჯავშნები <span class="text-red-500">*</span>
+            {{ 'მინ. ჯავშნები' | t }} <span class="text-red-500">*</span>
           </span>
           <input
             class="ss-input"
@@ -153,11 +155,13 @@
             min="0"
           />
           @if (form.get('minBookings')?.touched && form.get('minBookings')?.invalid) {
-            <span class="ss-error georgian-text" lang="ka">სავალდებულო ველი (მინ. 0)</span>
+            <span class="ss-error georgian-text" lang="ka">
+              {{ 'სავალდებულო ველი (მინ. 0)' | t }}
+            </span>
           }
         </label>
         <label class="ss-field">
-          <span class="ss-label georgian-text" lang="ka">მაქს. ჯავშნები</span>
+          <span class="ss-label georgian-text" lang="ka">{{ 'მაქს. ჯავშნები' | t }}</span>
           <input class="ss-input" formControlName="maxBookings" type="number" min="0" />
         </label>
       </div>
@@ -166,14 +170,14 @@
     <!-- Validity window -->
     <div class="grid grid-cols-2 gap-4">
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">დაწყების თარიღი</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'დაწყების თარიღი' | t }}</span>
         <input class="ss-input" type="date" formControlName="startsAt" />
       </label>
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">ვადა</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'ვადა' | t }}</span>
         <input class="ss-input" type="date" formControlName="expiresAt" />
         <span class="text-xs georgian-text" style="color: var(--tui-text-secondary)" lang="ka">
-          მოქმედებს არჩეული დღის ბოლომდე
+          {{ 'მოქმედებს არჩეული დღის ბოლომდე' | t }}
         </span>
       </label>
     </div>
@@ -181,11 +185,13 @@
     <!-- Usage limits -->
     <div class="grid grid-cols-2 gap-4">
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">ლიმიტი (სულ)</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'ლიმიტი (სულ)' | t }}</span>
         <input class="ss-input" formControlName="usageLimitTotal" type="number" min="1" />
       </label>
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">ლიმიტი (თითო მომხმარებელზე)</span>
+        <span class="ss-label georgian-text" lang="ka">
+          {{ 'ლიმიტი (თითო მომხმარებელზე)' | t }}
+        </span>
         <input class="ss-input" formControlName="usageLimitPerUser" type="number" min="1" />
       </label>
     </div>
@@ -193,16 +199,16 @@
     <!-- Active -->
     <label class="flex items-center gap-3">
       <input class="ss-switch" type="checkbox" formControlName="active" />
-      <span class="ss-label georgian-text" lang="ka">აქტიური</span>
+      <span class="ss-label georgian-text" lang="ka">{{ 'აქტიური' | t }}</span>
     </label>
 
     <!-- Actions -->
     <div class="flex justify-end gap-2 pt-2">
       <button class="ss-btn ss-btn--outline" type="button" (click)="cancel()">
-        <span class="georgian-text" lang="ka">გაუქმება</span>
+        <span class="georgian-text" lang="ka">{{ 'გაუქმება' | t }}</span>
       </button>
       <button class="ss-btn ss-btn--primary" type="submit" [disabled]="isSaving()">
-        <span class="georgian-text" lang="ka">შენახვა</span>
+        <span class="georgian-text" lang="ka">{{ 'შენახვა' | t }}</span>
       </button>
     </div>
   </form>

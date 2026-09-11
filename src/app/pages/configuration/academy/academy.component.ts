@@ -27,6 +27,8 @@ import {
 import { TenantService } from '../../../shared/services/tenant.service';
 import { SportType } from '../../../shared/enums/court-type.enum';
 import { gelToTetri, tetriToGel } from '../../../shared/utils/money.util';
+import { tr } from '../../../shared/i18n/lang';
+import { TPipe } from '../../../shared/i18n/t.pipe';
 
 import { SsToastService } from '../../../shared/ui/toast.service';
 /** A padel game needs 4 rackets (docs/20) — the academy decides how many are included. */
@@ -36,7 +38,7 @@ const PADEL_MAX_RACKETS = 4;
 @Component({
   selector: 'app-academy',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, TPipe],
   templateUrl: './academy.component.html',
   styleUrls: ['./academy.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -73,6 +75,15 @@ export class AcademyComponent implements OnInit {
   }
 
   readonly padelMaxRackets = PADEL_MAX_RACKETS;
+
+  /**
+   * Range hint for `racketsIncluded`, composed at READ time: `{max}` is filled
+   * after the lookup so the number keeps following the (differently ordered)
+   * translated sentence instead of a baked-in Georgian one.
+   */
+  get racketsRangeError(): string {
+    return tr('მიუთითეთ რიცხვი 0-დან {max}-მდე').replace('{max}', String(PADEL_MAX_RACKETS));
+  }
 
   private initializeForm(): void {
     this.academyForm = this.fb.group({
@@ -133,7 +144,7 @@ export class AcademyComponent implements OnInit {
           this.isLoading.set(false);
           this.cdr.markForCheck();
           this.alerts
-            .open('შეცდომა აკადემიის ჩატვირთვისას', { appearance: 'error' })
+            .open(tr('შეცდომა აკადემიის ჩატვირთვისას'), { appearance: 'error' })
             .pipe(take(1))
             .subscribe();
         },
@@ -148,7 +159,7 @@ export class AcademyComponent implements OnInit {
       // Georgian error instead.
       if (!academyId) {
         this.alerts
-          .open('აკადემია ვერ მოიძებნა', { appearance: 'error' })
+          .open(tr('აკადემია ვერ მოიძებნა'), { appearance: 'error' })
           .pipe(take(1))
           .subscribe();
         return;
@@ -168,7 +179,7 @@ export class AcademyComponent implements OnInit {
             this.academyForm.markAsPristine();
             this.cdr.markForCheck();
             this.alerts
-              .open('აკადემია წარმატებით შეინახა!', { appearance: 'success' })
+              .open(tr('აკადემია წარმატებით შეინახა!'), { appearance: 'success' })
               .pipe(take(1))
               .subscribe();
           },
@@ -177,7 +188,7 @@ export class AcademyComponent implements OnInit {
             this.isSaving.set(false);
             this.cdr.markForCheck();
             this.alerts
-              .open('შეცდომა აკადემიის შენახვისას', { appearance: 'error' })
+              .open(tr('შეცდომა აკადემიის შენახვისას'), { appearance: 'error' })
               .pipe(take(1))
               .subscribe();
           },
@@ -185,7 +196,7 @@ export class AcademyComponent implements OnInit {
     } else {
       this.academyForm.markAllAsTouched();
       this.alerts
-        .open('გთხოვთ შეავსოთ ყველა სავალდებულო ველი', { appearance: 'error' })
+        .open(tr('გთხოვთ შეავსოთ ყველა სავალდებულო ველი'), { appearance: 'error' })
         .pipe(take(1))
         .subscribe();
     }
@@ -324,7 +335,7 @@ export class AcademyComponent implements OnInit {
   private handleFile(file: File): void {
     if (!file.type.startsWith('image/')) {
       this.alerts
-        .open('გთხოვთ აირჩიოთ სურათის ფაილი', { appearance: 'error' })
+        .open(tr('გთხოვთ აირჩიოთ სურათის ფაილი'), { appearance: 'error' })
         .pipe(take(1))
         .subscribe();
       return;
@@ -356,7 +367,7 @@ export class AcademyComponent implements OnInit {
           this.cdr.markForCheck();
           if (error instanceof MediaUnconfiguredError) {
             this.alerts
-              .open('სურათების ატვირთვა ამ გარემოში არ არის კონფიგურირებული', {
+              .open(tr('სურათების ატვირთვა ამ გარემოში არ არის კონფიგურირებული'), {
                 appearance: 'error',
               })
               .pipe(take(1))
@@ -365,14 +376,14 @@ export class AcademyComponent implements OnInit {
           }
           if (error instanceof MediaFileTooLargeError) {
             this.alerts
-              .open('ფაილი ძალიან დიდია. მაქსიმალური ზომაა 10 MB.', { appearance: 'error' })
+              .open(tr('ფაილი ძალიან დიდია. მაქსიმალური ზომაა 10 MB.'), { appearance: 'error' })
               .pipe(take(1))
               .subscribe();
             return;
           }
           console.error('Error uploading logo:', error);
           this.alerts
-            .open('შეცდომა სურათის ატვირთვისას', { appearance: 'error' })
+            .open(tr('შეცდომა სურათის ატვირთვისას'), { appearance: 'error' })
             .pipe(take(1))
             .subscribe();
         },

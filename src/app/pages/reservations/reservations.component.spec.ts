@@ -27,6 +27,7 @@ import { BookingDialogData } from './booking-dialog/booking-dialog.component';
 
 import { SsToastService } from '../../shared/ui/toast.service';
 import { SsDialogService } from '../../shared/ui/dialog.service';
+import { TPipe } from '../../shared/i18n/t.pipe';
 const facility: Facility = {
   _id: 'fac-1',
   name: 'Padel House',
@@ -138,7 +139,8 @@ describe('ReservationsComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(ReservationsComponent, {
-        set: { imports: [], schemas: [NO_ERRORS_SCHEMA] },
+        // The override REPLACES imports — the template needs the `t` pipe.
+        set: { imports: [TPipe], schemas: [NO_ERRORS_SCHEMA] },
       })
       .compileComponents();
 

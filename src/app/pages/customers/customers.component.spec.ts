@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { of } from 'rxjs';
 
 import { CustomersComponent } from './customers.component';
+import { TPipe } from '../../shared/i18n/t.pipe';
 import { CustomersService } from '../../services/http-services/customers.service';
 import { AcademyService } from '../../services/http-services/academy.service';
 import { AuthService } from '../../shared/services/auth.service';
@@ -60,8 +61,9 @@ describe('CustomersComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(CustomersComponent, {
-        // The desktop table renders `| date` — keep the pipe available.
-        set: { imports: [DatePipe], schemas: [NO_ERRORS_SCHEMA] },
+        // set:{imports} REPLACES the array — the desktop table renders `| date`
+        // and every label goes through `| t`, so both pipes must ride along.
+        set: { imports: [DatePipe, TPipe], schemas: [NO_ERRORS_SCHEMA] },
       })
       .compileComponents();
 

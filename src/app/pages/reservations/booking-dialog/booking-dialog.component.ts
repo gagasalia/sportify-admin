@@ -17,7 +17,13 @@ import { blockChunks, hhmmToMinutes, isBookableDuration } from '../calendar-grid
 
 import { SsToastService } from '../../../shared/ui/toast.service';
 import { SS_DIALOG_CONTEXT, SsDialogContext } from '../../../shared/ui/dialog.service';
-/** Default names per the operator's request (booking vs disable). */
+import { TPipe } from '../../../shared/i18n/t.pipe';
+import { tr } from '../../../shared/i18n/lang';
+/**
+ * Default names per the operator's request (booking vs disable). NOT
+ * translated: they are editable form values that go to the API as the stored
+ * `customerName` / `note`, so they must stay language-stable data.
+ */
 export const DEFAULT_BOOKING_NAME = 'ჯავშანი ადმინის მიერ';
 export const DEFAULT_BLOCK_NOTE = 'დაბლოკვა ადმინის მიერ';
 
@@ -49,7 +55,7 @@ export interface BookingDialogData {
 @Component({
   selector: 'app-booking-dialog',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, MaskitoDirective],
+  imports: [ReactiveFormsModule, CommonModule, MaskitoDirective, TPipe],
   templateUrl: './booking-dialog.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -140,7 +146,7 @@ export class BookingDialogComponent implements OnInit {
       .createBooking(this.data.facilityId, dto)
       .pipe(take(1))
       .subscribe({
-        next: () => this.onSuccess('ჯავშანი წარმატებით დაემატა!'),
+        next: () => this.onSuccess(tr('ჯავშანი წარმატებით დაემატა!')),
         error: (err) => this.onError(err),
       });
   }
@@ -150,7 +156,7 @@ export class BookingDialogComponent implements OnInit {
     const chunks = blockChunks(hhmmToMinutes(this.data.start), hhmmToMinutes(this.data.end));
     if (chunks.length === 0) {
       this.alerts
-        .open('ბლოკი მინიმუმ 60 წუთია', { appearance: 'error' })
+        .open(tr('ბლოკი მინიმუმ 60 წუთია'), { appearance: 'error' })
         .pipe(take(1))
         .subscribe();
       return;
@@ -171,7 +177,7 @@ export class BookingDialogComponent implements OnInit {
     forkJoin(requests)
       .pipe(take(1))
       .subscribe({
-        next: () => this.onSuccess('სლოტი დაბლოკილია'),
+        next: () => this.onSuccess(tr('სლოტი დაბლოკილია')),
         error: (err) => this.onError(err),
       });
   }
@@ -186,16 +192,16 @@ export class BookingDialogComponent implements OnInit {
     this.submitting.set(false);
     const status = err instanceof HttpErrorResponse ? err.status : 0;
     if (status === 409) {
-      // Slot was taken concurrently — tell the operator in Georgian and close so
-      // the calendar refreshes the day (the freshly-taken slot reappears).
+      // Slot was taken concurrently — tell the operator and close so the
+      // calendar refreshes the day (the freshly-taken slot reappears).
       this.alerts
-        .open('სლოტი უკვე დაკავებულია', { appearance: 'error' })
+        .open(tr('სლოტი უკვე დაკავებულია'), { appearance: 'error' })
         .pipe(take(1))
         .subscribe();
       this.context.completeWith(true);
       return;
     }
-    this.alerts.open('შეცდომა ჯავშნის შენახვისას.', { appearance: 'error' }).pipe(take(1)).subscribe();
+    this.alerts.open(tr('შეცდომა ჯავშნის შენახვისას.'), { appearance: 'error' }).pipe(take(1)).subscribe();
   }
 
   cancel(): void {

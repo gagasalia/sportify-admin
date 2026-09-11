@@ -1,3 +1,5 @@
+import { liveLabels } from '../i18n/lang';
+
 export enum Day {
   Monday = 0,
   Tuesday = 1,
@@ -8,7 +10,8 @@ export enum Day {
   Sunday = 6,
 }
 
-export const DAY_LABELS: Record<Day, string> = {
+/** Labels stay RAW Georgian; `liveLabels` translates on every read. */
+export const DAY_LABELS: Record<Day, string> = liveLabels({
   [Day.Monday]: 'ორშაბათი',
   [Day.Tuesday]: 'სამშაბათი',
   [Day.Wednesday]: 'ოთხშაბათი',
@@ -16,9 +19,9 @@ export const DAY_LABELS: Record<Day, string> = {
   [Day.Friday]: 'პარასკევი',
   [Day.Saturday]: 'შაბათი',
   [Day.Sunday]: 'კვირა',
-};
+});
 
-export const DAY_SHORT_LABELS: Record<Day, string> = {
+export const DAY_SHORT_LABELS: Record<Day, string> = liveLabels({
   [Day.Monday]: 'ორშ',
   [Day.Tuesday]: 'სამ',
   [Day.Wednesday]: 'ოთხ',
@@ -26,4 +29,4 @@ export const DAY_SHORT_LABELS: Record<Day, string> = {
   [Day.Friday]: 'პარ',
   [Day.Saturday]: 'შაბ',
   [Day.Sunday]: 'კვი',
-};
+});

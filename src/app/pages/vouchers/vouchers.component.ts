@@ -26,6 +26,8 @@ import { FacilityService } from '../../services/http-services/facility.service';
 import { AcademyService } from '../../services/http-services/academy.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { TenantService } from '../../shared/services/tenant.service';
+import { liveLabels, tr } from '../../shared/i18n/lang';
+import { TPipe } from '../../shared/i18n/t.pipe';
 import { gelToTetri, tetriToGel } from '../../shared/utils/money.util';
 import { formatMemberId } from '../../shared/utils/member-id.util';
 import { Academy } from '../../shared/models/academy.model';
@@ -76,7 +78,7 @@ const PHONE_RE = /^\+?\d{9,15}$/;
 @Component({
   selector: 'app-vouchers',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, AcademySelectComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, AcademySelectComponent, TPipe],
   templateUrl: './vouchers.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -144,21 +146,23 @@ export class VouchersComponent implements OnInit {
   readonly importControl = new FormControl<string>('', { nonNullable: true });
   readonly importExpiry = new FormControl<string>('', { nonNullable: true });
 
-  readonly statusLabels: Record<VoucherDerivedStatus, string> = {
+  // RAW Georgian values behind `liveLabels` — every read translates on the fly,
+  // so a language flip re-renders the chips instead of leaving them stale.
+  readonly statusLabels: Record<VoucherDerivedStatus, string> = liveLabels({
     active: 'აქტიური',
     depleted: 'ამოწურული',
     expired: 'ვადაგასული',
     pending_activation: 'ელოდება აქტივაციას',
     revoked: 'გაუქმებული',
-  };
+  });
 
-  readonly sourceLabels: Record<VoucherSource, string> = {
+  readonly sourceLabels: Record<VoucherSource, string> = liveLabels({
     migration: 'მიგრაცია',
     admin_grant: 'გრანტი',
     purchase: 'ყიდვა',
     gift: 'საჩუქარი',
     campaign: 'კამპანია',
-  };
+  });
 
   private static phoneValidator(control: AbstractControl): ValidationErrors | null {
     const normalized = String(control.value ?? '').replace(/[\s-]/g, '');
@@ -170,7 +174,7 @@ export class VouchersComponent implements OnInit {
   }
 
   facilityLabel(f: Facility): string {
-    return f.name || f.description || 'უსახელო ობიექტი';
+    return f.name || f.description || tr('უსახელო ობიექტი');
   }
 
   ngOnInit(): void {
@@ -370,10 +374,10 @@ export class VouchersComponent implements OnInit {
         next: (result) => {
           this.grantSubmitting.set(false);
           if (isVoucher(result)) {
-            this.alerts.open('მიენიჭა', { appearance: 'success' }).pipe(take(1)).subscribe();
+            this.alerts.open(tr('მიენიჭა'), { appearance: 'success' }).pipe(take(1)).subscribe();
           } else {
             this.alerts
-              .open('მოლოდინში დაემატა', { appearance: 'info' })
+              .open(tr('მოლოდინში დაემატა'), { appearance: 'info' })
               .pipe(take(1))
               .subscribe();
           }
@@ -383,7 +387,7 @@ export class VouchersComponent implements OnInit {
         error: () => {
           this.grantSubmitting.set(false);
           this.alerts
-            .open('შეცდომა მინიჭებისას.', { appearance: 'error' })
+            .open(tr('შეცდომა მინიჭებისას.'), { appearance: 'error' })
             .pipe(take(1))
             .subscribe();
         },
@@ -411,17 +415,17 @@ export class VouchersComponent implements OnInit {
       const n = index + 1;
       const parts = line.split(',');
       if (parts.length !== 2) {
-        errors.push(`ხაზი ${n}: არასწორი ფორმატი`);
+        errors.push(`${tr('ხაზი')} ${n}: ${tr('არასწორი ფორმატი')}`);
         return;
       }
       const phone = parts[0].replace(/[\s-]/g, '');
       const amount = Number(parts[1].trim());
       if (!PHONE_RE.test(phone)) {
-        errors.push(`ხაზი ${n}: არასწორი ტელეფონი`);
+        errors.push(`${tr('ხაზი')} ${n}: ${tr('არასწორი ტელეფონი')}`);
         return;
       }
       if (!Number.isFinite(amount) || amount <= 0) {
-        errors.push(`ხაზი ${n}: არასწორი თანხა`);
+        errors.push(`${tr('ხაზი')} ${n}: ${tr('არასწორი თანხა')}`);
         return;
       }
       entries.push({ phone, amountTetri: gelToTetri(amount) });
@@ -438,6 +442,7 @@ export class VouchersComponent implements OnInit {
       return;
     }
     if (entries.length === 0) {
+      // RAW Georgian — the template renders importErrors through `| t`.
       this.importErrors.set(['სია ცარიელია']);
       return;
     }
@@ -452,7 +457,9 @@ export class VouchersComponent implements OnInit {
         next: (res) => {
           this.importSubmitting.set(false);
           this.alerts
-            .open(`მიენიჭა ${res.granted} · მოლოდინში ${res.pending}`, { appearance: 'success' })
+            .open(`${tr('მიენიჭა')} ${res.granted} · ${tr('მოლოდინში')} ${res.pending}`, {
+              appearance: 'success',
+            })
             .pipe(take(1))
             .subscribe();
           this.importControl.reset('');
@@ -462,7 +469,7 @@ export class VouchersComponent implements OnInit {
         error: () => {
           this.importSubmitting.set(false);
           this.alerts
-            .open('შეცდომა იმპორტისას.', { appearance: 'error' })
+            .open(tr('შეცდომა იმპორტისას.'), { appearance: 'error' })
             .pipe(take(1))
             .subscribe();
         },

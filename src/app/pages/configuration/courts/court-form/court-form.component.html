@@ -3,7 +3,7 @@
     <!-- Court Name (Georgian) -->
     <label class="ss-field">
       <span class="ss-label georgian-text" lang="ka">
-        კორტის სახელი <span class="text-red-500">*</span>
+        {{ 'კორტის სახელი' | t }} <span class="text-red-500">*</span>
       </span>
       <input
         class="ss-input georgian-text"
@@ -12,7 +12,7 @@
         formControlName="name"
       />
       @if (courtForm.get('name')?.touched && courtForm.get('name')?.invalid) {
-        <span class="ss-error georgian-text" lang="ka">შეიყვანეთ კორტის სახელი</span>
+        <span class="ss-error georgian-text" lang="ka">{{ 'შეიყვანეთ კორტის სახელი' | t }}</span>
       }
     </label>
 
@@ -25,11 +25,11 @@
     <!-- Sport Type -->
     <label class="ss-field">
       <span class="ss-label georgian-text" lang="ka">
-        სპორტის ტიპი <span class="text-red-500">*</span>
+        {{ 'სპორტის ტიპი' | t }} <span class="text-red-500">*</span>
       </span>
       <select class="ss-input georgian-text" lang="ka" formControlName="sportType">
         @for (type of sportTypes; track type) {
-          <option [value]="type">{{ sportTypeLabels[type] }}</option>
+          <option [value]="type">{{ sportTypeLabels[type] | t }}</option>
         }
       </select>
     </label>
@@ -37,37 +37,39 @@
     <!-- Location Type (Indoor/Outdoor/Covered) -->
     <label class="ss-field">
       <span class="ss-label georgian-text" lang="ka">
-        კორტის ტიპი <span class="text-red-500">*</span>
+        {{ 'კორტის ტიპი' | t }} <span class="text-red-500">*</span>
       </span>
       <select class="ss-input georgian-text" lang="ka" formControlName="locationType">
         @for (locationType of locationTypes; track locationType) {
-          <option [value]="locationType">{{ locationTypeLabels[locationType] }}</option>
+          <option [value]="locationType">{{ locationTypeLabels[locationType] | t }}</option>
         }
       </select>
     </label>
 
     <!-- Court Surface -->
     <div formGroupName="surface" class="space-y-4">
-      <h3 class="text-lg font-medium georgian-text" lang="ka">საფარი</h3>
+      <h3 class="text-lg font-medium georgian-text" lang="ka">{{ 'საფარი' | t }}</h3>
 
       <!-- Surface Material -->
       <label class="ss-field">
         <span class="ss-label georgian-text" lang="ka">
-          მატერიალი <span class="text-red-500">*</span>
+          {{ 'მატერიალი' | t }} <span class="text-red-500">*</span>
         </span>
         <select class="ss-input georgian-text" lang="ka" formControlName="material">
           @for (material of surfaceMaterials; track material) {
-            <option [value]="material">{{ surfaceMaterialLabels[material] }}</option>
+            <option [value]="material">{{ surfaceMaterialLabels[material] | t }}</option>
           }
         </select>
       </label>
 
       <!-- Surface Color -->
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">ფერი <span class="text-red-500">*</span></span>
+        <span class="ss-label georgian-text" lang="ka">
+          {{ 'ფერი' | t }} <span class="text-red-500">*</span>
+        </span>
         <select class="ss-input georgian-text" lang="ka" formControlName="color">
           @for (color of surfaceColors; track color) {
-            <option [value]="color">{{ surfaceColorLabels[color] }}</option>
+            <option [value]="color">{{ surfaceColorLabels[color] | t }}</option>
           }
         </select>
       </label>
@@ -76,10 +78,10 @@
     <!-- Action Buttons -->
     <div class="flex justify-end gap-2 mt-6">
       <button class="ss-btn ss-btn--flat" type="button" (click)="onCancel()">
-        <span class="georgian-text" lang="ka">გაუქმება</span>
+        <span class="georgian-text" lang="ka">{{ 'გაუქმება' | t }}</span>
       </button>
       <button class="ss-btn ss-btn--primary" type="submit" [disabled]="!courtForm.valid">
-        <span class="georgian-text" lang="ka">შენახვა</span>
+        <span class="georgian-text" lang="ka">{{ 'შენახვა' | t }}</span>
       </button>
     </div>
   </form>

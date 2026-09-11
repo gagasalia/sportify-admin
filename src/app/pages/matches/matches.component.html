@@ -1,16 +1,16 @@
 <div class="pt-8 p-0 sm:p-8">
   <header class="mb-6 flex items-center justify-between">
-    <h1 class="text-2xl font-semibold georgian-text" lang="ka">თამაშები</h1>
+    <h1 class="text-2xl font-semibold georgian-text" lang="ka">{{ 'თამაშები' | t }}</h1>
   </header>
 
   @if (isLoading()) {
     <div class="flex justify-center items-center py-16">
-      <div class="text-lg georgian-text" lang="ka">იტვირთება...</div>
+      <div class="text-lg georgian-text" lang="ka">{{ 'იტვირთება...' | t }}</div>
     </div>
   } @else if (matches().length === 0) {
     <div class="ss-card p-10 text-center">
       <p class="georgian-text" lang="ka" data-testid="matches-empty">
-        თქვენს მოედნებზე ღია თამაშები ჯერ არ არის — თამაშებს მოთამაშეები ქმნიან აპლიკაციიდან
+        {{ 'თქვენს მოედნებზე ღია თამაშები ჯერ არ არის — თამაშებს მოთამაშეები ქმნიან აპლიკაციიდან' | t }}
       </p>
     </div>
   } @else {
@@ -20,12 +20,12 @@
         <table class="ss-table">
           <thead>
             <tr>
-              <th class="georgian-text" lang="ka">თამაში</th>
-              <th class="georgian-text" lang="ka">ორგანიზატორი</th>
-              <th class="georgian-text" lang="ka">დეტალები</th>
-              <th class="georgian-text" lang="ka">მოთამაშეები</th>
-              <th class="georgian-text" lang="ka">ხილვადობა</th>
-              <th class="georgian-text" lang="ka">სტატუსი</th>
+              <th class="georgian-text" lang="ka">{{ 'თამაში' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'ორგანიზატორი' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'დეტალები' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'მოთამაშეები' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'ხილვადობა' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'სტატუსი' | t }}</th>
               <th></th>
             </tr>
           </thead>
@@ -35,7 +35,8 @@
                 <td>
                   <div class="font-medium whitespace-nowrap">{{ m.date }} · {{ m.startTime }}</div>
                   <div class="text-xs" style="color: var(--tui-text-secondary)">
-                    {{ m.facilityName }} @if (m.city) { · {{ m.city }} } · {{ m.durationMinutes }} წთ
+                    {{ m.facilityName }} @if (m.city) { · {{ m.city }} } · {{ m.durationMinutes }}
+                    {{ 'წთ' | t }}
                   </div>
                 </td>
                 <td class="text-sm">{{ m.ownerName || '—' }}</td>
@@ -66,8 +67,8 @@
                     <button
                       class="ss-icon-btn"
                       type="button"
-                      aria-label="მოთამაშეები"
-                      title="მოთამაშეები"
+                      [attr.aria-label]="'მოთამაშეები' | t"
+                      [title]="'მოთამაშეები' | t"
                       (click)="openPlayers(m)"
                       data-testid="open-players"
                     >
@@ -77,8 +78,8 @@
                       <button
                         class="ss-icon-btn ss-icon-btn--danger"
                         type="button"
-                        aria-label="გაუქმება"
-                        title="გაუქმება"
+                        [attr.aria-label]="'გაუქმება' | t"
+                        [title]="'გაუქმება' | t"
                         (click)="cancel(m)"
                         data-testid="cancel-match"
                       >
@@ -131,7 +132,7 @@
               <button
                 class="ss-icon-btn"
                 type="button"
-                aria-label="მოთამაშეები"
+                [attr.aria-label]="'მოთამაშეები' | t"
                 (click)="openPlayers(m)"
               >
                 <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/users.svg')"></i>
@@ -140,7 +141,7 @@
                 <button
                   class="ss-icon-btn ss-icon-btn--danger"
                   type="button"
-                  aria-label="გაუქმება"
+                  [attr.aria-label]="'გაუქმება' | t"
                   (click)="cancel(m)"
                 >
                   <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/circle-x.svg')"></i>
@@ -161,7 +162,7 @@
           [disabled]="page() === 1"
           (click)="onPageChange(page() - 1)"
         >
-          <span class="georgian-text" lang="ka">წინა</span>
+          <span class="georgian-text" lang="ka">{{ 'წინა' | t }}</span>
         </button>
         <span class="text-sm" style="color: var(--tui-text-secondary)">
           {{ page() }} / {{ totalPages() }}
@@ -172,7 +173,7 @@
           [disabled]="page() >= totalPages()"
           (click)="onPageChange(page() + 1)"
         >
-          <span class="georgian-text" lang="ka">შემდეგი</span>
+          <span class="georgian-text" lang="ka">{{ 'შემდეგი' | t }}</span>
         </button>
       </div>
     }

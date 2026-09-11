@@ -13,6 +13,7 @@ import {
   PaginatedUsers,
 } from '../../../services/http-services/user-management.service';
 import { User, UserType, FilterUsersDto } from '../../../shared/models/user.model';
+import { TPipe } from '../../../shared/i18n/t.pipe';
 
 import { SsToastService } from '../../../shared/ui/toast.service';
 import { SsDialogService } from '../../../shared/ui/dialog.service';
@@ -95,7 +96,7 @@ describe('UserManagementComponent', () => {
       // Keep only DatePipe; strip Taiga UI and FormsModule so NO_ERRORS_SCHEMA
       // suppresses unknown-element/directive/control-accessor errors.
       .overrideComponent(UserManagementComponent, {
-        set: { imports: [DatePipe], schemas: [NO_ERRORS_SCHEMA] },
+        set: { imports: [DatePipe, TPipe], schemas: [NO_ERRORS_SCHEMA] },
       })
       .compileComponents();
 
@@ -647,7 +648,7 @@ describe('UserManagementComponent — URL-seeded filters', () => {
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(UserManagementComponent, {
-        set: { imports: [DatePipe], schemas: [NO_ERRORS_SCHEMA] },
+        set: { imports: [DatePipe, TPipe], schemas: [NO_ERRORS_SCHEMA] },
       })
       .compileComponents();
 

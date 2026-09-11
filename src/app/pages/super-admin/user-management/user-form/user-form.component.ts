@@ -17,13 +17,15 @@ import {
 import { UserManagementService } from '../../../../services/http-services/user-management.service';
 import { CreateUserDto, User, UserType } from '../../../../shared/models/user.model';
 import { arrayRequiredValidator } from '../../../../shared/validators/array-required.validator';
+import { liveLabels, tr } from '../../../../shared/i18n/lang';
+import { TPipe } from '../../../../shared/i18n/t.pipe';
 
 import { SsToastService } from '../../../../shared/ui/toast.service';
 import { SS_DIALOG_CONTEXT, SsDialogContext } from '../../../../shared/ui/dialog.service';
 @Component({
   selector: 'app-user-form',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, MaskitoDirective],
+  imports: [ReactiveFormsModule, CommonModule, MaskitoDirective, TPipe],
   templateUrl: './user-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -32,11 +34,12 @@ export class UserFormComponent implements OnInit {
 
   readonly userTypes = Object.values(UserType);
 
-  readonly userTypeLabels: Record<UserType, string> = {
+  /** RAW-Georgian role labels; `liveLabels` translates on every read (never baked). */
+  readonly userTypeLabels: Record<UserType, string> = liveLabels({
     [UserType.ADMIN]: 'ადმინი',
     [UserType.USER]: 'მომხმარებელი',
     [UserType.SUPERADMIN]: 'სუპერადმინი',
-  };
+  });
 
   readonly phoneMask: MaskitoOptions = {
     mask: ['+', '9', '9', '5', /[5]/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/],
@@ -172,14 +175,14 @@ export class UserFormComponent implements OnInit {
         .subscribe({
           next: (savedUser) => {
             this.alerts
-              .open('მომხმარებელი წარმატებით განახლდა!', { appearance: 'success' })
+              .open(tr('მომხმარებელი წარმატებით განახლდა!'), { appearance: 'success' })
               .pipe(take(1))
               .subscribe();
             this.context.completeWith(savedUser);
           },
           error: () => {
             this.alerts
-              .open('შეცდომა მომხმარებლის განახლებისას.', { appearance: 'error' })
+              .open(tr('შეცდომა მომხმარებლის განახლებისას.'), { appearance: 'error' })
               .pipe(take(1))
               .subscribe();
           },
@@ -202,14 +205,14 @@ export class UserFormComponent implements OnInit {
         .subscribe({
           next: (savedUser) => {
             this.alerts
-              .open('მომხმარებელი წარმატებით დაემატა!', { appearance: 'success' })
+              .open(tr('მომხმარებელი წარმატებით დაემატა!'), { appearance: 'success' })
               .pipe(take(1))
               .subscribe();
             this.context.completeWith(savedUser);
           },
           error: () => {
             this.alerts
-              .open('შეცდომა მომხმარებლის დამატებისას.', { appearance: 'error' })
+              .open(tr('შეცდომა მომხმარებლის დამატებისას.'), { appearance: 'error' })
               .pipe(take(1))
               .subscribe();
           },

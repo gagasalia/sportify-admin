@@ -12,6 +12,7 @@ import { MediaService } from '../../../services/http-services/media.service';
 import { TenantService } from '../../../shared/services/tenant.service';
 import { Academy, AcademyStatus } from '../../../shared/models/academy.model';
 import { SportType } from '../../../shared/enums/court-type.enum';
+import { TPipe } from '../../../shared/i18n/t.pipe';
 
 import { SsToastService } from '../../../shared/ui/toast.service';
 // ─── Test data ────────────────────────────────────────────────────────────────
@@ -74,7 +75,7 @@ describe('AcademyComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(AcademyComponent, {
-        set: { imports: [ReactiveFormsModule], schemas: [NO_ERRORS_SCHEMA] },
+        set: { imports: [ReactiveFormsModule, TPipe], schemas: [NO_ERRORS_SCHEMA] },
       })
       .compileComponents();
 

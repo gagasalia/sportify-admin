@@ -31,6 +31,8 @@ import {
 } from '../../../shared/models/booking.model';
 import { GridCourt } from '../calendar-grid';
 import { bookingDisplayName, bookingPlayer } from '../booking-display.util';
+import { TPipe } from '../../../shared/i18n/t.pipe';
+import { liveLabels, tr } from '../../../shared/i18n/lang';
 
 /** ID column filter: only digits can match a public member ID. */
 const MEMBER_ID_RX = /^\d+$/;
@@ -47,7 +49,7 @@ const MEMBER_ID_RX = /^\d+$/;
 @Component({
   selector: 'app-reservation-list',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, SsAvatarComponent],
+  imports: [CommonModule, ReactiveFormsModule, SsAvatarComponent, TPipe],
   templateUrl: './reservation-list.component.html',
   styleUrl: './reservation-list.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -102,11 +104,12 @@ export class ReservationListComponent {
 
   readonly statusOptions: BookingStatus[] = ['confirmed', 'cancelled', 'completed'];
 
-  readonly statusLabels: Record<BookingStatus, string> = {
+  /** RAW-Georgian values behind a live proxy — every read translates, never baked. */
+  readonly statusLabels: Record<BookingStatus, string> = liveLabels({
     confirmed: 'დადასტურებული',
     cancelled: 'გაუქმებული',
     completed: 'დასრულებული',
-  };
+  });
 
   constructor() {
     // Auto-apply: free-text/number inputs settle first; pickers fire directly.
@@ -276,14 +279,14 @@ export class ReservationListComponent {
 
   cancelFromList(booking: Booking): void {
     const data: SsConfirmData = {
-      content: 'ჯავშნის გაუქმება გსურთ?',
-      yes: 'დიახ',
-      no: 'არა',
+      content: tr('ჯავშნის გაუქმება გსურთ?'),
+      yes: tr('დიახ'),
+      no: tr('არა'),
       appearance: 'destructive',
     };
     this.dialogs
       .open<boolean>(SsConfirmComponent, {
-        label: 'დადასტურება',
+        label: tr('დადასტურება'),
         size: 's',
         data,
       })
@@ -299,12 +302,12 @@ export class ReservationListComponent {
       .pipe(take(1))
       .subscribe({
         next: () => {
-          this.alerts.open('გაუქმებულია', { appearance: 'success' }).pipe(take(1)).subscribe();
+          this.alerts.open(tr('გაუქმებულია'), { appearance: 'success' }).pipe(take(1)).subscribe();
           this.load(this.page());
         },
         error: () => {
           this.alerts
-            .open('შეცდომა გაუქმებისას.', { appearance: 'error' })
+            .open(tr('შეცდომა გაუქმებისას.'), { appearance: 'error' })
             .pipe(take(1))
             .subscribe();
         },

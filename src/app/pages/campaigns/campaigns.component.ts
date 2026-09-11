@@ -25,6 +25,8 @@ import {
   CampaignDerivedStatus,
 } from '../../shared/models/campaign.model';
 import { tetriToGel } from '../../shared/utils/money.util';
+import { tr } from '../../shared/i18n/lang';
+import { TPipe } from '../../shared/i18n/t.pipe';
 import { SsToastService } from '../../shared/ui/toast.service';
 import { SsDialogService } from '../../shared/ui/dialog.service';
 import { SsConfirmComponent, SsConfirmData } from '../../shared/ui/confirm.component';
@@ -48,7 +50,7 @@ const PAGE_SIZE = 20;
 @Component({
   selector: 'app-campaigns',
   standalone: true,
-  imports: [CommonModule, FormsModule, AcademySelectComponent],
+  imports: [CommonModule, FormsModule, AcademySelectComponent, TPipe],
   templateUrl: './campaigns.component.html',
   styleUrl: './campaigns.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -158,7 +160,7 @@ export class CampaignsComponent implements OnInit {
   protected addCampaign(): void {
     this.dialogs
       .open<Campaign | null>(CampaignFormComponent, {
-        label: 'კამპანიის დამატება',
+        label: tr('კამპანიის დამატება'),
         size: 'l',
         dismissible: true,
         closable: true,
@@ -168,7 +170,7 @@ export class CampaignsComponent implements OnInit {
       .subscribe((result) => {
         if (result) {
           this.load();
-          this.alerts.open('შეიქმნა', { appearance: 'success' }).pipe(take(1)).subscribe();
+          this.alerts.open(tr('შეიქმნა'), { appearance: 'success' }).pipe(take(1)).subscribe();
         }
       });
   }
@@ -176,7 +178,7 @@ export class CampaignsComponent implements OnInit {
   protected editCampaign(campaign: Campaign): void {
     this.dialogs
       .open<Campaign | null>(CampaignFormComponent, {
-        label: 'კამპანიის რედაქტირება',
+        label: tr('კამპანიის რედაქტირება'),
         size: 'l',
         dismissible: true,
         closable: true,
@@ -186,7 +188,7 @@ export class CampaignsComponent implements OnInit {
       .subscribe((result) => {
         if (result) {
           this.load();
-          this.alerts.open('შეინახა', { appearance: 'success' }).pipe(take(1)).subscribe();
+          this.alerts.open(tr('შეინახა'), { appearance: 'success' }).pipe(take(1)).subscribe();
         }
       });
   }
@@ -194,7 +196,7 @@ export class CampaignsComponent implements OnInit {
   protected openParticipants(campaign: Campaign): void {
     this.dialogs
       .open<void>(CampaignParticipantsDialogComponent, {
-        label: `მონაწილეები · ${this.offerLabel(campaign)}`,
+        label: `${tr('მონაწილეები')} · ${this.offerLabel(campaign)}`,
         size: 'l',
         dismissible: true,
         closable: true,
@@ -207,12 +209,12 @@ export class CampaignsComponent implements OnInit {
   protected deleteCampaign(campaign: Campaign): void {
     this.dialogs
       .open<boolean>(SsConfirmComponent, {
-        label: 'კამპანიის წაშლა',
+        label: tr('კამპანიის წაშლა'),
         size: 's',
         data: {
-          content: `ნამდვილად წაშალოთ კამპანია „${this.offerLabel(campaign)}"?`,
-          yes: 'წაშლა',
-          no: 'გაუქმება',
+          content: `${tr('ნამდვილად წაშალოთ კამპანია')} „${this.offerLabel(campaign)}"?`,
+          yes: tr('წაშლა'),
+          no: tr('გაუქმება'),
           appearance: 'destructive',
         } as SsConfirmData,
       })
@@ -225,11 +227,11 @@ export class CampaignsComponent implements OnInit {
       .subscribe({
         next: () => {
           this.load();
-          this.alerts.open('წაიშალა', { appearance: 'success' }).pipe(take(1)).subscribe();
+          this.alerts.open(tr('წაიშალა'), { appearance: 'success' }).pipe(take(1)).subscribe();
         },
         error: () => {
           this.alerts
-            .open('წაშლა ვერ მოხერხდა, სცადეთ თავიდან', { appearance: 'error' })
+            .open(tr('წაშლა ვერ მოხერხდა, სცადეთ თავიდან'), { appearance: 'error' })
             .pipe(take(1))
             .subscribe();
         },
@@ -253,14 +255,14 @@ export class CampaignsComponent implements OnInit {
           this.rows.update((list) =>
             list.map((c) => (c._id === updated._id ? updated : c)),
           );
-          this.alerts.open('შეინახა', { appearance: 'success' }).pipe(take(1)).subscribe();
+          this.alerts.open(tr('შეინახა'), { appearance: 'success' }).pipe(take(1)).subscribe();
         },
         error: () => {
           this.rows.update((list) =>
             list.map((c) => (c._id === campaign._id ? { ...c, active: previous } : c)),
           );
           this.alerts
-            .open('შენახვა ვერ მოხერხდა, სცადეთ თავიდან', { appearance: 'error' })
+            .open(tr('შენახვა ვერ მოხერხდა, სცადეთ თავიდან'), { appearance: 'error' })
             .pipe(take(1))
             .subscribe();
         },
@@ -297,7 +299,7 @@ export class CampaignsComponent implements OnInit {
   protected goalLabel(c: Campaign): string {
     return c.goalType === 'spend'
       ? `${tetriToGel(c.goalTarget)} ₾`
-      : `${c.goalTarget} ჯავშანი`;
+      : tr('%s ჯავშანი').replace('%s', String(c.goalTarget));
   }
 
   /**
@@ -306,9 +308,15 @@ export class CampaignsComponent implements OnInit {
    */
   protected offerLabel(c: Campaign): string {
     const reward = tetriToGel(c.rewardTetri);
+    // ONE translatable sentence per goal type (%s = goal, %n = reward): the
+    // word order differs per language, so it must not be concatenated here.
     return c.goalType === 'spend'
-      ? `დახარჯე ${tetriToGel(c.goalTarget)} ₾ და მიიღე ${reward} ₾`
-      : `ითამაშე ${c.goalTarget}-ჯერ და მიიღე ${reward} ₾`;
+      ? tr('დახარჯე %s ₾ და მიიღე %n ₾')
+          .replace('%s', String(tetriToGel(c.goalTarget)))
+          .replace('%n', String(reward))
+      : tr('ითამაშე %s-ჯერ და მიიღე %n ₾')
+          .replace('%s', String(c.goalTarget))
+          .replace('%n', String(reward));
   }
 
   /** '20 ₾ ვაუჩერი' + the validity hint when the reward expires. */
@@ -317,13 +325,13 @@ export class CampaignsComponent implements OnInit {
   }
 
   protected rewardHint(c: Campaign): string | null {
-    return c.rewardValidDays ? `ვადა ${c.rewardValidDays} დღე` : null;
+    return c.rewardValidDays ? tr('ვადა %s დღე').replace('%s', String(c.rewardValidDays)) : null;
   }
 
   /** The venues in scope, or 'ყველა მოედანი' for an academy-wide campaign. */
   protected scopeLabel(c: Campaign): string {
     if (c.facilityNames.length === 0) {
-      return c.academy ? 'ყველა მოედანი' : 'პლატფორმა';
+      return c.academy ? tr('ყველა მოედანი') : tr('პლატფორმა');
     }
     if (c.facilityNames.length <= 2) {
       return c.facilityNames.join(' · ');
@@ -333,7 +341,7 @@ export class CampaignsComponent implements OnInit {
 
   /** 'DD.MM.YY – DD.MM.YY' publication window, or 'უვადო' when unbounded. */
   protected periodLabel(c: Campaign): string {
-    if (!c.startsAt && !c.endsAt) return 'უვადო';
+    if (!c.startsAt && !c.endsAt) return tr('უვადო');
     const from = c.startsAt ? this.fmtDate(c.startsAt) : '…';
     const to = c.endsAt ? this.fmtDate(c.endsAt) : '…';
     return `${from} – ${to}`;

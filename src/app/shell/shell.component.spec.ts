@@ -5,6 +5,7 @@ import { provideAnimations } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 
 import { ShellComponent } from './shell.component';
+import { TPipe } from '../shared/i18n/t.pipe';
 import { AuthService } from '../shared/services/auth.service';
 import { TenantService } from '../shared/services/tenant.service';
 import { SsDialogService } from '../shared/ui/dialog.service';
@@ -32,7 +33,8 @@ describe('ShellComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
     })
-      .overrideComponent(ShellComponent, { set: { imports: [], schemas: [NO_ERRORS_SCHEMA] } })
+      // set:{imports} REPLACES the array — TPipe must ride along or `| t` is NG0302
+      .overrideComponent(ShellComponent, { set: { imports: [TPipe], schemas: [NO_ERRORS_SCHEMA] } })
       .compileComponents();
   });
 

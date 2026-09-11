@@ -1,9 +1,9 @@
 <div class="max-h-[70vh] overflow-y-auto">
   @if (isLoading()) {
-    <p class="py-8 text-center georgian-text" lang="ka">იტვირთება...</p>
+    <p class="py-8 text-center georgian-text" lang="ka">{{ 'იტვირთება...' | t }}</p>
   } @else if (participants().length === 0) {
     <p class="py-8 text-center georgian-text" lang="ka" data-testid="participants-empty">
-      მონაწილეები ჯერ არ არიან
+      {{ 'მონაწილეები ჯერ არ არიან' | t }}
     </p>
   } @else {
     <div class="overflow-x-auto">
@@ -12,11 +12,11 @@
           <tr>
             <!-- No per-row deadline: it is the CAMPAIGN's end date, shared by
                  everyone (docs/24 v2) — shown once on the list row instead. -->
-            <th class="georgian-text" lang="ka">მოთამაშე</th>
-            <th class="georgian-text" lang="ka">პროგრესი</th>
-            <th class="georgian-text" lang="ka">ციკლი</th>
-            <th class="georgian-text" lang="ka">სტატუსი</th>
-            <th class="georgian-text" lang="ka">ვაუჩერი</th>
+            <th class="georgian-text" lang="ka">{{ 'მოთამაშე' | t }}</th>
+            <th class="georgian-text" lang="ka">{{ 'პროგრესი' | t }}</th>
+            <th class="georgian-text" lang="ka">{{ 'ციკლი' | t }}</th>
+            <th class="georgian-text" lang="ka">{{ 'სტატუსი' | t }}</th>
+            <th class="georgian-text" lang="ka">{{ 'ვაუჩერი' | t }}</th>
           </tr>
         </thead>
         <tbody>
@@ -59,7 +59,7 @@
           [disabled]="page() === 1"
           (click)="onPageChange(page() - 1)"
         >
-          <span class="georgian-text" lang="ka">წინა</span>
+          <span class="georgian-text" lang="ka">{{ 'წინა' | t }}</span>
         </button>
         <span class="text-sm" style="color: var(--tui-text-secondary)">
           {{ page() }} / {{ totalPages() }}
@@ -70,7 +70,7 @@
           [disabled]="page() >= totalPages()"
           (click)="onPageChange(page() + 1)"
         >
-          <span class="georgian-text" lang="ka">შემდეგი</span>
+          <span class="georgian-text" lang="ka">{{ 'შემდეგი' | t }}</span>
         </button>
       </div>
     }

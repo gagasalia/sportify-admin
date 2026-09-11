@@ -14,6 +14,8 @@
  * every facility of the academy.
  */
 
+import { liveLabels } from '../i18n/lang';
+
 /** What the player accumulates: paid bookings, or gross tetri spent. */
 export type CampaignGoalType = 'bookings' | 'spend';
 
@@ -26,17 +28,19 @@ export type CampaignDerivedStatus = 'inactive' | 'expired' | 'scheduled' | 'live
 /** One player's run, as the participants table shows it. */
 export type CampaignProgressStatus = 'in_progress' | 'completed' | 'expired';
 
-export const GOAL_TYPE_LABELS: Record<CampaignGoalType, string> = {
+// Label maps keep RAW Georgian values and go through `liveLabels` so every
+// read translates on the live language (never baked at import time).
+export const GOAL_TYPE_LABELS: Record<CampaignGoalType, string> = liveLabels({
   bookings: 'ჯავშნები',
   spend: 'დახარჯული თანხა',
-};
+});
 
-export const CAMPAIGN_STATUS_LABELS: Record<CampaignDerivedStatus, string> = {
+export const CAMPAIGN_STATUS_LABELS: Record<CampaignDerivedStatus, string> = liveLabels({
   inactive: 'გამორთული',
   expired: 'ვადაგასული',
   scheduled: 'დაგეგმილი',
   live: 'აქტიური',
-};
+});
 
 // Theme-aware ss-badge variants (mirrors the promocodes STATUS_CLASSES map).
 export const CAMPAIGN_STATUS_CLASSES: Record<CampaignDerivedStatus, string> = {
@@ -46,11 +50,11 @@ export const CAMPAIGN_STATUS_CLASSES: Record<CampaignDerivedStatus, string> = {
   live: 'ss-badge ss-badge--positive',
 };
 
-export const PROGRESS_STATUS_LABELS: Record<CampaignProgressStatus, string> = {
+export const PROGRESS_STATUS_LABELS: Record<CampaignProgressStatus, string> = liveLabels({
   in_progress: 'მიმდინარე',
   completed: 'დასრულებული',
   expired: 'ვადაგასული',
-};
+});
 
 export const PROGRESS_STATUS_CLASSES: Record<CampaignProgressStatus, string> = {
   in_progress: 'ss-badge ss-badge--info',

@@ -3,13 +3,13 @@
     <div
       class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 min-h-16"
     >
-      <h1 class="text-2xl font-semibold georgian-text" lang="ka">კორტები</h1>
+      <h1 class="text-2xl font-semibold georgian-text" lang="ka">{{ 'კორტები' | t }}</h1>
       @if (selectedFacilityId() && courts().length > 0) {
         <button class="ss-btn ss-btn--primary" type="button" (click)="addCourt()">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" width="16" height="16" aria-hidden="true">
             <path d="M12 5v14M5 12h14" />
           </svg>
-          <span class="georgian-text" lang="ka">კორტის დამატება</span>
+          <span class="georgian-text" lang="ka">{{ 'კორტის დამატება' | t }}</span>
         </button>
       }
     </div>
@@ -22,14 +22,14 @@
       <div class="flex flex-col items-center justify-center py-16">
         <img src="images/no-result.png" alt="No facilities" class="w-64 h-64 mb-6 opacity-50" />
         <p class="text-lg text-gray-500 mb-6 georgian-text" lang="ka">
-          კორტების სანახავად დაამატეთ ობიექტი
+          {{ 'კორტების სანახავად დაამატეთ ობიექტი' | t }}
         </p>
         <button class="ss-btn ss-btn--primary" type="button" (click)="navigateToFacilities()">
-          <span class="georgian-text" lang="ka">დაამატე ობიექტი</span>
+          <span class="georgian-text" lang="ka">{{ 'დაამატე ობიექტი' | t }}</span>
         </button>
       </div>
     } @else {
-      <div class="ss-chip-rail mb-6" role="tablist" aria-label="ობიექტები">
+      <div class="ss-chip-rail mb-6" role="tablist" [attr.aria-label]="'ობიექტები' | t">
         @for (facility of facilities(); track facility._id ?? facility.id) {
           <button
             type="button"
@@ -51,9 +51,11 @@
     @if (courts().length === 0 && !isLoadingCourts()) {
       <div class="flex flex-col items-center justify-center py-16">
         <img src="images/no-result.png" alt="No courts" class="w-64 h-64 mb-6 opacity-50" />
-        <p class="text-lg text-gray-500 mb-6 georgian-text" lang="ka">კორტი დამატებული არ არის</p>
+        <p class="text-lg text-gray-500 mb-6 georgian-text" lang="ka">
+          {{ 'კორტი დამატებული არ არის' | t }}
+        </p>
         <button class="ss-btn ss-btn--primary" type="button" (click)="addCourt()">
-          <span class="georgian-text" lang="ka">კორტის დამატება</span>
+          <span class="georgian-text" lang="ka">{{ 'კორტის დამატება' | t }}</span>
         </button>
       </div>
     } @else if (courts().length > 0) {

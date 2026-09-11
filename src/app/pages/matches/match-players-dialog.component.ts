@@ -8,14 +8,16 @@ import {
   MatchPlayerStatus,
 } from '../../shared/models/match.model';
 
+import { liveLabels } from '../../shared/i18n/lang';
+import { TPipe } from '../../shared/i18n/t.pipe';
 import { SS_DIALOG_CONTEXT, SsDialogContext } from '../../shared/ui/dialog.service';
 import { SsAvatarComponent } from '../../shared/ui/ss-avatar.component';
 import { formatMemberId } from '../../shared/utils/member-id.util';
-const STATUS_LABELS: Record<MatchPlayerStatus, string> = {
+const STATUS_LABELS: Record<MatchPlayerStatus, string> = liveLabels({
   joined: 'შეერთებული',
   left: 'გავიდა',
   removed: 'მოხსნილი',
-};
+});
 
 const STATUS_CLASSES: Record<MatchPlayerStatus, string> = {
   joined: 'ss-badge ss-badge--positive',
@@ -27,15 +29,15 @@ const STATUS_CLASSES: Record<MatchPlayerStatus, string> = {
 @Component({
   selector: 'app-match-players-dialog',
   standalone: true,
-  imports: [CommonModule, DatePipe, SsAvatarComponent],
+  imports: [CommonModule, DatePipe, SsAvatarComponent, TPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="max-h-[70vh] overflow-y-auto">
       @if (isLoading()) {
-        <p class="py-8 text-center georgian-text" lang="ka">იტვირთება...</p>
+        <p class="py-8 text-center georgian-text" lang="ka">{{ 'იტვირთება...' | t }}</p>
       } @else if (players().length === 0) {
         <p class="py-8 text-center georgian-text" lang="ka" data-testid="players-empty">
-          მოთამაშეები არ არიან
+          {{ 'მოთამაშეები არ არიან' | t }}
         </p>
       } @else {
         <ul class="m-0 p-0 list-none" data-testid="players-list">
@@ -53,7 +55,7 @@ const STATUS_CLASSES: Record<MatchPlayerStatus, string> = {
                     <span
                       class="ml-1 ss-badge ss-badge--accent georgian-text"
                       lang="ka"
-                      >ორგანიზატორი</span
+                      >{{ 'ორგანიზატორი' | t }}</span
                     >
                   }
                 </div>

@@ -4,6 +4,8 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { HttpErrorResponse } from '@angular/common/http';
 import { ActivatedRoute, Router } from '@angular/router';
 import { catchError, finalize, of, switchMap, take } from 'rxjs';
+import { I18nService } from '../../shared/i18n/i18n.service';
+import { TPipe } from '../../shared/i18n/t.pipe';
 import { AuthService } from '../../shared/services/auth.service';
 import { TenantService } from '../../shared/services/tenant.service';
 import { NonAdminLoginError } from '../../shared/models/auth.model';
@@ -16,7 +18,7 @@ import { NonAdminLoginError } from '../../shared/models/auth.model';
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, TPipe],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -27,10 +29,16 @@ export class LoginComponent {
   private readonly tenant = inject(TenantService);
   private readonly router = inject(Router);
   private readonly route = inject(ActivatedRoute);
+  private readonly i18n = inject(I18nService);
 
   readonly isSubmitting = signal(false);
-  /** Set to a Georgian message on a 401; cleared on a fresh submit. */
+  /** Raw-GEORGIAN message on failure (translated at render); cleared on a fresh submit. */
   readonly loginError = signal<string | null>(null);
+  readonly isEnglish = this.i18n.isEnglish;
+
+  toggleLang(): void {
+    this.i18n.toggle();
+  }
 
   readonly loginForm = this.fb.nonNullable.group({
     username: ['', [Validators.required]],

@@ -12,13 +12,15 @@
         type="checkbox"
         [ngModel]="isPublished"
         (ngModelChange)="onToggleState($event)"
-        [attr.aria-label]="'გამოქვეყნება'"
+        [attr.aria-label]="'გამოქვეყნება' | t"
       />
 
       @if (court.activeState) {
-        <span class="ss-badge ss-badge--positive georgian-text" lang="ka">გამოქვეყნებული</span>
+        <span class="ss-badge ss-badge--positive georgian-text" lang="ka">
+          {{ 'გამოქვეყნებული' | t }}
+        </span>
       } @else {
-        <span class="ss-badge ss-badge--neutral georgian-text" lang="ka">მონახაზი</span>
+        <span class="ss-badge ss-badge--neutral georgian-text" lang="ka">{{ 'მონახაზი' | t }}</span>
       }
     </div>
   </div>
@@ -32,10 +34,10 @@
 
     <!-- Information Badges -->
     <div class="flex flex-wrap gap-2 mb-4">
-      <span class="ss-badge ss-badge--accent georgian-text" lang="ka">{{ sportTypeName }}</span>
-      <span class="ss-badge ss-badge--info georgian-text" lang="ka">{{ locationTypeName }}</span>
-      <span class="ss-badge ss-badge--neutral georgian-text" lang="ka">{{ surfaceMaterialName }}</span>
-      <span class="ss-badge ss-badge--neutral georgian-text" lang="ka">{{ surfaceColorName }}</span>
+      <span class="ss-badge ss-badge--accent georgian-text" lang="ka">{{ sportTypeName | t }}</span>
+      <span class="ss-badge ss-badge--info georgian-text" lang="ka">{{ locationTypeName | t }}</span>
+      <span class="ss-badge ss-badge--neutral georgian-text" lang="ka">{{ surfaceMaterialName | t }}</span>
+      <span class="ss-badge ss-badge--neutral georgian-text" lang="ka">{{ surfaceColorName | t }}</span>
     </div>
 
     <!-- Action Buttons -->
@@ -45,12 +47,12 @@
         class="ss-btn ss-btn--outline ss-btn--s flex-1 min-w-0"
         type="button"
         (click)="onEdit($event)"
-        [attr.aria-label]="'რედაქტირება'"
+        [attr.aria-label]="'რედაქტირება' | t"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="14" height="14" aria-hidden="true" class="shrink-0">
           <path d="M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z" />
         </svg>
-        <span class="georgian-text truncate" lang="ka">რედაქტირება</span>
+        <span class="georgian-text truncate" lang="ka">{{ 'რედაქტირება' | t }}</span>
       </button>
 
       <!-- Delete button -->
@@ -58,7 +60,7 @@
         class="ss-icon-btn ss-icon-btn--danger"
         type="button"
         (click)="onDelete($event)"
-        [attr.aria-label]="'წაშლა'"
+        [attr.aria-label]="'წაშლა' | t"
       >
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M3 6h18M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2M10 11v6M14 11v6" />

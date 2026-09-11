@@ -26,15 +26,17 @@ import {
 } from './tournament-form/tournament-form.component';
 import { RegistrationsDialogComponent } from './registrations-dialog.component';
 
+import { liveLabels, tr } from '../../shared/i18n/lang';
+import { TPipe } from '../../shared/i18n/t.pipe';
 import { SsToastService } from '../../shared/ui/toast.service';
 import { SsDialogService } from '../../shared/ui/dialog.service';
 import { SsConfirmComponent, SsConfirmData } from '../../shared/ui/confirm.component';
-const STATUS_LABELS: Record<TournamentStatus, string> = {
+const STATUS_LABELS: Record<TournamentStatus, string> = liveLabels({
   draft: 'დრაფტი',
   published: 'გამოქვეყნებული',
   completed: 'დასრულებული',
   cancelled: 'გაუქმებული',
-};
+});
 
 // Theme-aware ss-badge variants (the old Tailwind color classes broke in dark mode).
 const STATUS_CLASSES: Record<TournamentStatus, string> = {
@@ -52,7 +54,7 @@ const STATUS_CLASSES: Record<TournamentStatus, string> = {
 @Component({
   selector: 'app-tournaments',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, TPipe],
   templateUrl: './tournaments.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -106,7 +108,7 @@ export class TournamentsComponent implements OnInit {
       .open<Tournament | null>(
         TournamentFormComponent,
         {
-          label: 'ტურნირის დამატება',
+          label: tr('ტურნირის დამატება'),
           size: 'l',
           dismissible: true,
           closable: true,
@@ -118,7 +120,7 @@ export class TournamentsComponent implements OnInit {
         if (result) {
           this.load();
           this.alerts
-            .open('ტურნირი შეიქმნა (დრაფტი)', { appearance: 'success' })
+            .open(tr('ტურნირი შეიქმნა (დრაფტი)'), { appearance: 'success' })
             .pipe(take(1))
             .subscribe();
         }
@@ -130,7 +132,7 @@ export class TournamentsComponent implements OnInit {
       .open<Tournament | null>(
         TournamentFormComponent,
         {
-          label: 'ტურნირის რედაქტირება',
+          label: tr('ტურნირის რედაქტირება'),
           size: 'l',
           dismissible: true,
           closable: true,
@@ -150,7 +152,7 @@ export class TournamentsComponent implements OnInit {
       .open<void>(
         RegistrationsDialogComponent,
         {
-          label: `რეგისტრაციები · ${tournament.name}`,
+          label: `${tr('რეგისტრაციები')} · ${tournament.name}`,
           size: 'l',
           dismissible: true,
           closable: true,
@@ -165,9 +167,9 @@ export class TournamentsComponent implements OnInit {
     this.confirmThenSetStatus(
       tournament,
       'published',
-      'ტურნირის გამოქვეყნება',
-      `გამოვაქვეყნოთ „${tournament.name}"? ის ხილული გახდება მოთამაშეებისთვის და გაიხსნება რეგისტრაცია.`,
-      'ტურნირი გამოქვეყნდა',
+      tr('ტურნირის გამოქვეყნება'),
+      `${tr('გამოვაქვეყნოთ')} „${tournament.name}"? ${tr('ის ხილული გახდება მოთამაშეებისთვის და გაიხსნება რეგისტრაცია.')}`,
+      tr('ტურნირი გამოქვეყნდა'),
     );
   }
 
@@ -175,9 +177,9 @@ export class TournamentsComponent implements OnInit {
     this.confirmThenSetStatus(
       tournament,
       'completed',
-      'ტურნირის დასრულება',
-      `დავასრულოთ „${tournament.name}"?`,
-      'ტურნირი დასრულდა',
+      tr('ტურნირის დასრულება'),
+      `${tr('დავასრულოთ')} „${tournament.name}"?`,
+      tr('ტურნირი დასრულდა'),
     );
   }
 
@@ -185,21 +187,21 @@ export class TournamentsComponent implements OnInit {
     this.confirmThenSetStatus(
       tournament,
       'cancelled',
-      'ტურნირის გაუქმება',
-      `გავაუქმოთ „${tournament.name}"? ბალანსით გადახდილი საფასურები ავტომატურად დაბრუნდება.`,
-      'ტურნირი გაუქმდა — გადახდილი საფასურები დაბრუნდა',
+      tr('ტურნირის გაუქმება'),
+      `${tr('გავაუქმოთ')} „${tournament.name}"? ${tr('ბალანსით გადახდილი საფასურები ავტომატურად დაბრუნდება.')}`,
+      tr('ტურნირი გაუქმდა — გადახდილი საფასურები დაბრუნდა'),
     );
   }
 
   protected deleteTournament(tournament: Tournament): void {
     this.dialogs
       .open<boolean>(SsConfirmComponent, {
-        label: 'ტურნირის წაშლა',
+        label: tr('ტურნირის წაშლა'),
         size: 's',
         data: {
-          content: `ნამდვილად წავშალოთ დრაფტი „${tournament.name}"?`,
-          yes: 'წაშლა',
-          no: 'გაუქმება',
+          content: `${tr('ნამდვილად წავშალოთ დრაფტი')} „${tournament.name}"?`,
+          yes: tr('წაშლა'),
+          no: tr('გაუქმება'),
         } as SsConfirmData,
       })
       .pipe(
@@ -214,7 +216,7 @@ export class TournamentsComponent implements OnInit {
             list.filter((t) => t._id !== tournament._id),
           );
           this.alerts
-            .open('დრაფტი წაიშალა', { appearance: 'success' })
+            .open(tr('დრაფტი წაიშალა'), { appearance: 'success' })
             .pipe(take(1))
             .subscribe();
         },
@@ -232,7 +234,7 @@ export class TournamentsComponent implements OnInit {
       .open<boolean>(SsConfirmComponent, {
         label,
         size: 's',
-        data: { content, yes: 'დიახ', no: 'არა' } as SsConfirmData,
+        data: { content, yes: tr('დიახ'), no: tr('არა') } as SsConfirmData,
       })
       .pipe(take(1), filter(Boolean))
       .subscribe(() => this.setStatus(tournament, status, successMessage));
@@ -286,6 +288,6 @@ export class TournamentsComponent implements OnInit {
   }
 
   protected feeLabel(t: Tournament): string {
-    return t.entryFeeTetri === 0 ? 'უფასო' : `${tetriToGel(t.entryFeeTetri)} ₾`;
+    return t.entryFeeTetri === 0 ? tr('უფასო') : `${tetriToGel(t.entryFeeTetri)} ₾`;
   }
 }

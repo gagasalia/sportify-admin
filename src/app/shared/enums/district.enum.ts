@@ -1,6 +1,7 @@
-// Canonical Tbilisi district (უბანი) list. The latin `id` is the stored value
-// (identical across admin + webapp + api); `name` is the Georgian label.
-export const DISTRICT_OPTIONS: { id: string; name: string }[] = [
+import { liveLabels, tr } from '../i18n/lang';
+
+// RAW Georgian labels — never read directly, see DISTRICT_OPTIONS/_LABELS.
+const DISTRICT_OPTIONS_KA: { id: string; name: string }[] = [
   { id: 'Vake', name: 'ვაკე' },
   { id: 'Saburtalo', name: 'საბურთალო' },
   { id: 'Vera', name: 'ვერა' },
@@ -18,10 +19,24 @@ export const DISTRICT_OPTIONS: { id: string; name: string }[] = [
   { id: 'Ortachala', name: 'ორთაჭალა' },
 ];
 
-export const DISTRICT_LABELS: Record<string, string> = DISTRICT_OPTIONS.reduce(
-  (acc, { id, name }) => {
-    acc[id] = name;
-    return acc;
-  },
-  {} as Record<string, string>,
+// Canonical Tbilisi district (უბანი) list. The latin `id` is the stored value
+// (identical across admin + webapp + api, never translated); `name` is a live
+// getter, so the label follows the language toggle on every read.
+export const DISTRICT_OPTIONS: { id: string; name: string }[] = DISTRICT_OPTIONS_KA.map(
+  ({ id, name }) => ({
+    id,
+    get name(): string {
+      return tr(name);
+    },
+  }),
+);
+
+export const DISTRICT_LABELS: Record<string, string> = liveLabels(
+  DISTRICT_OPTIONS_KA.reduce(
+    (acc, { id, name }) => {
+      acc[id] = name;
+      return acc;
+    },
+    {} as Record<string, string>,
+  ),
 );

@@ -10,6 +10,7 @@ import { AcademyService } from '../../../../services/http-services/academy.servi
 import { UserManagementService } from '../../../../services/http-services/user-management.service';
 import { Academy, AcademyStatus } from '../../../../shared/models/academy.model';
 import { User, UserType } from '../../../../shared/models/user.model';
+import { TPipe } from '../../../../shared/i18n/t.pipe';
 
 import { SsToastService } from '../../../../shared/ui/toast.service';
 import { SS_DIALOG_CONTEXT } from '../../../../shared/ui/dialog.service';
@@ -95,7 +96,7 @@ describe('AcademyFormComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(AcademyFormComponent, {
-        set: { imports: [ReactiveFormsModule], schemas: [NO_ERRORS_SCHEMA] },
+        set: { imports: [ReactiveFormsModule, TPipe], schemas: [NO_ERRORS_SCHEMA] },
       })
       .compileComponents();
 

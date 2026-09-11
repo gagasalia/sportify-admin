@@ -20,6 +20,8 @@ import {
 } from '../../../../shared/models/wallet.model';
 import { gelToTetri, tetriToGel } from '../../../../shared/utils/money.util';
 import { formatMemberId } from '../../../../shared/utils/member-id.util';
+import { liveLabels, tr } from '../../../../shared/i18n/lang';
+import { TPipe } from '../../../../shared/i18n/t.pipe';
 
 import {
   SS_DIALOG_CONTEXT,
@@ -28,14 +30,17 @@ import {
 } from '../../../../shared/ui/dialog.service';
 import { SsToastService } from '../../../../shared/ui/toast.service';
 import { SsConfirmComponent, SsConfirmData } from '../../../../shared/ui/confirm.component';
-/** Ledger row types → Georgian titles. */
-const TX_TYPE_LABELS: Record<WalletTransactionType, string> = {
+/**
+ * Ledger row types → RAW-Georgian titles, read through `liveLabels` so every
+ * lookup translates on the live language (never bake a translation into a const).
+ */
+const TX_TYPE_LABELS: Record<WalletTransactionType, string> = liveLabels({
   topup: 'შევსება (ბარათით)',
   admin_credit: 'დარიცხვა (ადმინი)',
   admin_debit: 'ჩამოჭრა (ადმინი)',
   booking_payment: 'ჯავშნის გადახდა',
   refund: 'თანხის დაბრუნება',
-};
+});
 
 const TX_PAGE_SIZE = 10;
 
@@ -48,7 +53,7 @@ const TX_PAGE_SIZE = 10;
 @Component({
   selector: 'app-user-balance',
   standalone: true,
-  imports: [CommonModule, DatePipe, ReactiveFormsModule],
+  imports: [CommonModule, DatePipe, ReactiveFormsModule, TPipe],
   templateUrl: './user-balance.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -164,20 +169,20 @@ export class UserBalanceComponent implements OnInit {
     const data: SsConfirmData =
       direction > 0
         ? {
-            content: `დაერიცხოს ${amountGel} ₾ — ${this.userLabel}?`,
-            yes: 'დარიცხვა',
-            no: 'გაუქმება',
+            content: `${tr('დაერიცხოს')} ${amountGel} ₾ — ${this.userLabel}?`,
+            yes: tr('დარიცხვა'),
+            no: tr('გაუქმება'),
           }
         : {
-            content: `ჩამოეჭრას ${amountGel} ₾ — ${this.userLabel}?`,
-            yes: 'ჩამოჭრა',
-            no: 'გაუქმება',
+            content: `${tr('ჩამოეჭრას')} ${amountGel} ₾ — ${this.userLabel}?`,
+            yes: tr('ჩამოჭრა'),
+            no: tr('გაუქმება'),
             appearance: 'destructive',
           };
 
     this.dialogs
       .open<boolean>(SsConfirmComponent, {
-        label: direction > 0 ? 'დარიცხვის დადასტურება' : 'ჩამოჭრის დადასტურება',
+        label: tr(direction > 0 ? 'დარიცხვის დადასტურება' : 'ჩამოჭრის დადასტურება'),
         size: 's',
         data,
       })
@@ -207,19 +212,20 @@ export class UserBalanceComponent implements OnInit {
           this.form.reset({ amountGel: null, note: '' });
           this.loadTransactions(true);
           this.alerts
-            .open(direction > 0 ? 'ბალანსი დაირიცხა' : 'ბალანსი ჩამოიჭრა', {
+            .open(tr(direction > 0 ? 'ბალანსი დაირიცხა' : 'ბალანსი ჩამოიჭრა'), {
               appearance: 'success',
             })
             .pipe(take(1))
             .subscribe();
         },
         error: (err: HttpErrorResponse) => {
-          const message =
+          const message = tr(
             err.status === 400
               ? direction > 0
                 ? 'ლიმიტი გადაჭარბდა (მაქს. 10 000 ₾)'
                 : 'არასაკმარისი ბალანსი'
-              : 'ოპერაცია ვერ შესრულდა';
+              : 'ოპერაცია ვერ შესრულდა',
+          );
           this.alerts.open(message, { appearance: 'negative' }).pipe(take(1)).subscribe();
         },
       });

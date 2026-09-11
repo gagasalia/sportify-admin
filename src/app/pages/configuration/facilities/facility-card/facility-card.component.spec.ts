@@ -6,6 +6,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { FacilityCardComponent } from './facility-card.component';
 import { FacilityService } from '../../../../services/http-services/facility.service';
 import { Facility } from '../../../../shared/models/facility.model';
+import { TPipe } from '../../../../shared/i18n/t.pipe';
 
 import { SsToastService } from '../../../../shared/ui/toast.service';
 import { SsDialogService } from '../../../../shared/ui/dialog.service';
@@ -39,7 +40,9 @@ describe('FacilityCardComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
     })
-      .overrideComponent(FacilityCardComponent, { set: { imports: [], schemas: [NO_ERRORS_SCHEMA] } })
+      .overrideComponent(FacilityCardComponent, {
+        set: { imports: [TPipe], schemas: [NO_ERRORS_SCHEMA] },
+      })
       .compileComponents();
 
     fixture = TestBed.createComponent(FacilityCardComponent);

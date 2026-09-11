@@ -7,28 +7,30 @@ import {
   TournamentRegistration,
 } from '../../shared/models/tournament.model';
 
+import { liveLabels } from '../../shared/i18n/lang';
+import { TPipe } from '../../shared/i18n/t.pipe';
 import { SS_DIALOG_CONTEXT, SsDialogContext } from '../../shared/ui/dialog.service';
 import { SsAvatarComponent } from '../../shared/ui/ss-avatar.component';
 import { formatMemberId } from '../../shared/utils/member-id.util';
-const PAYMENT_LABELS: Record<string, string> = {
+const PAYMENT_LABELS: Record<string, string> = liveLabels({
   pay_at_venue: 'ადგილზე',
   paid: 'გადახდილი',
   refunded: 'დაბრუნებული',
-};
+});
 
 /** Participant list for one tournament — snapshots, so no user joins. */
 @Component({
   selector: 'app-registrations-dialog',
   standalone: true,
-  imports: [CommonModule, DatePipe, SsAvatarComponent],
+  imports: [CommonModule, DatePipe, SsAvatarComponent, TPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     <div class="max-h-[70vh] overflow-y-auto">
       @if (isLoading()) {
-        <p class="py-8 text-center georgian-text" lang="ka">იტვირთება...</p>
+        <p class="py-8 text-center georgian-text" lang="ka">{{ 'იტვირთება...' | t }}</p>
       } @else if (registrations().length === 0) {
         <p class="py-8 text-center georgian-text" lang="ka" data-testid="regs-empty">
-          რეგისტრაციები ჯერ არ არის
+          {{ 'რეგისტრაციები ჯერ არ არის' | t }}
         </p>
       } @else {
         <ul class="m-0 p-0 list-none" data-testid="regs-list">
@@ -63,7 +65,7 @@ const PAYMENT_LABELS: Record<string, string> = {
                       : 'ss-badge ss-badge--info'
                 "
               >
-                {{ reg.status === 'cancelled' ? 'გაუქმებული' : paymentLabel(reg) }}
+                {{ reg.status === 'cancelled' ? ('გაუქმებული' | t) : paymentLabel(reg) }}
               </span>
             </li>
           }

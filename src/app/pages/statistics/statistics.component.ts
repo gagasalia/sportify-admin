@@ -32,6 +32,8 @@ import {
   StatsUsers,
 } from '../../shared/models/stats.model';
 import { SPORT_TYPE_LABELS, SportType } from '../../shared/enums/court-type.enum';
+import { isEnglish, liveLabels, tr } from '../../shared/i18n/lang';
+import { TPipe } from '../../shared/i18n/t.pipe';
 import { downloadCsv } from '../../shared/utils/csv.util';
 import { KpiCardComponent } from './charts/kpi-card.component';
 import { LineChartComponent, LinePoint } from './charts/line-chart.component';
@@ -49,19 +51,21 @@ export type StatsTab =
 
 type PresetKey = 'today' | '7d' | '30d' | '90d';
 
-const SEGMENT_LABELS: Record<string, string> = {
+// RAW Georgian values behind a live proxy: every read goes through `tr()`, so
+// the labels follow the language toggle instead of baking at import time.
+const SEGMENT_LABELS: Record<string, string> = liveLabels({
   casual: 'ერთჯერადი (1–2)',
   regular: 'რეგულარული (3–9)',
   power: 'აქტიური (10+)',
-};
+});
 
-const LEAD_LABELS: Record<string, string> = {
+const LEAD_LABELS: Record<string, string> = liveLabels({
   '<2h': '< 2 სთ',
   '2-6h': '2–6 სთ',
   '6-24h': '6–24 სთ',
   '1-3d': '1–3 დღე',
   '>3d': '> 3 დღე',
-};
+});
 
 /**
  * Statistics module: one page, six views behind segmented tabs, one shared
@@ -82,6 +86,7 @@ const LEAD_LABELS: Record<string, string> = {
     BarListComponent,
     StackBarsComponent,
     HeatmapGridComponent,
+    TPipe,
   ],
   templateUrl: './statistics.component.html',
   styleUrls: ['./statistics.component.css'],
@@ -116,10 +121,14 @@ export class StatisticsComponent implements OnInit {
     { key: '90d', label: '90 დღე' },
   ];
 
-  readonly sports = Object.entries(SPORT_TYPE_LABELS).map(([value, label]) => ({
-    value,
-    label,
-  }));
+  // computed, not a field initializer: SPORT_TYPE_LABELS is a liveLabels proxy,
+  // so a one-time Object.entries would bake the construction-time language
+  readonly sports = computed(() =>
+    Object.entries(SPORT_TYPE_LABELS).map(([value, label]) => ({
+      value,
+      label,
+    })),
+  );
 
   // ── tabs + per-view state ──────────────────────────────────────────────────
   readonly tab = signal<StatsTab>('overview');
@@ -314,6 +323,21 @@ export class StatisticsComponent implements OnInit {
     }
   }
 
+  /**
+   * Sense overrides: these Georgian words map to a DIFFERENT meaning in the
+   * shared dictionary ('კვირა' → Sunday for weekday labels, 'დაბრუნებული' →
+   * Refunded for the money KPI), so the week-granularity chip and the
+   * returning-users labels translate locally. isEnglish() reads the language
+   * signal, so both stay live across a toggle.
+   */
+  protected weekWord(): string {
+    return isEnglish() ? 'Week' : 'კვირა';
+  }
+
+  protected returningWord(): string {
+    return isEnglish() ? 'Returning' : 'დაბრუნებული';
+  }
+
   setGranularity(granularity: StatsGranularity): void {
     this.granularity.set(granularity);
   }
@@ -349,7 +373,7 @@ export class StatisticsComponent implements OnInit {
   }
 
   hoursOf(minutes: number): string {
-    return `${new Intl.NumberFormat('ka-GE', { maximumFractionDigits: 1 }).format(minutes / 60)} სთ`;
+    return `${new Intl.NumberFormat('ka-GE', { maximumFractionDigits: 1 }).format(minutes / 60)} ${tr('სთ')}`;
   }
 
   num(value: number | null | undefined): string {
@@ -403,7 +427,7 @@ export class StatisticsComponent implements OnInit {
   readonly revenueBySport = computed<BarRow[]>(
     () =>
       this.revenue()?.bySport.map((s) => ({
-        label: this.sportLabel(s.sportType),
+        label: tr(this.sportLabel(s.sportType)),
         value: s.netTetri,
         display: this.gel(s.netTetri),
       })) ?? [],
@@ -423,9 +447,9 @@ export class StatisticsComponent implements OnInit {
       this.users()?.trend.map((t) => ({
         label: t.bucket,
         parts: [
-          { name: 'ახალი', value: t.newUsers, color: 'var(--accent)' },
+          { name: tr('ახალი'), value: t.newUsers, color: 'var(--accent)' },
           {
-            name: 'დაბრუნებული',
+            name: this.returningWord(),
             value: t.returningUsers,
             color: 'var(--success)',
           },
@@ -447,10 +471,14 @@ export class StatisticsComponent implements OnInit {
       this.cancellations()?.trend.map((t) => ({
         label: t.bucket,
         parts: [
-          { name: 'გაუქმებული', value: t.cancelled, color: 'var(--danger)' },
-          { name: 'გამოუცხადებელი', value: t.noShow, color: 'var(--warning)' },
+          { name: tr('გაუქმებული'), value: t.cancelled, color: 'var(--danger)' },
           {
-            name: 'შემდგარი',
+            name: tr('გამოუცხადებელი'),
+            value: t.noShow,
+            color: 'var(--warning)',
+          },
+          {
+            name: tr('შემდგარი'),
             value: Math.max(0, t.total - t.cancelled - t.noShow),
             color: 'var(--accent-soft)',
           },

@@ -17,10 +17,12 @@ import { CourtService } from '../../../../services/http-services/court.service';
 import { SsDialogService } from '../../../../shared/ui/dialog.service';
 import { SsToastService } from '../../../../shared/ui/toast.service';
 import { SsConfirmComponent, SsConfirmData } from '../../../../shared/ui/confirm.component';
+import { tr } from '../../../../shared/i18n/lang';
+import { TPipe } from '../../../../shared/i18n/t.pipe';
 @Component({
   selector: 'app-court-card',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, TPipe],
   templateUrl: './court-card.component.html',
   styleUrls: ['./court-card.component.scss'],
 })
@@ -103,22 +105,24 @@ export class CourtCardComponent {
     // snaps back unless the operator confirms (dismissal counts as "no").
     this.court.activeState = checked;
 
+    // The confirm renders `content` verbatim, so it is translated HERE (at the
+    // call site, right before display); the court's own name stays untouched.
     const data: SsConfirmData = checked
       ? {
-          content: `გამოვაქვეყნოთ „${this.courtLabel}"? მოთამაშეები შეძლებენ მის დაჯავშნას.`,
-          yes: 'გამოქვეყნება',
-          no: 'გაუქმება',
+          content: `${tr('გამოვაქვეყნოთ')} „${this.courtLabel}"? ${tr('მოთამაშეები შეძლებენ მის დაჯავშნას.')}`,
+          yes: tr('გამოქვეყნება'),
+          no: tr('გაუქმება'),
         }
       : {
-          content: `მოვხსნათ „${this.courtLabel}" გამოქვეყნებიდან? მისი დაჯავშნა ვეღარ მოხერხდება.`,
-          yes: 'მოხსნა',
-          no: 'გაუქმება',
+          content: `${tr('მოვხსნათ გამოქვეყნებიდან')} „${this.courtLabel}"? ${tr('მისი დაჯავშნა ვეღარ მოხერხდება.')}`,
+          yes: tr('მოხსნა'),
+          no: tr('გაუქმება'),
           appearance: 'destructive',
         };
 
     this.dialogs
       .open<boolean>(SsConfirmComponent, {
-        label: checked ? 'კორტის გამოქვეყნება' : 'გამოქვეყნების მოხსნა',
+        label: checked ? tr('კორტის გამოქვეყნება') : tr('გამოქვეყნების მოხსნა'),
         size: 's',
         data,
       })
@@ -157,12 +161,12 @@ export class CourtCardComponent {
     event.stopPropagation();
     this.dialogs
       .open<boolean>(SsConfirmComponent, {
-        label: 'კორტის წაშლა',
+        label: tr('კორტის წაშლა'),
         size: 's',
         data: {
-          content: `ნამდვილად წავშალოთ „${this.courtLabel}"?`,
-          yes: 'წაშლა',
-          no: 'გაუქმება',
+          content: `${tr('ნამდვილად წავშალოთ')} „${this.courtLabel}"?`,
+          yes: tr('წაშლა'),
+          no: tr('გაუქმება'),
           appearance: 'destructive',
         },
       })

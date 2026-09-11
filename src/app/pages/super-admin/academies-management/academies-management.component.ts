@@ -13,6 +13,8 @@ import { filter, switchMap, take } from 'rxjs';
 import { AcademyService } from '../../../services/http-services/academy.service';
 import { Academy } from '../../../shared/models/academy.model';
 import { AcademyFormComponent } from './academy-form/academy-form.component';
+import { tr } from '../../../shared/i18n/lang';
+import { TPipe } from '../../../shared/i18n/t.pipe';
 
 import { SsToastService } from '../../../shared/ui/toast.service';
 import { SsDialogService } from '../../../shared/ui/dialog.service';
@@ -20,7 +22,7 @@ import { SsConfirmComponent, SsConfirmData } from '../../../shared/ui/confirm.co
 @Component({
   selector: 'app-academies-management',
   standalone: true,
-  imports: [],
+  imports: [TPipe],
   templateUrl: './academies-management.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -74,7 +76,7 @@ export class AcademiesManagementComponent implements OnInit {
   protected addAcademy(): void {
     this.dialogs
       .open<Academy | null>(AcademyFormComponent, {
-        label: 'აკადემიის დამატება',
+        label: tr('აკადემიის დამატება'),
         size: 'l',
         dismissible: true,
         closable: true,
@@ -91,7 +93,7 @@ export class AcademiesManagementComponent implements OnInit {
   protected editAcademy(academy: Academy): void {
     this.dialogs
       .open<Academy | null>(AcademyFormComponent, {
-        label: 'აკადემიის რედაქტირება',
+        label: tr('აკადემიის რედაქტირება'),
         size: 'l',
         dismissible: true,
         closable: true,
@@ -116,12 +118,12 @@ export class AcademiesManagementComponent implements OnInit {
 
     this.dialogs
       .open<boolean>(SsConfirmComponent, {
-        label: 'აკადემიის წაშლა',
+        label: tr('აკადემიის წაშლა'),
         size: 's',
         data: {
-          content: `ნამდვილად გსურთ "${academy.name}" - ის წაშლა?`,
-          yes: 'წაშლა',
-          no: 'გაუქმება',
+          content: `${tr('ნამდვილად გსურთ')} "${academy.name}"${tr(' - ის წაშლა?')}`,
+          yes: tr('წაშლა'),
+          no: tr('გაუქმება'),
         } as SsConfirmData,
       })
       .pipe(
@@ -134,7 +136,7 @@ export class AcademiesManagementComponent implements OnInit {
           // Reload instead of splicing locally — keeps the page/total honest.
           this.loadAcademies();
           this.alerts
-            .open('აკადემია წარმატებით წაიშალა!', { appearance: 'success' })
+            .open(tr('აკადემია წარმატებით წაიშალა!'), { appearance: 'success' })
             .pipe(take(1))
             .subscribe();
         },

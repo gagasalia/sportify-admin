@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, convertToParamMap } from '@angular/router';
 import { of } from 'rxjs';
 
 import { CustomerDetailComponent } from './customer-detail.component';
+import { TPipe } from '../../../shared/i18n/t.pipe';
 import { CustomersService } from '../../../services/http-services/customers.service';
 import { AuthService } from '../../../shared/services/auth.service';
 import { SsDialogService } from '../../../shared/ui/dialog.service';
@@ -107,8 +108,9 @@ describe('CustomerDetailComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(CustomerDetailComponent, {
-        // The template renders `| date` unconditionally — keep the pipe.
-        set: { imports: [DatePipe], schemas: [NO_ERRORS_SCHEMA] },
+        // set:{imports} REPLACES the array — the template renders `| date`
+        // unconditionally and every label through `| t`; keep both pipes.
+        set: { imports: [DatePipe, TPipe], schemas: [NO_ERRORS_SCHEMA] },
       })
       .compileComponents();
 

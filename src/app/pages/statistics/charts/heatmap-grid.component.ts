@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
+import { liveList, tr } from '../../../shared/i18n/lang';
 
 export interface HeatmapCell {
   /** Monday=0 … Sunday=6 (matches the API's slotDow). */
@@ -8,8 +9,10 @@ export interface HeatmapCell {
   count: number;
 }
 
-const DAY_LABELS = ['ორშ', 'სამ', 'ოთხ', 'ხუთ', 'პარ', 'შაბ', 'კვი'];
-const DAY_FULL = [
+// RAW Georgian behind `liveList`: each indexed read runs through `tr()`, so the
+// grid relabels itself on a language flip instead of baking at import time.
+const DAY_LABELS = liveList(['ორშ', 'სამ', 'ოთხ', 'ხუთ', 'პარ', 'შაბ', 'კვი']);
+const DAY_FULL = liveList([
   'ორშაბათი',
   'სამშაბათი',
   'ოთხშაბათი',
@@ -17,7 +20,7 @@ const DAY_FULL = [
   'პარასკევი',
   'შაბათი',
   'კვირა',
-];
+]);
 
 /**
  * 7×24 peak/dead-hours grid (spec metric 2): color intensity = booking
@@ -127,6 +130,6 @@ export class HeatmapGridComponent {
 
   cellTitle(dow: number, hour: number): string {
     const count = this.countAt(dow, hour);
-    return `${DAY_FULL[dow]} · ${String(hour).padStart(2, '0')}:00 — ${count} ჯავშანი`;
+    return `${DAY_FULL[dow]} · ${String(hour).padStart(2, '0')}:00 — ${count} ${tr('ჯავშანი')}`;
   }
 }

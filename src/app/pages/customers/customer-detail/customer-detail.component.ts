@@ -11,6 +11,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { filter, switchMap, take } from 'rxjs';
+import { liveLabels, tr } from '../../../shared/i18n/lang';
+import { TPipe } from '../../../shared/i18n/t.pipe';
 import { CustomersService } from '../../../services/http-services/customers.service';
 import { AuthService } from '../../../shared/services/auth.service';
 import { SsDialogService } from '../../../shared/ui/dialog.service';
@@ -37,7 +39,7 @@ const BOOKINGS_PAGE_SIZE = 10;
 @Component({
   selector: 'app-customer-detail',
   standalone: true,
-  imports: [DatePipe, RouterLink, KpiCardComponent, SsAvatarComponent],
+  imports: [DatePipe, RouterLink, KpiCardComponent, SsAvatarComponent, TPipe],
   templateUrl: './customer-detail.component.html',
   styleUrl: './customer-detail.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -67,18 +69,20 @@ export class CustomerDetailComponent implements OnInit {
     Math.max(1, Math.ceil(this.bookingsTotal() / this.bookingsLimit)),
   );
 
-  protected readonly statusLabels: Record<string, string> = {
+  // RAW Georgian values behind a liveLabels proxy: every read goes through
+  // tr(), so the template picks up a language flip without a reload.
+  protected readonly statusLabels: Record<string, string> = liveLabels({
     confirmed: 'დადასტურებული',
     cancelled: 'გაუქმებული',
     completed: 'დასრულებული',
-  };
-  protected readonly actionLabels: Record<ModerationActionType, string> = {
+  });
+  protected readonly actionLabels: Record<ModerationActionType, string> = liveLabels({
     ban: 'დაბლოკვა',
     unban: 'განბლოკვა',
     flag: 'მონიშვნა',
     unflag: 'მონიშვნის მოხსნა',
     contact_fix: 'მონაცემების შესწორება',
-  };
+  });
 
   ngOnInit(): void {
     this.route.paramMap
@@ -132,7 +136,9 @@ export class CustomerDetailComponent implements OnInit {
   protected ban(): void {
     this.dialogs
       .open<string | null>(ReasonDialogComponent, {
-        label: 'ანგარიშის დაბლოკვა',
+        // The dialog header is rendered raw by the outlet → translate here;
+        // the payload below stays RAW (ReasonDialogComponent applies `| t`).
+        label: tr('ანგარიშის დაბლოკვა'),
         size: 'm',
         dismissible: true,
         closable: true,
@@ -153,21 +159,22 @@ export class CustomerDetailComponent implements OnInit {
       .subscribe({
         next: (moderation) => {
           this.patchModeration(moderation);
-          this.toast('მომხმარებელი დაიბლოკა', 'success');
+          this.toast(tr('მომხმარებელი დაიბლოკა'), 'success');
         },
-        error: () => this.toast('დაბლოკვა ვერ მოხერხდა', 'error'),
+        error: () => this.toast(tr('დაბლოკვა ვერ მოხერხდა'), 'error'),
       });
   }
 
   protected unban(): void {
     this.dialogs
       .open<boolean>(SsConfirmComponent, {
-        label: 'განბლოკვა',
+        // SsConfirmComponent renders its payload raw → translate at the call site.
+        label: tr('განბლოკვა'),
         size: 's',
         data: {
-          content: 'მოვხსნათ ბლოკი ამ ანგარიშიდან?',
-          yes: 'განბლოკვა',
-          no: 'გაუქმება',
+          content: tr('მოვხსნათ ბლოკი ამ ანგარიშიდან?'),
+          yes: tr('განბლოკვა'),
+          no: tr('გაუქმება'),
         } as SsConfirmData,
       })
       .pipe(
@@ -179,16 +186,16 @@ export class CustomerDetailComponent implements OnInit {
       .subscribe({
         next: (moderation) => {
           this.patchModeration(moderation);
-          this.toast('ბლოკი მოხსნილია', 'success');
+          this.toast(tr('ბლოკი მოხსნილია'), 'success');
         },
-        error: () => this.toast('განბლოკვა ვერ მოხერხდა', 'error'),
+        error: () => this.toast(tr('განბლოკვა ვერ მოხერხდა'), 'error'),
       });
   }
 
   protected flagCustomer(): void {
     this.dialogs
       .open<string | null>(ReasonDialogComponent, {
-        label: 'მომხმარებლის მონიშვნა',
+        label: tr('მომხმარებლის მონიშვნა'),
         size: 'm',
         dismissible: true,
         closable: true,
@@ -208,21 +215,21 @@ export class CustomerDetailComponent implements OnInit {
       .subscribe({
         next: (moderation) => {
           this.patchModeration(moderation);
-          this.toast('მომხმარებელი მოინიშნა', 'success');
+          this.toast(tr('მომხმარებელი მოინიშნა'), 'success');
         },
-        error: () => this.toast('მონიშვნა ვერ მოხერხდა', 'error'),
+        error: () => this.toast(tr('მონიშვნა ვერ მოხერხდა'), 'error'),
       });
   }
 
   protected unflag(): void {
     this.dialogs
       .open<boolean>(SsConfirmComponent, {
-        label: 'მონიშვნის მოხსნა',
+        label: tr('მონიშვნის მოხსნა'),
         size: 's',
         data: {
-          content: 'მოვხსნათ მონიშვნა?',
-          yes: 'მოხსნა',
-          no: 'გაუქმება',
+          content: tr('მოვხსნათ მონიშვნა?'),
+          yes: tr('მოხსნა'),
+          no: tr('გაუქმება'),
         } as SsConfirmData,
       })
       .pipe(
@@ -234,9 +241,9 @@ export class CustomerDetailComponent implements OnInit {
       .subscribe({
         next: (moderation) => {
           this.patchModeration(moderation);
-          this.toast('მონიშვნა მოხსნილია', 'success');
+          this.toast(tr('მონიშვნა მოხსნილია'), 'success');
         },
-        error: () => this.toast('მოხსნა ვერ მოხერხდა', 'error'),
+        error: () => this.toast(tr('მოხსნა ვერ მოხერხდა'), 'error'),
       });
   }
 
@@ -248,7 +255,7 @@ export class CustomerDetailComponent implements OnInit {
       .open<Parameters<CustomersService['fixContact']>[1] | null>(
         ContactDialogComponent,
         {
-          label: 'მონაცემების შესწორება',
+          label: tr('მონაცემების შესწორება'),
           size: 'm',
           dismissible: true,
           closable: true,
@@ -266,11 +273,11 @@ export class CustomerDetailComponent implements OnInit {
       )
       .subscribe({
         next: () => {
-          this.toast('მონაცემები განახლდა', 'success');
+          this.toast(tr('მონაცემები განახლდა'), 'success');
           // Reload: the profile AND the audit trail both changed.
           this.load();
         },
-        error: () => this.toast('შენახვა ვერ მოხერხდა', 'error'),
+        error: () => this.toast(tr('შენახვა ვერ მოხერხდა'), 'error'),
       });
   }
 
@@ -341,6 +348,7 @@ export class CustomerDetailComponent implements OnInit {
     }
   }
 
+  /** RAW Georgian — the template renders it through `| t`. */
   protected paymentLabel(row: CustomerBookingRow): string {
     switch (row.paymentStatus) {
       case 'paid':

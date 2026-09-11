@@ -7,6 +7,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { of, throwError } from 'rxjs';
 
 import { LoginComponent } from './login.component';
+import { TPipe } from '../../shared/i18n/t.pipe';
 import { AuthService } from '../../shared/services/auth.service';
 import { TenantService } from '../../shared/services/tenant.service';
 import { NonAdminLoginError } from '../../shared/models/auth.model';
@@ -41,7 +42,7 @@ describe('LoginComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
     })
       .overrideComponent(LoginComponent, {
-        set: { imports: [ReactiveFormsModule], schemas: [NO_ERRORS_SCHEMA] },
+        set: { imports: [ReactiveFormsModule, TPipe], schemas: [NO_ERRORS_SCHEMA] },
       })
       .compileComponents();
 

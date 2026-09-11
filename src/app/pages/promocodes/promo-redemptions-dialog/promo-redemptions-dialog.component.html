@@ -1,19 +1,19 @@
 <div class="max-h-[70vh] overflow-y-auto">
   @if (isLoading()) {
-    <p class="py-8 text-center georgian-text" lang="ka">იტვირთება...</p>
+    <p class="py-8 text-center georgian-text" lang="ka">{{ 'იტვირთება...' | t }}</p>
   } @else if (redemptions().length === 0) {
     <p class="py-8 text-center georgian-text" lang="ka" data-testid="redemptions-empty">
-      გამოყენებები არ არის
+      {{ 'გამოყენებები არ არის' | t }}
     </p>
   } @else {
     <div class="overflow-x-auto">
       <table class="ss-table">
         <thead>
           <tr>
-            <th class="georgian-text" lang="ka">თარიღი</th>
-            <th class="georgian-text" lang="ka">მომხმარებელი</th>
-            <th class="georgian-text" lang="ka">ფასდაკლება</th>
-            <th class="georgian-text" lang="ka">ჯავშნის ფასი</th>
+            <th class="georgian-text" lang="ka">{{ 'თარიღი' | t }}</th>
+            <th class="georgian-text" lang="ka">{{ 'მომხმარებელი' | t }}</th>
+            <th class="georgian-text" lang="ka">{{ 'ფასდაკლება' | t }}</th>
+            <th class="georgian-text" lang="ka">{{ 'ჯავშნის ფასი' | t }}</th>
           </tr>
         </thead>
         <tbody>
@@ -46,7 +46,7 @@
           [disabled]="page() === 1"
           (click)="onPageChange(page() - 1)"
         >
-          <span class="georgian-text" lang="ka">წინა</span>
+          <span class="georgian-text" lang="ka">{{ 'წინა' | t }}</span>
         </button>
         <span class="text-sm" style="color: var(--tui-text-secondary)">
           {{ page() }} / {{ totalPages() }}
@@ -57,7 +57,7 @@
           [disabled]="page() >= totalPages()"
           (click)="onPageChange(page() + 1)"
         >
-          <span class="georgian-text" lang="ka">შემდეგი</span>
+          <span class="georgian-text" lang="ka">{{ 'შემდეგი' | t }}</span>
         </button>
       </div>
     }

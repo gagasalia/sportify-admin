@@ -1,30 +1,30 @@
 <div class="pt-8 p-0 sm:p-8">
   <header class="mb-6">
-    <h1 class="text-2xl font-semibold georgian-text" lang="ka">აკადემიის კონფიგურაცია</h1>
+    <h1 class="text-2xl font-semibold georgian-text" lang="ka">{{ 'აკადემიის კონფიგურაცია' | t }}</h1>
   </header>
 
   @if (isLoading()) {
     <div class="flex justify-center items-center py-16">
-      <div class="text-lg georgian-text" lang="ka">იტვირთება...</div>
+      <div class="text-lg georgian-text" lang="ka">{{ 'იტვირთება...' | t }}</div>
     </div>
   } @else {
     <div class="ss-card p-6">
       <form [formGroup]="academyForm" class="space-y-6">
         <!-- Name -->
         <label class="ss-field">
-          <span class="ss-label georgian-text" lang="ka">სახელი *</span>
+          <span class="ss-label georgian-text" lang="ka">{{ 'სახელი' | t }} *</span>
           <input
             class="ss-input georgian-text"
             lang="ka"
             type="text"
             formControlName="name"
-            placeholder="აკადემიის სახელი"
+            [placeholder]="'აკადემიის სახელი' | t"
           />
         </label>
 
         <!-- Logo Upload -->
         <div>
-          <span class="ss-label georgian-text" lang="ka">ლოგო</span>
+          <span class="ss-label georgian-text" lang="ka">{{ 'ლოგო' | t }}</span>
 
           <!-- Drop Zone -->
           <div
@@ -39,7 +39,7 @@
               style="--ss-ic: url('assets/taiga-ui/icons/upload.svg'); color: var(--tui-text-tertiary)"
             ></i>
             <p class="mb-2 georgian-text" lang="ka" style="color: var(--tui-text-secondary)">
-              გადმოწიეთ ლოგო აქ ან დააჭირეთ ასარჩევად
+              {{ 'გადმოწიეთ ლოგო აქ ან დააჭირეთ ასარჩევად' | t }}
             </p>
             <input
               type="file"
@@ -55,7 +55,7 @@
               [disabled]="isUploadingLogo()"
             >
               <span class="georgian-text" lang="ka">{{
-                isUploadingLogo() ? 'იტვირთება...' : 'ლოგოს არჩევა'
+                (isUploadingLogo() ? 'იტვირთება...' : 'ლოგოს არჩევა') | t
               }}</span>
             </button>
           </div>
@@ -65,7 +65,7 @@
             <div class="mt-4 relative inline-block">
               <img
                 [src]="logoUrl"
-                alt="ლოგო"
+                [alt]="'ლოგო' | t"
                 class="w-32 h-32 object-cover rounded border"
                 style="border-color: var(--tui-border-normal)"
               />
@@ -73,7 +73,7 @@
                 type="button"
                 (click)="removeLogo()"
                 class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center hover:bg-red-600 transition-colors"
-                [attr.aria-label]="'წაშლა'"
+                [attr.aria-label]="'წაშლა' | t"
               >
                 <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/x.svg'); width: 12px; height: 12px"></i>
               </button>
@@ -83,13 +83,13 @@
 
         <!-- Description Georgian -->
         <label class="ss-field">
-          <span class="ss-label georgian-text" lang="ka">აღწერა (ქართულად)</span>
+          <span class="ss-label georgian-text" lang="ka">{{ 'აღწერა (ქართულად)' | t }}</span>
           <textarea
             class="ss-input georgian-text"
             lang="ka"
             formControlName="descriptionGeorgian"
             rows="5"
-            placeholder="აკადემიის აღწერა ქართულად"
+            [placeholder]="'აკადემიის აღწერა ქართულად' | t"
           ></textarea>
         </label>
 
@@ -108,11 +108,10 @@
         <div class="space-y-6" formGroupName="padelRules">
           <div>
             <h3 class="text-lg font-semibold georgian-text" lang="ka">
-              ინვენტარის წესები — პადელი
+              {{ 'ინვენტარის წესები — პადელი' | t }}
             </h3>
             <p class="text-sm mt-1 georgian-text" lang="ka" style="color: var(--tui-text-secondary)">
-              პადელის თამაშს სჭირდება 4 ჩოგანი — მიუთითეთ რამდენი შედის კორტის
-              ფასში; დანარჩენის გაქირავება მოთამაშეს ჯავშნისას შეეძლება.
+              {{ 'პადელის თამაშს სჭირდება 4 ჩოგანი — მიუთითეთ რამდენი შედის კორტის ფასში; დანარჩენის გაქირავება მოთამაშეს ჯავშნისას შეეძლება.' | t }}
             </p>
           </div>
 
@@ -120,7 +119,7 @@
           <div>
             <label class="ss-field">
               <span class="ss-label georgian-text" lang="ka">
-                ფასში შემავალი ჩოგნები (0–{{ padelMaxRackets }})
+                {{ 'ფასში შემავალი ჩოგნები' | t }} (0–{{ padelMaxRackets }})
               </span>
               <input
                 class="ss-input"
@@ -137,14 +136,14 @@
               academyForm.get('padelRules.racketsIncluded')?.invalid
             ) {
               <span class="ss-error georgian-text" lang="ka">
-                მიუთითეთ რიცხვი 0-დან {{ padelMaxRackets }}-მდე
+                {{ racketsRangeError }}
               </span>
             }
           </div>
 
           <!-- Extra-racket rent (per game, duration-flat) -->
           <label class="ss-field">
-            <span class="ss-label georgian-text" lang="ka">დამატებითი ჩოგნის ქირა (₾ / თამაში)</span>
+            <span class="ss-label georgian-text" lang="ka">{{ 'დამატებითი ჩოგნის ქირა (₾ / თამაში)' | t }}</span>
             <input
               class="ss-input"
               type="number"
@@ -154,14 +153,13 @@
               data-testid="racket-rent"
             />
             <span class="text-xs georgian-text" lang="ka" style="color: var(--tui-text-secondary)">
-              ერთი ფასი თამაშზე, ხანგრძლივობის (60/90/120 წთ) მიუხედავად ·
-              ცარიელი — არ ქირავდება
+              {{ 'ერთი ფასი თამაშზე, ხანგრძლივობის (60/90/120 წთ) მიუხედავად · ცარიელი — არ ქირავდება' | t }}
             </span>
           </label>
 
           <!-- New balls sale price -->
           <label class="ss-field">
-            <span class="ss-label georgian-text" lang="ka">ახალი ბურთების ფასი (₾)</span>
+            <span class="ss-label georgian-text" lang="ka">{{ 'ახალი ბურთების ფასი (₾)' | t }}</span>
             <input
               class="ss-input"
               type="number"
@@ -171,7 +169,7 @@
               data-testid="balls-price"
             />
             <span class="text-xs georgian-text" lang="ka" style="color: var(--tui-text-secondary)">
-              ცარიელი — არ იყიდება
+              {{ 'ცარიელი — არ იყიდება' | t }}
             </span>
           </label>
         </div>
@@ -184,7 +182,7 @@
             (click)="onSave()"
             [disabled]="!academyForm.valid || isSaving()"
           >
-            <span class="georgian-text" lang="ka">{{ isSaving() ? 'ინახება...' : 'შენახვა' }}</span>
+            <span class="georgian-text" lang="ka">{{ (isSaving() ? 'ინახება...' : 'შენახვა') | t }}</span>
           </button>
         </div>
       </form>
@@ -198,7 +196,7 @@
             [disabled]="!isSaved()"
           >
             <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/map-pin.svg'); width: 14px; height: 14px"></i>
-            <span class="georgian-text" lang="ka">ობიექტების მართვა</span>
+            <span class="georgian-text" lang="ka">{{ 'ობიექტების მართვა' | t }}</span>
           </button>
         </div>
       }

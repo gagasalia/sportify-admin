@@ -10,6 +10,7 @@ import { AcademyService } from '../../services/http-services/academy.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { TenantService } from '../../shared/services/tenant.service';
 import { Campaign } from '../../shared/models/campaign.model';
+import { TPipe } from '../../shared/i18n/t.pipe';
 
 import { SsToastService } from '../../shared/ui/toast.service';
 import { SsDialogService } from '../../shared/ui/dialog.service';
@@ -79,8 +80,10 @@ describe('CampaignsComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
     })
+      // The override REPLACES the component's imports — the template uses the
+      // `t` pipe, so TPipe has to come along or the view fails with NG0302.
       .overrideComponent(CampaignsComponent, {
-        set: { imports: [], schemas: [NO_ERRORS_SCHEMA] },
+        set: { imports: [TPipe], schemas: [NO_ERRORS_SCHEMA] },
       })
       .compileComponents();
 

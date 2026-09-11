@@ -1,6 +1,6 @@
 <div class="pt-8 p-0 sm:p-8">
   <header class="mb-6 flex items-center justify-between">
-    <h1 class="text-2xl font-semibold georgian-text" lang="ka">პრომოკოდები</h1>
+    <h1 class="text-2xl font-semibold georgian-text" lang="ka">{{ 'პრომოკოდები' | t }}</h1>
     <button
       automation-id="promocodes-add"
       class="ss-btn ss-btn--primary"
@@ -8,7 +8,7 @@
       (click)="addPromocode()"
     >
       <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/plus.svg')"></i>
-      <span class="georgian-text" lang="ka">დამატება</span>
+      <span class="georgian-text" lang="ka">{{ 'დამატება' | t }}</span>
     </button>
   </header>
 
@@ -16,12 +16,12 @@
   <div class="ss-card p-4 mb-6">
     <div class="filter-row">
       <label class="ss-field search-field">
-        <span class="ss-label georgian-text" lang="ka">ძებნა</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'ძებნა' | t }}</span>
         <input
           automation-id="promocodes-search"
           class="ss-input"
           type="text"
-          placeholder="კოდი ან სახელი"
+          [placeholder]="'კოდი ან სახელი' | t"
           [ngModel]="q()"
           (ngModelChange)="onSearchChange($event)"
         />
@@ -29,12 +29,12 @@
 
       @if (isSuperAdmin()) {
         <label class="ss-field academy-field">
-          <span class="ss-label georgian-text" lang="ka">აკადემია</span>
+          <span class="ss-label georgian-text" lang="ka">{{ 'აკადემია' | t }}</span>
           <ss-academy-select
             automation-id="promocodes-academy"
             [academies]="academies()"
-            emptyLabel="ყველა აკადემია"
-            ariaLabel="აკადემია"
+            [emptyLabel]="'ყველა აკადემია' | t"
+            [ariaLabel]="'აკადემია' | t"
             [ngModel]="academyId()"
             (ngModelChange)="onAcademyChange($event)"
           />
@@ -48,7 +48,7 @@
           [class.is-active]="activeFilter() === null"
           (click)="setActiveFilter(null)"
         >
-          <span class="georgian-text" lang="ka">ყველა</span>
+          <span class="georgian-text" lang="ka">{{ 'ყველა' | t }}</span>
         </button>
         <button
           automation-id="promocodes-filter-active"
@@ -57,7 +57,7 @@
           [class.is-active]="activeFilter() === true"
           (click)="setActiveFilter(true)"
         >
-          <span class="georgian-text" lang="ka">აქტიური</span>
+          <span class="georgian-text" lang="ka">{{ 'აქტიური' | t }}</span>
         </button>
         <button
           automation-id="promocodes-filter-inactive"
@@ -66,7 +66,7 @@
           [class.is-active]="activeFilter() === false"
           (click)="setActiveFilter(false)"
         >
-          <span class="georgian-text" lang="ka">გამორთული</span>
+          <span class="georgian-text" lang="ka">{{ 'გამორთული' | t }}</span>
         </button>
       </div>
     </div>
@@ -78,10 +78,10 @@
       lang="ka"
       style="background: var(--tui-status-negative-pale); color: var(--tui-status-negative)"
     >
-      მონაცემების ჩატვირთვა ვერ მოხერხდა. სცადეთ თავიდან.
+      {{ 'მონაცემების ჩატვირთვა ვერ მოხერხდა. სცადეთ თავიდან.' | t }}
     </div>
     <button class="ss-btn ss-btn--outline ss-btn--s" type="button" (click)="retry()">
-      <span class="georgian-text" lang="ka">თავიდან ცდა</span>
+      <span class="georgian-text" lang="ka">{{ 'თავიდან ცდა' | t }}</span>
     </button>
   } @else if (isLoading()) {
     <div class="space-y-2 animate-pulse">
@@ -96,15 +96,15 @@
         <table class="ss-table">
           <thead>
             <tr>
-              <th class="georgian-text" lang="ka">კოდი</th>
-              <th class="georgian-text" lang="ka">სახელი</th>
-              <th class="georgian-text" lang="ka">ფასდაკლება</th>
-              <th class="georgian-text" lang="ka">ვისთვის</th>
-              <th class="georgian-text" lang="ka">მოქმედების ვადა</th>
-              <th class="georgian-text" lang="ka">გამოყენება</th>
-              <th class="georgian-text" lang="ka">სტატუსი</th>
+              <th class="georgian-text" lang="ka">{{ 'კოდი' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'სახელი' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'ფასდაკლება' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'ვისთვის' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'მოქმედების ვადა' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'გამოყენება' | t }}</th>
+              <th class="georgian-text" lang="ka">{{ 'სტატუსი' | t }}</th>
               @if (isSuperAdmin()) {
-                <th class="georgian-text" lang="ka">აკადემია</th>
+                <th class="georgian-text" lang="ka">{{ 'აკადემია' | t }}</th>
               }
               <th></th>
             </tr>
@@ -147,7 +147,7 @@
                       {{ p.academyName || '—' }}
                     } @else {
                       <span class="ss-badge ss-badge--info">
-                        <span class="georgian-text" lang="ka">პლატფორმა</span>
+                        <span class="georgian-text" lang="ka">{{ 'პლატფორმა' | t }}</span>
                       </span>
                     }
                   </td>
@@ -159,13 +159,13 @@
                       type="checkbox"
                       [ngModel]="p.active"
                       (ngModelChange)="onActiveToggle(p, $event)"
-                      [attr.aria-label]="'აქტიური'"
+                      [attr.aria-label]="'აქტიური' | t"
                     />
                     <button
                       class="ss-icon-btn"
                       type="button"
-                      aria-label="რედაქტირება"
-                      title="რედაქტირება"
+                      [attr.aria-label]="'რედაქტირება' | t"
+                      [title]="'რედაქტირება' | t"
                       (click)="editPromocode(p)"
                     >
                       <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/pencil.svg')"></i>
@@ -173,8 +173,8 @@
                     <button
                       class="ss-icon-btn"
                       type="button"
-                      aria-label="გამოყენებები"
-                      title="გამოყენებები"
+                      [attr.aria-label]="'გამოყენებები' | t"
+                      [title]="'გამოყენებები' | t"
                       (click)="openRedemptions(p)"
                     >
                       <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/list.svg')"></i>
@@ -183,8 +183,8 @@
                       <button
                         class="ss-icon-btn ss-icon-btn--danger"
                         type="button"
-                        aria-label="წაშლა"
-                        title="წაშლა"
+                        [attr.aria-label]="'წაშლა' | t"
+                        [title]="'წაშლა' | t"
                         (click)="deletePromocode(p)"
                       >
                         <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/trash-2.svg')"></i>
@@ -200,7 +200,7 @@
                   class="px-4 py-8 text-center georgian-text"
                   lang="ka"
                 >
-                  პრომოკოდები არ მოიძებნა
+                  {{ 'პრომოკოდები არ მოიძებნა' | t }}
                 </td>
               </tr>
             }
@@ -249,7 +249,7 @@
               <span>{{ usageLabel(p) }}</span>
               @if (isSuperAdmin() && !p.academy) {
                 <span>·</span>
-                <span>პლატფორმა</span>
+                <span>{{ 'პლატფორმა' | t }}</span>
               } @else if (isSuperAdmin() && p.academyName) {
                 <span>·</span>
                 <span>{{ p.academyName }}</span>
@@ -261,12 +261,12 @@
                 type="checkbox"
                 [ngModel]="p.active"
                 (ngModelChange)="onActiveToggle(p, $event)"
-                [attr.aria-label]="'აქტიური'"
+                [attr.aria-label]="'აქტიური' | t"
               />
               <button
                 class="ss-icon-btn"
                 type="button"
-                aria-label="რედაქტირება"
+                [attr.aria-label]="'რედაქტირება' | t"
                 (click)="editPromocode(p)"
               >
                 <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/pencil.svg')"></i>
@@ -274,7 +274,7 @@
               <button
                 class="ss-icon-btn"
                 type="button"
-                aria-label="გამოყენებები"
+                [attr.aria-label]="'გამოყენებები' | t"
                 (click)="openRedemptions(p)"
               >
                 <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/list.svg')"></i>
@@ -283,7 +283,7 @@
                 <button
                   class="ss-icon-btn ss-icon-btn--danger"
                   type="button"
-                  aria-label="წაშლა"
+                  [attr.aria-label]="'წაშლა' | t"
                   (click)="deletePromocode(p)"
                 >
                   <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/trash-2.svg')"></i>
@@ -293,7 +293,7 @@
           </div>
         } @empty {
           <div class="ss-card p-6 text-center">
-            <p class="georgian-text" lang="ka">პრომოკოდები არ მოიძებნა</p>
+            <p class="georgian-text" lang="ka">{{ 'პრომოკოდები არ მოიძებნა' | t }}</p>
           </div>
         }
       </div>
@@ -308,7 +308,7 @@
           [disabled]="page() === 1"
           (click)="onPageChange(page() - 1)"
         >
-          <span class="georgian-text" lang="ka">წინა</span>
+          <span class="georgian-text" lang="ka">{{ 'წინა' | t }}</span>
         </button>
         <span class="text-sm" style="color: var(--tui-text-secondary)">
           {{ page() }} / {{ totalPages() }}
@@ -319,7 +319,7 @@
           [disabled]="page() >= totalPages()"
           (click)="onPageChange(page() + 1)"
         >
-          <span class="georgian-text" lang="ka">შემდეგი</span>
+          <span class="georgian-text" lang="ka">{{ 'შემდეგი' | t }}</span>
         </button>
       </div>
     }

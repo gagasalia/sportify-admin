@@ -5,7 +5,7 @@
     lang="ka"
     style="background: var(--tui-status-negative-pale); color: var(--tui-status-negative)"
   >
-    მონაცემების ჩატვირთვა ვერ მოხერხდა. სცადეთ თავიდან.
+    {{ 'მონაცემების ჩატვირთვა ვერ მოხერხდა. სცადეთ თავიდან.' | t }}
   </div>
 }
 
@@ -20,9 +20,9 @@
             class="rl-sort"
             [class.is-active]="sortBy() === 'created'"
             (click)="setSort('created')"
-            title="ჯერ ბოლოს გაკეთებული ჯავშნები"
+            [title]="'ჯერ ბოლოს გაკეთებული ჯავშნები' | t"
           >
-            <span class="georgian-text" lang="ka">ჯავშნის თარიღი</span>
+            <span class="georgian-text" lang="ka">{{ 'ჯავშნის თარიღი' | t }}</span>
             @if (sortBy() === 'created') {
               <i class="ss-ic rl-sort-ic" style="--ss-ic: url('assets/taiga-ui/icons/chevron-down.svg')"></i>
             }
@@ -34,23 +34,23 @@
             class="rl-sort"
             [class.is-active]="sortBy() === 'playing'"
             (click)="setSort('playing')"
-            title="ჯერ მომავალი თამაშები"
+            [title]="'ჯერ მომავალი თამაშები' | t"
           >
-            <span class="georgian-text" lang="ka">თამაშის თარიღი</span>
+            <span class="georgian-text" lang="ka">{{ 'თამაშის თარიღი' | t }}</span>
             @if (sortBy() === 'playing') {
               <i class="ss-ic rl-sort-ic" style="--ss-ic: url('assets/taiga-ui/icons/chevron-down.svg')"></i>
             }
           </button>
         </th>
-        <th class="georgian-text" lang="ka">დრო</th>
-        <th class="georgian-text" lang="ka">კორტი</th>
-        <th class="georgian-text" lang="ka">მომხმარებელი</th>
+        <th class="georgian-text" lang="ka">{{ 'დრო' | t }}</th>
+        <th class="georgian-text" lang="ka">{{ 'კორტი' | t }}</th>
+        <th class="georgian-text" lang="ka">{{ 'მომხმარებელი' | t }}</th>
         <th>ID</th>
-        <th class="georgian-text" lang="ka">ფასი</th>
+        <th class="georgian-text" lang="ka">{{ 'ფასი' | t }}</th>
         @if (isSuperAdmin()) {
-          <th class="georgian-text" lang="ka">თიფი</th>
+          <th class="georgian-text" lang="ka">{{ 'თიფი' | t }}</th>
         }
-        <th class="georgian-text" lang="ka">სტატუსი</th>
+        <th class="georgian-text" lang="ka">{{ 'სტატუსი' | t }}</th>
         <th></th>
       </tr>
 
@@ -58,27 +58,27 @@
       <tr class="rl-filters">
         <th>
           <div class="rl-filter">
-            <input type="date" class="ss-input rl-input" [formControl]="createdFrom" aria-label="ჯავშნის თარიღი — დან" />
-            <input type="date" class="ss-input rl-input" [formControl]="createdTo" aria-label="ჯავშნის თარიღი — მდე" />
+            <input type="date" class="ss-input rl-input" [formControl]="createdFrom" [attr.aria-label]="'ჯავშნის თარიღი — დან' | t" />
+            <input type="date" class="ss-input rl-input" [formControl]="createdTo" [attr.aria-label]="'ჯავშნის თარიღი — მდე' | t" />
           </div>
         </th>
         <th>
           <div class="rl-filter">
-            <input type="date" class="ss-input rl-input" [formControl]="playFrom" aria-label="თამაშის თარიღი — დან" />
-            <input type="date" class="ss-input rl-input" [formControl]="playTo" aria-label="თამაშის თარიღი — მდე" />
+            <input type="date" class="ss-input rl-input" [formControl]="playFrom" [attr.aria-label]="'თამაშის თარიღი — დან' | t" />
+            <input type="date" class="ss-input rl-input" [formControl]="playTo" [attr.aria-label]="'თამაშის თარიღი — მდე' | t" />
           </div>
         </th>
         <th>
-          <select class="ss-input rl-input" [formControl]="startHour" aria-label="საათი">
-            <option [ngValue]="null" class="georgian-text" lang="ka">ყველა</option>
+          <select class="ss-input rl-input" [formControl]="startHour" [attr.aria-label]="'საათი' | t">
+            <option [ngValue]="null" class="georgian-text" lang="ka">{{ 'ყველა' | t }}</option>
             @for (hour of hourOptions; track hour.value) {
               <option [ngValue]="hour.value">{{ hour.label }}</option>
             }
           </select>
         </th>
         <th>
-          <select class="ss-input rl-input georgian-text" lang="ka" [formControl]="court" aria-label="კორტი">
-            <option [ngValue]="null">ყველა</option>
+          <select class="ss-input rl-input georgian-text" lang="ka" [formControl]="court" [attr.aria-label]="'კორტი' | t">
+            <option [ngValue]="null">{{ 'ყველა' | t }}</option>
             @for (court of courts(); track court.id) {
               <option [ngValue]="court.id">{{ court.label }}</option>
             }
@@ -89,9 +89,9 @@
             type="text"
             class="ss-input rl-input georgian-text"
             lang="ka"
-            placeholder="სახელი"
+            [placeholder]="'სახელი' | t"
             [formControl]="customer"
-            aria-label="მომხმარებლის ძებნა"
+            [attr.aria-label]="'მომხმარებლის ძებნა' | t"
           />
         </th>
         <th>
@@ -107,16 +107,16 @@
         </th>
         <th>
           <div class="rl-filter">
-            <input type="number" min="0" class="ss-input rl-input" placeholder="დან ₾" [formControl]="priceMin" aria-label="ფასი — დან" />
-            <input type="number" min="0" class="ss-input rl-input" placeholder="მდე ₾" [formControl]="priceMax" aria-label="ფასი — მდე" />
+            <input type="number" min="0" class="ss-input rl-input" [placeholder]="'დან ₾' | t" [formControl]="priceMin" [attr.aria-label]="'ფასი — დან' | t" />
+            <input type="number" min="0" class="ss-input rl-input" [placeholder]="'მდე ₾' | t" [formControl]="priceMax" [attr.aria-label]="'ფასი — მდე' | t" />
           </div>
         </th>
         @if (isSuperAdmin()) {
           <th></th>
         }
         <th>
-          <select class="ss-input rl-input georgian-text" lang="ka" [formControl]="status" aria-label="სტატუსი">
-            <option [ngValue]="null">ყველა</option>
+          <select class="ss-input rl-input georgian-text" lang="ka" [formControl]="status" [attr.aria-label]="'სტატუსი' | t">
+            <option [ngValue]="null">{{ 'ყველა' | t }}</option>
             @for (status of statusOptions; track status) {
               <option [ngValue]="status">{{ statusLabels[status] }}</option>
             }
@@ -127,8 +127,8 @@
             <button
               class="ss-icon-btn ss-icon-btn--s"
               type="button"
-              aria-label="ფილტრების გასუფთავება"
-              title="ფილტრების გასუფთავება"
+              [attr.aria-label]="'ფილტრების გასუფთავება' | t"
+              [title]="'ფილტრების გასუფთავება' | t"
               (click)="clearFilters()"
             >
               <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/x.svg')"></i>
@@ -157,12 +157,12 @@
             <td class="whitespace-nowrap">{{ courtLabelById(b.court) }}</td>
             <td>
               @if (b.type === 'block') {
-                <span class="georgian-text" lang="ka">დაბლოკილი</span>
+                <span class="georgian-text" lang="ka">{{ 'დაბლოკილი' | t }}</span>
               } @else if (bookingPlayer(b)) {
                 <button
                   class="player-link"
                   type="button"
-                  title="მომხმარებლის გვერდი"
+                  [title]="'მომხმარებლის გვერდი' | t"
                   (click)="openPlayer(b, $event)"
                 >
                   <ss-avatar
@@ -215,7 +215,7 @@
                   type="button"
                   (click)="cancelFromList(b)"
                 >
-                  <span class="georgian-text" lang="ka">გაუქმება</span>
+                  <span class="georgian-text" lang="ka">{{ 'გაუქმება' | t }}</span>
                 </button>
               }
             </td>
@@ -224,9 +224,9 @@
           <tr>
             <td [attr.colspan]="isSuperAdmin() ? 10 : 9" class="px-4 py-8 text-center georgian-text" lang="ka">
               @if (hasActiveFilters()) {
-                ამ ფილტრით ჯავშნები ვერ მოიძებნა
+                {{ 'ამ ფილტრით ჯავშნები ვერ მოიძებნა' | t }}
               } @else {
-                ჯავშნები არ მოიძებნა
+                {{ 'ჯავშნები არ მოიძებნა' | t }}
               }
             </td>
           </tr>
@@ -245,7 +245,7 @@
       [disabled]="page() === 1"
       (click)="prevPage()"
     >
-      <span class="georgian-text" lang="ka">წინა</span>
+      <span class="georgian-text" lang="ka">{{ 'წინა' | t }}</span>
     </button>
     <span class="text-sm" style="color: var(--tui-text-secondary)">
       {{ page() }} / {{ totalPages() }}
@@ -256,7 +256,7 @@
       [disabled]="page() * limit >= total()"
       (click)="nextPage()"
     >
-      <span class="georgian-text" lang="ka">შემდეგი</span>
+      <span class="georgian-text" lang="ka">{{ 'შემდეგი' | t }}</span>
     </button>
   </div>
 }

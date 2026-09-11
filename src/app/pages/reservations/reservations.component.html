@@ -1,7 +1,7 @@
 <div class="pt-8 p-0 sm:p-8 pb-28">
   <header class="mb-6">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 min-h-16">
-      <h1 class="text-2xl font-semibold georgian-text" lang="ka">ჯავშნები</h1>
+      <h1 class="text-2xl font-semibold georgian-text" lang="ka">{{ 'ჯავშნები' | t }}</h1>
     </div>
   </header>
 
@@ -10,15 +10,15 @@
     <div class="flex flex-col items-center justify-center py-16">
       <img src="images/no-result.png" alt="No facilities" class="w-64 h-64 mb-6 opacity-50" />
       <p class="text-lg text-gray-500 mb-6 georgian-text" lang="ka">
-        ჯავშნების სანახავად დაამატეთ ობიექტი
+        {{ 'ჯავშნების სანახავად დაამატეთ ობიექტი' | t }}
       </p>
       <button class="ss-btn ss-btn--primary" type="button" (click)="navigateToFacilities()">
         <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/plus.svg')"></i>
-        <span class="georgian-text" lang="ka">დაამატე ობიექტი</span>
+        <span class="georgian-text" lang="ka">{{ 'დაამატე ობიექტი' | t }}</span>
       </button>
     </div>
   } @else {
-    <div class="chip-rail mb-5" role="tablist" aria-label="ობიექტები">
+    <div class="chip-rail mb-5" role="tablist" [attr.aria-label]="'ობიექტები' | t">
       @for (facility of facilities(); track facility._id ?? facility.id) {
         <button
           type="button"
@@ -44,7 +44,7 @@
           style="--ss-ic: url('assets/taiga-ui/icons/table-cells-merge.svg'); width: 128px; height: 128px"
         ></i>
         <p class="text-lg text-gray-500 georgian-text" lang="ka">
-          ამ ობიექტს აქტიური კორტი არ აქვს
+          {{ 'ამ ობიექტს აქტიური კორტი არ აქვს' | t }}
         </p>
       </div>
     } @else {
@@ -57,7 +57,7 @@
           (click)="setTab('day')"
         >
           <i class="ss-ic seg-ic" style="--ss-ic: url('assets/taiga-ui/icons/calendar.svg')"></i>
-          <span class="georgian-text" lang="ka">დღე</span>
+          <span class="georgian-text" lang="ka">{{ 'დღე' | t }}</span>
         </button>
         <button
           type="button"
@@ -66,7 +66,8 @@
           (click)="setTab('week')"
         >
           <i class="ss-ic seg-ic" style="--ss-ic: url('assets/taiga-ui/icons/calendar-range.svg')"></i>
-          <span class="georgian-text" lang="ka">კვირა</span>
+          <!-- sense override: dictionary maps 'კვირა' to Sunday -->
+          <span class="georgian-text" lang="ka">{{ weekWord() }}</span>
         </button>
         <button
           type="button"
@@ -75,7 +76,7 @@
           (click)="setTab('list')"
         >
           <i class="ss-ic seg-ic" style="--ss-ic: url('assets/taiga-ui/icons/list.svg')"></i>
-          <span class="georgian-text" lang="ka">სია</span>
+          <span class="georgian-text" lang="ka">{{ 'სია' | t }}</span>
         </button>
       </div>
 
@@ -86,14 +87,14 @@
           lang="ka"
           style="background: var(--tui-status-negative-pale); color: var(--tui-status-negative)"
         >
-          მონაცემების ჩატვირთვა ვერ მოხერხდა. სცადეთ თავიდან.
+          {{ 'მონაცემების ჩატვირთვა ვერ მოხერხდა. სცადეთ თავიდან.' | t }}
         </div>
       }
 
       <!-- Date rail + datepicker (day + week tabs) -->
       @if (tab() !== 'list') {
         <div class="flex flex-wrap items-center gap-3 mb-4">
-          <div class="chip-rail date-rail-wrap" aria-label="თარიღი">
+          <div class="chip-rail date-rail-wrap" [attr.aria-label]="'თარიღი' | t">
             @for (option of dateOptions; track option.iso) {
               <button
                 type="button"
@@ -101,7 +102,7 @@
                 [class.is-active]="selectedDate() === option.iso"
                 (click)="selectDate(option.iso)"
               >
-                <span class="dow georgian-text" lang="ka">{{ option.label }}</span>
+                <span class="dow georgian-text" lang="ka">{{ option.label | t }}</span>
                 <span class="dnum">{{ option.dayNum }}</span>
               </button>
             }
@@ -113,7 +114,7 @@
               type="date"
               class="ss-input"
               [formControl]="dateControl"
-              aria-label="თარიღის არჩევა"
+              [attr.aria-label]="'თარიღის არჩევა' | t"
             />
           </label>
         </div>
@@ -125,7 +126,7 @@
               class="ss-icon-btn ss-icon-btn--s"
               type="button"
               (click)="prevDay()"
-              aria-label="წინა კვირა"
+              [attr.aria-label]="'წინა კვირა' | t"
             >
               <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/chevron-left.svg')"></i>
             </button>
@@ -134,7 +135,7 @@
               class="ss-icon-btn ss-icon-btn--s"
               type="button"
               (click)="nextDay()"
-              aria-label="შემდეგი კვირა"
+              [attr.aria-label]="'შემდეგი კვირა' | t"
             >
               <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/chevron-right.svg')"></i>
             </button>
@@ -143,7 +144,7 @@
 
         <!-- Court chips: week tab always; day tab on mobile only -->
         @if (tab() === 'week' || isMobile()) {
-          <div class="chip-rail mb-4" aria-label="კორტები">
+          <div class="chip-rail mb-4" [attr.aria-label]="'კორტები' | t">
             @for (court of activeCourts(); track court.id) {
               <button
                 type="button"
@@ -159,11 +160,11 @@
 
         <!-- Color legend -->
         <div class="legend mb-3">
-          <span class="lg-item"><i class="lg-dot dot-free"></i><span class="georgian-text" lang="ka">თავისუფალი</span></span>
-          <span class="lg-item"><i class="lg-dot dot-user"></i><span class="georgian-text" lang="ka">მომხმარებლის ჯავშანი</span></span>
-          <span class="lg-item"><i class="lg-dot dot-admin"></i><span class="georgian-text" lang="ka">ადმინის ჯავშანი</span></span>
-          <span class="lg-item"><i class="lg-dot dot-block"></i><span class="georgian-text" lang="ka">დაბლოკილი</span></span>
-          <span class="lg-item"><i class="lg-dot dot-closed"></i><span class="georgian-text" lang="ka">მიუწვდომელი</span></span>
+          <span class="lg-item"><i class="lg-dot dot-free"></i><span class="georgian-text" lang="ka">{{ 'თავისუფალი' | t }}</span></span>
+          <span class="lg-item"><i class="lg-dot dot-user"></i><span class="georgian-text" lang="ka">{{ 'მომხმარებლის ჯავშანი' | t }}</span></span>
+          <span class="lg-item"><i class="lg-dot dot-admin"></i><span class="georgian-text" lang="ka">{{ 'ადმინის ჯავშანი' | t }}</span></span>
+          <span class="lg-item"><i class="lg-dot dot-block"></i><span class="georgian-text" lang="ka">{{ 'დაბლოკილი' | t }}</span></span>
+          <span class="lg-item"><i class="lg-dot dot-closed"></i><span class="georgian-text" lang="ka">{{ 'მიუწვდომელი' | t }}</span></span>
         </div>
       }
 
@@ -183,7 +184,7 @@
               class="ss-ic opacity-50 mb-4"
               style="--ss-ic: url('assets/taiga-ui/icons/calendar-off.svg'); width: 96px; height: 96px"
             ></i>
-            <p class="text-lg text-gray-500 georgian-text" lang="ka">ამ დღეს ობიექტი დაკეტილია</p>
+            <p class="text-lg text-gray-500 georgian-text" lang="ka">{{ 'ამ დღეს ობიექტი დაკეტილია' | t }}</p>
           </div>
         } @else {
           <div class="overflow-x-auto">
@@ -248,7 +249,7 @@
                                     </span>
                                   }
                                 </div>
-                                <span class="cell-sub">{{ cell.start }}–{{ cell.end }} · {{ cellSpanMinutes(cell) }} წთ</span>
+                                <span class="cell-sub">{{ cell.start }}–{{ cell.end }} · {{ cellSpanMinutes(cell) }} {{ 'წთ' | t }}</span>
                                 @if (cell.kind === 'booking') {
                                   <div class="cell-foot" (click)="$event.stopPropagation()">
                                     <span
@@ -259,14 +260,14 @@
                                       "
                                     >
                                       <span class="georgian-text" lang="ka">
-                                        {{ isPaid(cell) ? 'გადახდილია' : 'ადგილზე' }}
+                                        {{ (isPaid(cell) ? 'გადახდილია' : 'ადგილზე') | t }}
                                       </span>
                                     </span>
                                     @if (!isPaid(cell) && cell.booking) {
                                       <button
                                         class="ss-icon-btn ss-icon-btn--s"
                                         type="button"
-                                        aria-label="გადახდილად მონიშვნა"
+                                        [attr.aria-label]="'გადახდილად მონიშვნა' | t"
                                         (click)="markPaid(cell.booking, $event)"
                                       >
                                         <i
@@ -279,7 +280,7 @@
                                       <button
                                         class="ss-icon-btn ss-icon-btn--s"
                                         type="button"
-                                        aria-label="მომხმარებლის გვერდი"
+                                        [attr.aria-label]="'მომხმარებლის გვერდი' | t"
                                         (click)="openPlayer(cell.booking, $event)"
                                       >
                                         <i
@@ -318,7 +319,7 @@
               class="ss-ic opacity-50 mb-4"
               style="--ss-ic: url('assets/taiga-ui/icons/calendar-off.svg'); width: 96px; height: 96px"
             ></i>
-            <p class="text-lg text-gray-500 georgian-text" lang="ka">სლოტები არ არის</p>
+            <p class="text-lg text-gray-500 georgian-text" lang="ka">{{ 'სლოტები არ არის' | t }}</p>
           </div>
         } @else {
           <div class="overflow-x-auto">
@@ -328,7 +329,7 @@
                   <th class="time-col"></th>
                   @for (date of weekGrid().days; track date) {
                     <th [class.today-col]="isToday(date)">
-                      <span class="georgian-text" lang="ka">{{ weekdayShortOf(date) }}</span>
+                      <span class="georgian-text" lang="ka">{{ weekdayShortOf(date) | t }}</span>
                       <span class="th-date">{{ weekDayLabel(date) }}</span>
                     </th>
                   }
@@ -417,18 +418,18 @@
         <span class="sb-sep">·</span>
         <span class="sb-strong">{{ info.start }}–{{ info.end }}</span>
         <span class="sb-sep">·</span>
-        <span>{{ info.minutes }} წთ</span>
+        <span>{{ info.minutes }} {{ 'წთ' | t }}</span>
         @if (info.priceGel > 0) {
           <span class="sb-sep">·</span>
           <span class="sb-strong">{{ info.priceGel }}₾</span>
         }
         @if (!info.canContinue) {
-          <span class="sb-hint georgian-text" lang="ka">აირჩიეთ მინ. 60 წუთი</span>
+          <span class="sb-hint georgian-text" lang="ka">{{ 'აირჩიეთ მინ. 60 წუთი' | t }}</span>
         }
       </div>
       <div class="sb-actions">
         <button class="ss-btn ss-btn--flat ss-btn--s" type="button" (click)="clearSelection()">
-          <span class="georgian-text" lang="ka">გასუფთავება</span>
+          <span class="georgian-text" lang="ka">{{ 'გასუფთავება' | t }}</span>
         </button>
         <button
           class="ss-btn ss-btn--primary ss-btn--s"
@@ -436,7 +437,7 @@
           [disabled]="!info.canContinue"
           (click)="openSelectionDialog()"
         >
-          <span class="georgian-text" lang="ka">გაგრძელება</span>
+          <span class="georgian-text" lang="ka">{{ 'გაგრძელება' | t }}</span>
         </button>
       </div>
     </div>

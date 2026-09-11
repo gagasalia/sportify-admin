@@ -12,13 +12,13 @@
         type="checkbox"
         [ngModel]="activeState()"
         (ngModelChange)="onToggleState($event)"
-        [attr.aria-label]="'გამოქვეყნება'"
+        [attr.aria-label]="'გამოქვეყნება' | t"
       />
 
       @if (activeState()) {
-        <span class="ss-badge ss-badge--positive georgian-text" lang="ka">გამოქვეყნებული</span>
+        <span class="ss-badge ss-badge--positive georgian-text" lang="ka">{{ 'გამოქვეყნებული' | t }}</span>
       } @else {
-        <span class="ss-badge ss-badge--neutral georgian-text" lang="ka">მონახაზი</span>
+        <span class="ss-badge ss-badge--neutral georgian-text" lang="ka">{{ 'მონახაზი' | t }}</span>
       }
     </div>
   </div>
@@ -60,7 +60,7 @@
       <i class="ss-ic mt-0.5" style="--ss-ic: url('assets/taiga-ui/icons/map-pin.svg'); color: var(--tui-text-action)"></i>
       <div class="text-sm leading-snug georgian-text" lang="ka" style="color: var(--tui-text-secondary)">
         <div class="line-clamp-1">{{ facility.addressText || '--' }}</div>
-        <div class="line-clamp-1">{{ cityName || '--' }}, {{ countryName || '--' }}</div>
+        <div class="line-clamp-1">{{ (cityName || '--') | t }}, {{ (countryName || '--') | t }}</div>
       </div>
     </button>
 
@@ -71,10 +71,10 @@
         class="ss-btn ss-btn--outline ss-btn--s flex-1 min-w-0"
         type="button"
         (click)="onEdit($event)"
-        [attr.aria-label]="'რედაქტირება'"
+        [attr.aria-label]="'რედაქტირება' | t"
       >
         <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/pencil.svg'); width: 14px; height: 14px"></i>
-        <span class="georgian-text truncate" lang="ka">რედაქტირება</span>
+        <span class="georgian-text truncate" lang="ka">{{ 'რედაქტირება' | t }}</span>
       </button>
 
       <!-- Courts -->
@@ -82,10 +82,10 @@
         class="ss-btn ss-btn--primary ss-btn--s flex-1 min-w-0"
         [routerLink]="['/configuration/courts']"
         [queryParams]="{ facilityId: facility._id ?? facility.id }"
-        [attr.aria-label]="'კორტები'"
+        [attr.aria-label]="'კორტები' | t"
       >
         <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/layout-grid.svg'); width: 14px; height: 14px"></i>
-        <span class="georgian-text truncate" lang="ka">კორტები</span>
+        <span class="georgian-text truncate" lang="ka">{{ 'კორტები' | t }}</span>
       </a>
 
       <!-- Delete -->
@@ -93,7 +93,7 @@
         class="ss-icon-btn ss-icon-btn--danger"
         type="button"
         (click)="onDelete($event)"
-        [attr.aria-label]="'წაშლა'"
+        [attr.aria-label]="'წაშლა' | t"
       >
         <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/trash-2.svg')"></i>
       </button>

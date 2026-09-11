@@ -135,3 +135,11 @@
   height: 48px;
   margin-top: 6px;
 }
+
+/* pre-auth language toggle pinned to the viewport corner */
+.auth-lang {
+  position: absolute;
+  top: 18px;
+  right: 18px;
+  z-index: 2;
+}

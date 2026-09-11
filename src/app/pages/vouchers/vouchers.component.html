@@ -1,19 +1,19 @@
 <div class="pt-8 p-0 sm:p-8">
   <header class="mb-6">
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 min-h-16">
-      <h1 class="text-2xl font-semibold georgian-text" lang="ka">ვაუჩერები</h1>
+      <h1 class="text-2xl font-semibold georgian-text" lang="ka">{{ 'ვაუჩერები' | t }}</h1>
     </div>
   </header>
 
   <!-- Superadmin: academy select — empty = the UNIVERSAL (platform-wide) pool -->
   @if (isSuperAdmin()) {
     <label class="ss-field mb-4 max-w-sm">
-      <span class="ss-label georgian-text" lang="ka">აკადემია</span>
+      <span class="ss-label georgian-text" lang="ka">{{ 'აკადემია' | t }}</span>
       <ss-academy-select
         automation-id="vouchers-academy"
         [academies]="academies()"
-        emptyLabel="უნივერსალური — მთელი პლატფორმა"
-        ariaLabel="აკადემია"
+        [emptyLabel]="'უნივერსალური — მთელი პლატფორმა' | t"
+        [ariaLabel]="'აკადემია' | t"
         [ngModel]="selectedAcademyId()"
         (ngModelChange)="onAcademyChange($event)"
       />
@@ -25,14 +25,14 @@
     <div class="flex flex-col items-center justify-center py-16">
       <img src="images/no-result.png" alt="No facilities" class="w-64 h-64 mb-6 opacity-50" />
       <p class="text-lg text-gray-500 mb-6 georgian-text" lang="ka">
-        ვაუჩერების სამართავად დაამატეთ ობიექტი
+        {{ 'ვაუჩერების სამართავად დაამატეთ ობიექტი' | t }}
       </p>
       <button class="ss-btn ss-btn--primary" type="button" (click)="navigateToFacilities()">
-        <span class="georgian-text" lang="ka">დაამატე ობიექტი</span>
+        <span class="georgian-text" lang="ka">{{ 'დაამატე ობიექტი' | t }}</span>
       </button>
     </div>
   } @else if (selectedScope()?.kind !== 'universal') {
-    <div class="ss-chip-rail mb-6" role="tablist" aria-label="სივრცეები">
+    <div class="ss-chip-rail mb-6" role="tablist" [attr.aria-label]="'სივრცეები' | t">
       @for (facility of facilities(); track facility._id ?? facility.id) {
         <button
           type="button"
@@ -54,12 +54,12 @@
         [attr.aria-selected]="isAcademyScopeSelected()"
         (click)="onAcademyChipClick()"
       >
-        <span class="georgian-text" lang="ka">მთელი აკადემია</span>
+        <span class="georgian-text" lang="ka">{{ 'მთელი აკადემია' | t }}</span>
       </button>
     </div>
   } @else {
     <p class="mb-6 text-sm georgian-text" lang="ka" style="color: var(--tui-text-secondary)">
-      უნივერსალური ვაუჩერები მოქმედებს ყველა ობიექტზე.
+      {{ 'უნივერსალური ვაუჩერები მოქმედებს ყველა ობიექტზე.' | t }}
     </p>
   }
 
@@ -70,17 +70,19 @@
         lang="ka"
         style="background: var(--tui-status-negative-pale); color: var(--tui-status-negative)"
       >
-        მონაცემების ჩატვირთვა ვერ მოხერხდა. სცადეთ თავიდან.
+        {{ 'მონაცემების ჩატვირთვა ვერ მოხერხდა. სცადეთ თავიდან.' | t }}
       </div>
     }
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
       <!-- ═══════════════ GRANT FORM ═══════════════ -->
       <section class="ss-card p-5">
-        <h2 class="text-lg font-medium mb-4 georgian-text" lang="ka">ვაუჩერის მინიჭება</h2>
+        <h2 class="text-lg font-medium mb-4 georgian-text" lang="ka">
+          {{ 'ვაუჩერის მინიჭება' | t }}
+        </h2>
         <form [formGroup]="grantForm" (ngSubmit)="submitGrant()" class="flex flex-col gap-4">
           <label class="ss-field">
-            <span class="ss-label georgian-text" lang="ka">ტელეფონი</span>
+            <span class="ss-label georgian-text" lang="ka">{{ 'ტელეფონი' | t }}</span>
             <input
               class="ss-input"
               [class.ss-input--invalid]="grantForm.get('phone')?.touched && grantForm.get('phone')?.invalid"
@@ -91,11 +93,13 @@
               autocomplete="off"
             />
             @if (grantForm.get('phone')?.touched && grantForm.get('phone')?.invalid) {
-              <span class="ss-error georgian-text" lang="ka">შეიყვანეთ სწორი ტელეფონი</span>
+              <span class="ss-error georgian-text" lang="ka">
+                {{ 'შეიყვანეთ სწორი ტელეფონი' | t }}
+              </span>
             }
           </label>
           <label class="ss-field">
-            <span class="ss-label georgian-text" lang="ka">თანხა (₾)</span>
+            <span class="ss-label georgian-text" lang="ka">{{ 'თანხა (₾)' | t }}</span>
             <input
               class="ss-input"
               [class.ss-input--invalid]="grantForm.get('amountGel')?.touched && grantForm.get('amountGel')?.invalid"
@@ -105,15 +109,21 @@
               min="0"
             />
             @if (grantForm.get('amountGel')?.touched && grantForm.get('amountGel')?.invalid) {
-              <span class="ss-error georgian-text" lang="ka">შეიყვანეთ დადებითი თანხა</span>
+              <span class="ss-error georgian-text" lang="ka">
+                {{ 'შეიყვანეთ დადებითი თანხა' | t }}
+              </span>
             }
           </label>
           <label class="ss-field">
-            <span class="ss-label georgian-text" lang="ka">ვადა (არასავალდებულო)</span>
+            <span class="ss-label georgian-text" lang="ka">
+              {{ 'ვადა (არასავალდებულო)' | t }}
+            </span>
             <input class="ss-input" formControlName="expiresAt" type="date" />
           </label>
           <label class="ss-field">
-            <span class="ss-label georgian-text" lang="ka">შენიშვნა (არასავალდებულო)</span>
+            <span class="ss-label georgian-text" lang="ka">
+              {{ 'შენიშვნა (არასავალდებულო)' | t }}
+            </span>
             <textarea class="ss-input georgian-text" lang="ka" formControlName="note"></textarea>
           </label>
           <div class="flex justify-end">
@@ -122,7 +132,7 @@
               type="submit"
               [disabled]="grantForm.invalid || grantSubmitting()"
             >
-              <span class="georgian-text" lang="ka">მინიჭება</span>
+              <span class="georgian-text" lang="ka">{{ 'მინიჭება' | t }}</span>
             </button>
           </div>
         </form>
@@ -130,13 +140,15 @@
 
       <!-- ═══════════════ BULK IMPORT ═══════════════ -->
       <section class="ss-card p-5">
-        <h2 class="text-lg font-medium mb-1 georgian-text" lang="ka">მასობრივი იმპორტი</h2>
+        <h2 class="text-lg font-medium mb-1 georgian-text" lang="ka">
+          {{ 'მასობრივი იმპორტი' | t }}
+        </h2>
         <p class="text-sm mb-4 georgian-text" lang="ka" style="color: var(--tui-text-secondary)">
-          თითო ხაზზე: ტელეფონი,თანხა (მაგ. +995555123456,50)
+          {{ 'თითო ხაზზე: ტელეფონი,თანხა (მაგ. +995555123456,50)' | t }}
         </p>
         <div class="flex flex-col gap-4">
           <label class="ss-field">
-            <span class="ss-label georgian-text" lang="ka">სია</span>
+            <span class="ss-label georgian-text" lang="ka">{{ 'სია' | t }}</span>
             <textarea
               class="ss-input"
               [formControl]="importControl"
@@ -145,7 +157,9 @@
             ></textarea>
           </label>
           <label class="ss-field">
-            <span class="ss-label georgian-text" lang="ka">ვადა (არასავალდებულო)</span>
+            <span class="ss-label georgian-text" lang="ka">
+              {{ 'ვადა (არასავალდებულო)' | t }}
+            </span>
             <input class="ss-input" [formControl]="importExpiry" type="date" />
           </label>
 
@@ -156,7 +170,7 @@
             >
               <ul class="list-disc pl-5 space-y-1">
                 @for (err of importErrors(); track err) {
-                  <li class="georgian-text" lang="ka">{{ err }}</li>
+                  <li class="georgian-text" lang="ka">{{ err | t }}</li>
                 }
               </ul>
             </div>
@@ -169,7 +183,7 @@
               [disabled]="importSubmitting()"
               (click)="submitImport()"
             >
-              <span class="georgian-text" lang="ka">იმპორტი</span>
+              <span class="georgian-text" lang="ka">{{ 'იმპორტი' | t }}</span>
             </button>
           </div>
         </div>
@@ -185,22 +199,22 @@
     } @else {
       <!-- ═══════════════ VOUCHERS TABLE ═══════════════ -->
       <section class="mb-8">
-        <h2 class="text-lg font-medium mb-3 georgian-text" lang="ka">ვაუჩერები</h2>
+        <h2 class="text-lg font-medium mb-3 georgian-text" lang="ka">{{ 'ვაუჩერები' | t }}</h2>
         @if (vouchers().length === 0) {
           <p class="py-6 georgian-text" lang="ka" style="color: var(--tui-text-secondary)">
-            ვაუჩერები არ მოიძებნა
+            {{ 'ვაუჩერები არ მოიძებნა' | t }}
           </p>
         } @else {
           <div class="ss-card overflow-x-auto">
             <table class="ss-table">
               <thead>
                 <tr>
-                  <th class="georgian-text" lang="ka">მფლობელი</th>
-                  <th class="georgian-text" lang="ka">კოდი</th>
-                  <th class="georgian-text" lang="ka">ბალანსი / საწყისი</th>
-                  <th class="georgian-text" lang="ka">ვადა</th>
-                  <th class="georgian-text" lang="ka">წყარო</th>
-                  <th class="georgian-text" lang="ka">სტატუსი</th>
+                  <th class="georgian-text" lang="ka">{{ 'მფლობელი' | t }}</th>
+                  <th class="georgian-text" lang="ka">{{ 'კოდი' | t }}</th>
+                  <th class="georgian-text" lang="ka">{{ 'ბალანსი / საწყისი' | t }}</th>
+                  <th class="georgian-text" lang="ka">{{ 'ვადა' | t }}</th>
+                  <th class="georgian-text" lang="ka">{{ 'წყარო' | t }}</th>
+                  <th class="georgian-text" lang="ka">{{ 'სტატუსი' | t }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -231,7 +245,7 @@
                 [disabled]="vouchersPage() === 1"
                 (click)="onVouchersPageChange(vouchersPage() - 1)"
               >
-                <span class="georgian-text" lang="ka">წინა</span>
+                <span class="georgian-text" lang="ka">{{ 'წინა' | t }}</span>
               </button>
               <span class="text-sm" style="color: var(--tui-text-secondary)">
                 {{ vouchersPage() }} / {{ vouchersPages() }}
@@ -242,7 +256,7 @@
                 [disabled]="vouchersPage() >= vouchersPages()"
                 (click)="onVouchersPageChange(vouchersPage() + 1)"
               >
-                <span class="georgian-text" lang="ka">შემდეგი</span>
+                <span class="georgian-text" lang="ka">{{ 'შემდეგი' | t }}</span>
               </button>
             </div>
           }
@@ -251,19 +265,21 @@
 
       <!-- ═══════════════ PENDING GRANTS TABLE ═══════════════ -->
       <section class="mb-8">
-        <h2 class="text-lg font-medium mb-3 georgian-text" lang="ka">მოლოდინში მინიჭებები</h2>
+        <h2 class="text-lg font-medium mb-3 georgian-text" lang="ka">
+          {{ 'მოლოდინში მინიჭებები' | t }}
+        </h2>
         @if (grants().length === 0) {
           <p class="py-6 georgian-text" lang="ka" style="color: var(--tui-text-secondary)">
-            მოლოდინში მინიჭებები არ არის
+            {{ 'მოლოდინში მინიჭებები არ არის' | t }}
           </p>
         } @else {
           <div class="ss-card overflow-x-auto">
             <table class="ss-table">
               <thead>
                 <tr>
-                  <th class="georgian-text" lang="ka">ტელეფონი</th>
-                  <th class="georgian-text" lang="ka">თანხა</th>
-                  <th class="georgian-text" lang="ka">შენიშვნა</th>
+                  <th class="georgian-text" lang="ka">{{ 'ტელეფონი' | t }}</th>
+                  <th class="georgian-text" lang="ka">{{ 'თანხა' | t }}</th>
+                  <th class="georgian-text" lang="ka">{{ 'შენიშვნა' | t }}</th>
                 </tr>
               </thead>
               <tbody>
@@ -291,7 +307,7 @@
                 [disabled]="grantsPage() === 1"
                 (click)="onGrantsPageChange(grantsPage() - 1)"
               >
-                <span class="georgian-text" lang="ka">წინა</span>
+                <span class="georgian-text" lang="ka">{{ 'წინა' | t }}</span>
               </button>
               <span class="text-sm" style="color: var(--tui-text-secondary)">
                 {{ grantsPage() }} / {{ grantsPages() }}
@@ -302,7 +318,7 @@
                 [disabled]="grantsPage() >= grantsPages()"
                 (click)="onGrantsPageChange(grantsPage() + 1)"
               >
-                <span class="georgian-text" lang="ka">შემდეგი</span>
+                <span class="georgian-text" lang="ka">{{ 'შემდეგი' | t }}</span>
               </button>
             </div>
           }

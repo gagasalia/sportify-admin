@@ -14,6 +14,8 @@ import { DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { Subject, debounceTime, take } from 'rxjs';
+import { tr } from '../../shared/i18n/lang';
+import { TPipe } from '../../shared/i18n/t.pipe';
 import { CustomersService } from '../../services/http-services/customers.service';
 import { AcademyService } from '../../services/http-services/academy.service';
 import { AuthService } from '../../shared/services/auth.service';
@@ -35,7 +37,7 @@ const PAGE_SIZE = 20;
 @Component({
   selector: 'app-customers',
   standalone: true,
-  imports: [DatePipe, FormsModule, SsAvatarComponent, AcademySelectComponent],
+  imports: [DatePipe, FormsModule, SsAvatarComponent, AcademySelectComponent, TPipe],
   templateUrl: './customers.component.html',
   styleUrl: './customers.component.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -158,7 +160,7 @@ export class CustomersComponent implements OnInit {
   protected fullName(row: CustomerRow): string {
     const parts = [row.firstName, row.lastName].filter(Boolean);
     if (parts.length > 0) return parts.join(' ');
-    return row.email ?? 'წაშლილი ანგარიში';
+    return row.email ?? tr('წაშლილი ანგარიში');
   }
 
   protected initials(row: CustomerRow): string {

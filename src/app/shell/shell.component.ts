@@ -1,6 +1,9 @@
 import { ChangeDetectionStrategy, Component, HostListener, inject, signal } from '@angular/core';
 import { Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
 import { take } from 'rxjs';
+import { I18nService } from '../shared/i18n/i18n.service';
+import { tr } from '../shared/i18n/lang';
+import { TPipe } from '../shared/i18n/t.pipe';
 import { AuthService } from '../shared/services/auth.service';
 import { TenantService } from '../shared/services/tenant.service';
 import { SsConfirmComponent, SsConfirmData } from '../shared/ui/confirm.component';
@@ -21,7 +24,7 @@ import { SsThemeService } from '../shared/ui/theme.service';
 @Component({
   selector: 'app-shell',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive],
+  imports: [RouterOutlet, RouterLink, RouterLinkActive, TPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.css',
@@ -32,8 +35,10 @@ export class ShellComponent {
   private readonly router = inject(Router);
   private readonly theme = inject(SsThemeService);
   private readonly dialogs = inject(SsDialogService);
+  private readonly i18n = inject(I18nService);
 
   protected readonly darkMode = this.theme.dark;
+  protected readonly isEnglish = this.i18n.isEnglish;
   protected readonly isSuperAdmin = this.auth.isSuperAdmin;
   protected expanded = signal(true);
   protected isMobile = signal(false);
@@ -90,14 +95,18 @@ export class ShellComponent {
     this.theme.toggle();
   }
 
+  protected toggleLang(): void {
+    this.i18n.toggle();
+  }
+
   protected signOut(): void {
     const data: SsConfirmData = {
-      content: 'ნამდვილად გსურთ სისტემიდან გასვლა?',
-      yes: 'გასვლა',
-      no: 'გაუქმება',
+      content: tr('ნამდვილად გსურთ სისტემიდან გასვლა?'),
+      yes: tr('გასვლა'),
+      no: tr('გაუქმება'),
     };
     this.dialogs
-      .open<boolean>(SsConfirmComponent, { label: 'გასვლა', size: 's', data })
+      .open<boolean>(SsConfirmComponent, { label: tr('გასვლა'), size: 's', data })
       .pipe(take(1))
       .subscribe((confirmed) => {
         if (!confirmed) {

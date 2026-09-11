@@ -3,7 +3,7 @@
     <!-- Email -->
     <label class="ss-field">
       <span class="ss-label georgian-text" lang="ka">
-        ელ. ფოსტა <span class="text-red-500">*</span>
+        {{ 'ელ. ფოსტა' | t }} <span class="text-red-500">*</span>
       </span>
       <input
         class="ss-input"
@@ -12,14 +12,14 @@
         formControlName="email"
       />
       @if (userForm.get('email')?.touched && userForm.get('email')?.hasError('email')) {
-        <span class="ss-error georgian-text" lang="ka">არასწორი ელ. ფოსტის ფორმატი</span>
+        <span class="ss-error georgian-text" lang="ka">{{ 'არასწორი ელ. ფოსტის ფორმატი' | t }}</span>
       }
     </label>
 
     <!-- Password -->
     <label class="ss-field">
       <span class="ss-label georgian-text" lang="ka">
-        პაროლი
+        {{ 'პაროლი' | t }}
         @if (!isEditMode) {
           <span class="text-red-500">*</span>
         }
@@ -27,7 +27,7 @@
       <input class="ss-input" type="password" formControlName="password" />
       @if (isEditMode) {
         <span class="text-xs georgian-text" lang="ka" style="color: var(--tui-text-secondary)">
-          დატოვეთ ცარიელი თუ არ გსურთ შეცვლა
+          {{ 'დატოვეთ ცარიელი თუ არ გსურთ შეცვლა' | t }}
         </span>
       }
     </label>
@@ -35,11 +35,11 @@
     <!-- First Name & Last Name -->
     <div class="grid grid-cols-2 gap-4">
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">სახელი</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'სახელი' | t }}</span>
         <input class="ss-input georgian-text" lang="ka" formControlName="firstName" />
       </label>
       <label class="ss-field">
-        <span class="ss-label georgian-text" lang="ka">გვარი</span>
+        <span class="ss-label georgian-text" lang="ka">{{ 'გვარი' | t }}</span>
         <input class="ss-input georgian-text" lang="ka" formControlName="lastName" />
       </label>
     </div>
@@ -48,7 +48,7 @@
     @if (isAdminAccount) {
       <label class="ss-field">
         <span class="ss-label georgian-text" lang="ka">
-          მომხმარებლის სახელი <span class="text-red-500">*</span>
+          {{ 'მომხმარებლის სახელი' | t }} <span class="text-red-500">*</span>
         </span>
         <input
           class="ss-input"
@@ -60,21 +60,23 @@
           placeholder="admin.name"
         />
         @if (userForm.get('username')?.touched && userForm.get('username')?.hasError('required')) {
-          <span class="ss-error georgian-text" lang="ka">მომხმარებლის სახელი სავალდებულოა</span>
+          <span class="ss-error georgian-text" lang="ka">{{
+            'მომხმარებლის სახელი სავალდებულოა' | t
+          }}</span>
         }
         @if (userForm.get('username')?.touched && userForm.get('username')?.hasError('pattern')) {
           <span class="ss-error georgian-text" lang="ka">
-            3-32 სიმბოლო: ლათინური ასოები, ციფრები, წერტილი, ტირე ან ქვედა ტირე
+            {{ '3-32 სიმბოლო: ლათინური ასოები, ციფრები, წერტილი, ტირე ან ქვედა ტირე' | t }}
           </span>
         }
         <span class="text-xs georgian-text" lang="ka" style="color: var(--tui-text-secondary)">
-          ადმინის ანგარიშს ტელეფონის ნომერი არ აქვს — შესვლა ხდება მომხმარებლის სახელით
+          {{ 'ადმინის ანგარიშს ტელეფონის ნომერი არ აქვს — შესვლა ხდება მომხმარებლის სახელით' | t }}
         </span>
       </label>
     } @else {
       <label class="ss-field">
         <span class="ss-label georgian-text" lang="ka">
-          ტელეფონი <span class="text-red-500">*</span>
+          {{ 'ტელეფონი' | t }} <span class="text-red-500">*</span>
         </span>
         <input
           class="ss-input"
@@ -85,11 +87,13 @@
           placeholder="+9955XXXXXXXX"
         />
         @if (userForm.get('phone')?.touched && userForm.get('phone')?.hasError('required')) {
-          <span class="ss-error georgian-text" lang="ka">ტელეფონის ნომერი სავალდებულოა</span>
+          <span class="ss-error georgian-text" lang="ka">{{
+            'ტელეფონის ნომერი სავალდებულოა' | t
+          }}</span>
         }
         @if (userForm.get('phone')?.touched && userForm.get('phone')?.hasError('pattern')) {
           <span class="ss-error georgian-text" lang="ka">
-            ნომერი უნდა იწყებოდეს 5-ით და იყოს 9 ციფრი
+            {{ 'ნომერი უნდა იწყებოდეს 5-ით და იყოს 9 ციფრი' | t }}
           </span>
         }
       </label>
@@ -97,7 +101,7 @@
 
     <!-- PID -->
     <label class="ss-field">
-      <span class="ss-label georgian-text" lang="ka">პირადი ნომერი</span>
+      <span class="ss-label georgian-text" lang="ka">{{ 'პირადი ნომერი' | t }}</span>
       <input
         class="ss-input"
         formControlName="pid"
@@ -105,19 +109,23 @@
         placeholder="XXXXXXXXXXX"
       />
       @if (userForm.get('pid')?.touched && userForm.get('pid')?.hasError('pattern')) {
-        <span class="ss-error georgian-text" lang="ka">პირადი ნომერი უნდა იყოს 11 ციფრი</span>
+        <span class="ss-error georgian-text" lang="ka">{{
+          'პირადი ნომერი უნდა იყოს 11 ციფრი' | t
+        }}</span>
       }
     </label>
 
     <!-- Date of Birth -->
     <label class="ss-field">
-      <span class="ss-label georgian-text" lang="ka">დაბადების თარიღი</span>
+      <span class="ss-label georgian-text" lang="ka">{{ 'დაბადების თარიღი' | t }}</span>
       <input class="ss-input" type="date" formControlName="dateOfBirth" />
     </label>
 
     <!-- User Type (multi-select — a user can hold several roles) -->
     <div class="ss-field">
-      <span class="ss-label georgian-text" lang="ka">როლი <span class="text-red-500">*</span></span>
+      <span class="ss-label georgian-text" lang="ka"
+        >{{ 'როლი' | t }} <span class="text-red-500">*</span></span
+      >
       <div class="flex flex-wrap gap-3 mt-1">
         @for (type of userTypes; track type) {
           <label class="flex items-center gap-2 cursor-pointer">
@@ -132,17 +140,19 @@
         }
       </div>
       @if (userForm.get('userType')?.touched && userForm.get('userType')?.hasError('required')) {
-        <span class="ss-error georgian-text" lang="ka">როლი სავალდებულოა</span>
+        <span class="ss-error georgian-text" lang="ka">{{ 'როლი სავალდებულოა' | t }}</span>
       }
     </div>
 
     <!-- Action Buttons -->
     <div class="flex justify-end gap-2 mt-6">
       <button class="ss-btn ss-btn--flat" type="button" (click)="onCancel()">
-        <span class="georgian-text" lang="ka">გაუქმება</span>
+        <span class="georgian-text" lang="ka">{{ 'გაუქმება' | t }}</span>
       </button>
       <button class="ss-btn ss-btn--primary" type="submit" [disabled]="!userForm.valid">
-        <span class="georgian-text" lang="ka">{{ isEditMode ? 'განახლება' : 'დამატება' }}</span>
+        <span class="georgian-text" lang="ka">{{
+          (isEditMode ? 'განახლება' : 'დამატება') | t
+        }}</span>
       </button>
     </div>
   </form>

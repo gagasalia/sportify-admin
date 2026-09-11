@@ -9,6 +9,45 @@
 
   <div class="shell-spacer"></div>
 
+  <!-- Language Toggle: GE / UK flag slider, same control as the webapp header -->
+  <button
+    type="button"
+    class="toggle lang"
+    [class.on]="isEnglish()"
+    [attr.aria-pressed]="isEnglish()"
+    (click)="toggleLang()"
+    [attr.aria-label]="'ენის გადართვა' | t"
+    data-testid="lang-toggle"
+  >
+    <span class="knob"></span>
+    <span class="t-ic left" aria-hidden="true">
+      <svg class="flag" viewBox="0 0 20 14" aria-hidden="true">
+        <rect width="20" height="14" rx="2" fill="#ffffff" />
+        <path d="M8.6 0h2.8v14H8.6zM0 5.6h20v2.8H0z" fill="#e8112d" />
+        <path
+          d="M4 1.9h0.8v2.4H4zM2.8 3h3.2v0.8H2.8zM15.2 1.9h0.8v2.4h-0.8zM14 3h3.2v0.8H14zM4 9.7h0.8v2.4H4zM2.8 10.8h3.2v0.8H2.8zM15.2 9.7h0.8v2.4h-0.8zM14 10.8h3.2v0.8H14z"
+          fill="#e8112d"
+        />
+      </svg>
+    </span>
+    <span class="t-ic right" aria-hidden="true">
+      <svg class="flag" viewBox="0 0 20 14" aria-hidden="true">
+        <defs>
+          <clipPath id="ukm">
+            <rect width="20" height="14" rx="2" />
+          </clipPath>
+        </defs>
+        <g clip-path="url(#ukm)">
+          <rect width="20" height="14" fill="#012169" />
+          <path d="M0 0l20 14M20 0L0 14" stroke="#ffffff" stroke-width="2.8" />
+          <path d="M0 0l20 14M20 0L0 14" stroke="#c8102e" stroke-width="1.2" />
+          <path d="M10 0v14M0 7h20" stroke="#ffffff" stroke-width="4.6" />
+          <path d="M10 0v14M0 7h20" stroke="#c8102e" stroke-width="2.8" />
+        </g>
+      </svg>
+    </span>
+  </button>
+
   <!-- Dark Mode Toggle -->
   <button
     class="ss-icon-btn"
@@ -28,8 +67,8 @@
     class="ss-icon-btn"
     type="button"
     (click)="signOut()"
-    aria-label="გასვლა"
-    title="გასვლა"
+    [attr.aria-label]="'გასვლა' | t"
+    [title]="'გასვლა' | t"
   >
     <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/log-out.svg')"></i>
   </button>
@@ -48,7 +87,7 @@
             (click)="toggleConfig()"
           >
             <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/settings.svg')"></i>
-            <span lang="ka" class="georgian-text aside-label">კონფიგურაცია</span>
+            <span lang="ka" class="georgian-text aside-label">{{ 'კონფიგურაცია' | t }}</span>
             <i
               class="ss-ic aside-caret"
               [class.is-open]="configOpen()"
@@ -62,7 +101,7 @@
               routerLinkActive="is-active"
             >
               <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/landmark.svg')"></i>
-              <span lang="ka" class="georgian-text aside-label">აკადემია</span>
+              <span lang="ka" class="georgian-text aside-label">{{ 'აკადემია' | t }}</span>
             </a>
             <a
               class="aside-item aside-sub"
@@ -70,7 +109,7 @@
               routerLinkActive="is-active"
             >
               <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/map-pin.svg')"></i>
-              <span lang="ka" class="georgian-text aside-label">ობიექტები</span>
+              <span lang="ka" class="georgian-text aside-label">{{ 'ობიექტები' | t }}</span>
             </a>
             <a
               class="aside-item aside-sub"
@@ -81,7 +120,7 @@
                 class="ss-ic aside-ic"
                 style="--ss-ic: url('assets/taiga-ui/icons/table-cells-merge.svg')"
               ></i>
-              <span lang="ka" class="georgian-text aside-label">კორტები</span>
+              <span lang="ka" class="georgian-text aside-label">{{ 'კორტები' | t }}</span>
             </a>
             <a
               class="aside-item aside-sub"
@@ -89,7 +128,7 @@
               routerLinkActive="is-active"
             >
               <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/clock.svg')"></i>
-              <span lang="ka" class="georgian-text aside-label">საათები და ფასები</span>
+              <span lang="ka" class="georgian-text aside-label">{{ 'საათები და ფასები' | t }}</span>
             </a>
           }
         </div>
@@ -105,7 +144,7 @@
               class="ss-ic aside-ic"
               style="--ss-ic: url('assets/taiga-ui/icons/calendar-check.svg')"
             ></i>
-            <span lang="ka" class="georgian-text aside-label">ჯავშნები</span>
+            <span lang="ka" class="georgian-text aside-label">{{ 'ჯავშნები' | t }}</span>
           </a>
           <a
             automation-id="vouchers"
@@ -114,7 +153,7 @@
             routerLinkActive="is-active"
           >
             <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/ticket.svg')"></i>
-            <span lang="ka" class="georgian-text aside-label">ვაუჩერები</span>
+            <span lang="ka" class="georgian-text aside-label">{{ 'ვაუჩერები' | t }}</span>
           </a>
           <a
             automation-id="promocodes"
@@ -123,7 +162,7 @@
             routerLinkActive="is-active"
           >
             <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/percent.svg')"></i>
-            <span lang="ka" class="georgian-text aside-label">პრომოკოდები</span>
+            <span lang="ka" class="georgian-text aside-label">{{ 'პრომოკოდები' | t }}</span>
           </a>
           <a
             automation-id="campaigns"
@@ -132,7 +171,7 @@
             routerLinkActive="is-active"
           >
             <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/rocket.svg')"></i>
-            <span lang="ka" class="georgian-text aside-label">კამპანიები</span>
+            <span lang="ka" class="georgian-text aside-label">{{ 'კამპანიები' | t }}</span>
           </a>
           <a
             automation-id="tournaments"
@@ -141,7 +180,7 @@
             routerLinkActive="is-active"
           >
             <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/trophy.svg')"></i>
-            <span lang="ka" class="georgian-text aside-label">ტურნირები</span>
+            <span lang="ka" class="georgian-text aside-label">{{ 'ტურნირები' | t }}</span>
           </a>
           <a
             automation-id="matches"
@@ -150,7 +189,7 @@
             routerLinkActive="is-active"
           >
             <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/users.svg')"></i>
-            <span lang="ka" class="georgian-text aside-label">თამაშები</span>
+            <span lang="ka" class="georgian-text aside-label">{{ 'თამაშები' | t }}</span>
           </a>
           <a
             automation-id="statistics"
@@ -162,7 +201,7 @@
               class="ss-ic aside-ic"
               style="--ss-ic: url('assets/taiga-ui/icons/chart-column.svg')"
             ></i>
-            <span lang="ka" class="georgian-text aside-label">სტატისტიკა</span>
+            <span lang="ka" class="georgian-text aside-label">{{ 'სტატისტიკა' | t }}</span>
           </a>
           <a
             automation-id="customers"
@@ -174,7 +213,7 @@
               class="ss-ic aside-ic"
               style="--ss-ic: url('assets/taiga-ui/icons/user-round.svg')"
             ></i>
-            <span lang="ka" class="georgian-text aside-label">მომხმარებლები</span>
+            <span lang="ka" class="georgian-text aside-label">{{ 'მომხმარებლები' | t }}</span>
           </a>
         </div>
 
@@ -204,7 +243,7 @@
                   class="ss-ic aside-ic"
                   style="--ss-ic: url('assets/taiga-ui/icons/building-2.svg')"
                 ></i>
-                <span lang="ka" class="georgian-text aside-label">აკადემიების მართვა</span>
+                <span lang="ka" class="georgian-text aside-label">{{ 'აკადემიების მართვა' | t }}</span>
               </a>
               <a
                 class="aside-item aside-sub"
@@ -212,7 +251,7 @@
                 routerLinkActive="is-active"
               >
                 <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/users.svg')"></i>
-                <span lang="ka" class="georgian-text aside-label">იუზერები</span>
+                <span lang="ka" class="georgian-text aside-label">{{ 'იუზერები' | t }}</span>
               </a>
             }
           </div>
@@ -233,7 +272,7 @@
             ></i>
           }
           <span lang="ka" class="georgian-text aside-label">
-            {{ expanded() ? 'დახურვა' : 'გაფართოება' }}
+            {{ (expanded() ? 'დახურვა' : 'გაფართოება') | t }}
           </span>
         </button>
       </footer>
@@ -264,7 +303,7 @@
         (click)="closeSheets()"
       >
         <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/landmark.svg')"></i>
-        <span lang="ka" class="georgian-text">აკადემია</span>
+        <span lang="ka" class="georgian-text">{{ 'აკადემია' | t }}</span>
       </a>
       <a
         class="sheet-item"
@@ -273,7 +312,7 @@
         (click)="closeSheets()"
       >
         <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/map-pin.svg')"></i>
-        <span lang="ka" class="georgian-text">ობიექტები</span>
+        <span lang="ka" class="georgian-text">{{ 'ობიექტები' | t }}</span>
       </a>
       <a
         class="sheet-item"
@@ -285,7 +324,7 @@
           class="ss-ic aside-ic"
           style="--ss-ic: url('assets/taiga-ui/icons/table-cells-merge.svg')"
         ></i>
-        <span lang="ka" class="georgian-text">კორტები</span>
+        <span lang="ka" class="georgian-text">{{ 'კორტები' | t }}</span>
       </a>
       <a
         class="sheet-item"
@@ -294,7 +333,7 @@
         (click)="closeSheets()"
       >
         <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/clock.svg')"></i>
-        <span lang="ka" class="georgian-text">საათები და ფასები</span>
+        <span lang="ka" class="georgian-text">{{ 'საათები და ფასები' | t }}</span>
       </a>
     </div>
   }
@@ -308,7 +347,7 @@
         (click)="closeSheets()"
       >
         <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/building-2.svg')"></i>
-        <span lang="ka" class="georgian-text">აკადემიების მართვა</span>
+        <span lang="ka" class="georgian-text">{{ 'აკადემიების მართვა' | t }}</span>
       </a>
       <a
         class="sheet-item"
@@ -317,7 +356,7 @@
         (click)="closeSheets()"
       >
         <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/users.svg')"></i>
-        <span lang="ka" class="georgian-text">იუზერები</span>
+        <span lang="ka" class="georgian-text">{{ 'იუზერები' | t }}</span>
       </a>
     </div>
   }
@@ -330,39 +369,39 @@
       (click)="toggleConfigDropdown()"
     >
       <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/settings.svg')"></i>
-      <span lang="ka" class="georgian-text">კონფიგ.</span>
+      <span lang="ka" class="georgian-text">{{ 'კონფიგ.' | t }}</span>
     </button>
     <a class="tab-item" routerLink="/reservations" routerLinkActive="is-active">
       <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/calendar-check.svg')"></i>
-      <span lang="ka" class="georgian-text">ჯავშნები</span>
+      <span lang="ka" class="georgian-text">{{ 'ჯავშნები' | t }}</span>
     </a>
     <a class="tab-item" routerLink="/vouchers" routerLinkActive="is-active">
       <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/ticket.svg')"></i>
-      <span lang="ka" class="georgian-text">ვაუჩერები</span>
+      <span lang="ka" class="georgian-text">{{ 'ვაუჩერები' | t }}</span>
     </a>
     <a class="tab-item" routerLink="/promocodes" routerLinkActive="is-active">
       <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/percent.svg')"></i>
-      <span lang="ka" class="georgian-text">პრომო</span>
+      <span lang="ka" class="georgian-text">{{ 'პრომო' | t }}</span>
     </a>
     <a class="tab-item" routerLink="/campaigns" routerLinkActive="is-active">
       <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/rocket.svg')"></i>
-      <span lang="ka" class="georgian-text">კამპან.</span>
+      <span lang="ka" class="georgian-text">{{ 'კამპან.' | t }}</span>
     </a>
     <a class="tab-item" routerLink="/tournaments" routerLinkActive="is-active">
       <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/trophy.svg')"></i>
-      <span lang="ka" class="georgian-text">ტურნირები</span>
+      <span lang="ka" class="georgian-text">{{ 'ტურნირები' | t }}</span>
     </a>
     <a class="tab-item" routerLink="/matches" routerLinkActive="is-active">
       <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/users.svg')"></i>
-      <span lang="ka" class="georgian-text">თამაშები</span>
+      <span lang="ka" class="georgian-text">{{ 'თამაშები' | t }}</span>
     </a>
     <a class="tab-item" routerLink="/statistics" routerLinkActive="is-active">
       <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/chart-column.svg')"></i>
-      <span lang="ka" class="georgian-text">სტატ.</span>
+      <span lang="ka" class="georgian-text">{{ 'სტატ.' | t }}</span>
     </a>
     <a class="tab-item" routerLink="/customers" routerLinkActive="is-active">
       <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/user-round.svg')"></i>
-      <span lang="ka" class="georgian-text">მომხმ.</span>
+      <span lang="ka" class="georgian-text">{{ 'მომხმ.' | t }}</span>
     </a>
     @if (isSuperAdmin()) {
       <button

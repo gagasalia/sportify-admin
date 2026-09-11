@@ -2,6 +2,45 @@
   <div class="auth-orb" aria-hidden="true"></div>
   <div class="auth-ring" aria-hidden="true"></div>
 
+  <!-- Language toggle — pre-auth page renders outside the shell, so it carries its own -->
+  <button
+    type="button"
+    class="toggle lang auth-lang"
+    [class.on]="isEnglish()"
+    [attr.aria-pressed]="isEnglish()"
+    (click)="toggleLang()"
+    [attr.aria-label]="'ენის გადართვა' | t"
+    data-testid="lang-toggle"
+  >
+    <span class="knob"></span>
+    <span class="t-ic left" aria-hidden="true">
+      <svg class="flag" viewBox="0 0 20 14" aria-hidden="true">
+        <rect width="20" height="14" rx="2" fill="#ffffff" />
+        <path d="M8.6 0h2.8v14H8.6zM0 5.6h20v2.8H0z" fill="#e8112d" />
+        <path
+          d="M4 1.9h0.8v2.4H4zM2.8 3h3.2v0.8H2.8zM15.2 1.9h0.8v2.4h-0.8zM14 3h3.2v0.8H14zM4 9.7h0.8v2.4H4zM2.8 10.8h3.2v0.8H2.8zM15.2 9.7h0.8v2.4h-0.8zM14 10.8h3.2v0.8H14z"
+          fill="#e8112d"
+        />
+      </svg>
+    </span>
+    <span class="t-ic right" aria-hidden="true">
+      <svg class="flag" viewBox="0 0 20 14" aria-hidden="true">
+        <defs>
+          <clipPath id="ukml">
+            <rect width="20" height="14" rx="2" />
+          </clipPath>
+        </defs>
+        <g clip-path="url(#ukml)">
+          <rect width="20" height="14" fill="#012169" />
+          <path d="M0 0l20 14M20 0L0 14" stroke="#ffffff" stroke-width="2.8" />
+          <path d="M0 0l20 14M20 0L0 14" stroke="#c8102e" stroke-width="1.2" />
+          <path d="M10 0v14M0 7h20" stroke="#ffffff" stroke-width="4.6" />
+          <path d="M10 0v14M0 7h20" stroke="#c8102e" stroke-width="2.8" />
+        </g>
+      </svg>
+    </span>
+  </button>
+
   <div class="auth-card">
     <div class="auth-brand">
       <span class="auth-brand-dot" aria-hidden="true">
@@ -11,14 +50,14 @@
       <span class="auth-brand-admin">Admin</span>
     </div>
 
-    <h1 class="auth-title georgian-text" lang="ka">ავტორიზაცია</h1>
-    <p class="auth-sub georgian-text" lang="ka">შედი მართვის პანელში</p>
+    <h1 class="auth-title georgian-text" lang="ka">{{ 'ავტორიზაცია' | t }}</h1>
+    <p class="auth-sub georgian-text" lang="ka">{{ 'შედი მართვის პანელში' | t }}</p>
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-4">
       <!-- Username -->
       <label class="ss-field">
         <span class="ss-label georgian-text" lang="ka">
-          მომხმარებლის სახელი <span class="auth-req">*</span>
+          {{ 'მომხმარებლის სახელი' | t }} <span class="auth-req">*</span>
         </span>
         <input
           class="ss-input"
@@ -30,14 +69,16 @@
           autocomplete="username"
         />
         @if (loginForm.get('username')?.touched && loginForm.get('username')?.hasError('required')) {
-          <span class="ss-error georgian-text" lang="ka">მომხმარებლის სახელი სავალდებულოა</span>
+          <span class="ss-error georgian-text" lang="ka">{{
+            'მომხმარებლის სახელი სავალდებულოა' | t
+          }}</span>
         }
       </label>
 
       <!-- Password -->
       <label class="ss-field">
         <span class="ss-label georgian-text" lang="ka">
-          პაროლი <span class="auth-req">*</span>
+          {{ 'პაროლი' | t }} <span class="auth-req">*</span>
         </span>
         <input
           class="ss-input"
@@ -47,14 +88,14 @@
           autocomplete="current-password"
         />
         @if (loginForm.get('password')?.touched && loginForm.get('password')?.hasError('required')) {
-          <span class="ss-error georgian-text" lang="ka">პაროლი სავალდებულოა</span>
+          <span class="ss-error georgian-text" lang="ka">{{ 'პაროლი სავალდებულოა' | t }}</span>
         }
       </label>
 
-      <!-- Server error (e.g. 401 wrong credentials) -->
+      <!-- Server error (e.g. 401 wrong credentials); stored raw-Georgian, translated at render -->
       @if (loginError()) {
         <div class="auth-error georgian-text" lang="ka" data-testid="login-error">
-          {{ loginError() }}
+          {{ loginError()! | t }}
         </div>
       }
 
@@ -63,7 +104,9 @@
         type="submit"
         [disabled]="isSubmitting()"
       >
-        <span class="georgian-text" lang="ka">{{ isSubmitting() ? 'იტვირთება...' : 'შესვლა' }}</span>
+        <span class="georgian-text" lang="ka">{{
+          (isSubmitting() ? 'იტვირთება...' : 'შესვლა') | t
+        }}</span>
       </button>
     </form>
   </div>

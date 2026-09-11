@@ -17,31 +17,33 @@ import {
 import { Facility } from '../../../shared/models/facility.model';
 import { gelToTetri, tetriToGel } from '../../../shared/utils/money.util';
 
+import { liveLabels, tr } from '../../../shared/i18n/lang';
+import { TPipe } from '../../../shared/i18n/t.pipe';
 import { SsToastService } from '../../../shared/ui/toast.service';
 import { SS_DIALOG_CONTEXT, SsDialogContext } from '../../../shared/ui/dialog.service';
-export const TYPE_LABELS: Record<TournamentType, string> = {
+export const TYPE_LABELS: Record<TournamentType, string> = liveLabels({
   singles: 'სინგლები',
   doubles: 'წყვილები',
-};
-export const FORMAT_LABELS: Record<TournamentFormat, string> = {
+});
+export const FORMAT_LABELS: Record<TournamentFormat, string> = liveLabels({
   knockout: 'ნოკაუტი',
   round_robin: 'წრიული',
   groups_playoffs: 'ჯგუფები + პლეიოფი',
   championship: 'ჩემპიონატი',
   americano: 'ამერიკანო',
   mexicano: 'მექსიკანო',
-};
-export const LEVEL_LABELS: Record<TournamentLevel, string> = {
+});
+export const LEVEL_LABELS: Record<TournamentLevel, string> = liveLabels({
   any: 'ნებისმიერი',
   beginner: 'დამწყები',
   intermediate: 'საშუალო',
   advanced: 'გამოცდილი',
-};
-export const CATEGORY_LABELS: Record<TournamentCategory, string> = {
+});
+export const CATEGORY_LABELS: Record<TournamentCategory, string> = liveLabels({
   men: 'კაცები',
   women: 'ქალები',
   mixed: 'შერეული',
-};
+});
 
 /** ISO instant → value for `<input type="datetime-local">` (local wall clock). */
 function isoToLocalInput(iso: string | undefined): string {
@@ -65,7 +67,7 @@ function isoToLocalInput(iso: string | undefined): string {
 @Component({
   selector: 'app-tournament-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TPipe],
   templateUrl: './tournament-form.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -228,8 +230,8 @@ export class TournamentFormComponent implements OnInit {
         this.isSaving.set(false);
         const message =
           err.status === 400
-            ? 'შეამოწმე ველები — მოთხოვნა ვერ დამუშავდა'
-            : 'შენახვა ვერ მოხერხდა, სცადეთ თავიდან';
+            ? tr('შეამოწმე ველები — მოთხოვნა ვერ დამუშავდა')
+            : tr('შენახვა ვერ მოხერხდა, სცადეთ თავიდან');
         this.alerts.open(message, { appearance: 'negative' }).pipe(take(1)).subscribe();
       },
     });

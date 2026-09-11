@@ -13,13 +13,15 @@ import { TenantService } from '../../../shared/services/tenant.service';
 import { Facility } from '../../../shared/models/facility.model';
 import { FacilityFormComponent } from './facility-form/facility-form.component';
 import { FacilityCardComponent } from './facility-card/facility-card.component';
+import { tr } from '../../../shared/i18n/lang';
+import { TPipe } from '../../../shared/i18n/t.pipe';
 
 import { SsToastService } from '../../../shared/ui/toast.service';
 import { SsDialogService } from '../../../shared/ui/dialog.service';
 @Component({
   selector: 'app-facilities',
   standalone: true,
-  imports: [FacilityCardComponent],
+  imports: [FacilityCardComponent, TPipe],
   templateUrl: './facilities.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -51,7 +53,7 @@ export class FacilitiesComponent implements OnInit {
   addFacility(): void {
     this.dialogs
       .open(FacilityFormComponent, {
-        label: 'ობიექტის დამატება',
+        label: tr('ობიექტის დამატება'),
         size: 'l',
         dismissible: true,
         closable: true,
@@ -83,7 +85,7 @@ export class FacilitiesComponent implements OnInit {
   onEditFacility(facility: Facility): void {
     this.dialogs
       .open(FacilityFormComponent, {
-        label: 'რედაქტირება',
+        label: tr('რედაქტირება'),
         size: 'l',
         dismissible: true,
         closable: true,
@@ -134,11 +136,11 @@ export class FacilitiesComponent implements OnInit {
       .subscribe({
         next: () => {
           this.facilities.update((list) => list.filter((f) => this.facilityId(f) !== facilityId));
-          this.alerts.open('ობიექტი წარმატებით წაიშალა', { appearance: 'success' }).subscribe();
+          this.alerts.open(tr('ობიექტი წარმატებით წაიშალა'), { appearance: 'success' }).subscribe();
         },
         error: (error) => {
           console.error('Error deleting facility:', error);
-          this.alerts.open('წაშლის დროს მოხდა შეცდომა', { appearance: 'error' }).subscribe();
+          this.alerts.open(tr('წაშლის დროს მოხდა შეცდომა'), { appearance: 'error' }).subscribe();
         },
       });
   }
