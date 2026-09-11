@@ -33,6 +33,7 @@ import {
 } from '../../shared/models/stats.model';
 import { SPORT_TYPE_LABELS, SportType } from '../../shared/enums/court-type.enum';
 import { isEnglish, liveLabels, tr } from '../../shared/i18n/lang';
+import { localizedCourtName, localizedName } from '../../shared/i18n/localized';
 import { TPipe } from '../../shared/i18n/t.pipe';
 import { downloadCsv } from '../../shared/utils/csv.util';
 import { KpiCardComponent } from './charts/kpi-card.component';
@@ -357,6 +358,28 @@ export class StatisticsComponent implements OnInit {
     return court._id ?? court.id ?? '';
   }
 
+  /** Occupancy rows carry a `courtName` / `courtNameEn` snapshot pair. */
+  readonly localizedCourtName = localizedCourtName;
+
+  /** Facility / court name for a filter option — English when the operator set one. */
+  facilityLabel(facility: Facility): string {
+    return localizedName(facility);
+  }
+
+  courtLabel(court: Court): string {
+    return localizedName(court);
+  }
+
+  /**
+   * Statistics rows carry a Georgian `facilityName` snapshot only, so an English
+   * session resolves the name through the loaded facility list (by id) and keeps
+   * the snapshot as the fallback for facilities that are gone.
+   */
+  facilityLabelById(facilityId: string, fallback: string): string {
+    const match = this.facilities().find((f) => this.facilityIdOf(f) === facilityId);
+    return (match && localizedName(match)) || fallback;
+  }
+
   // ── formatting ─────────────────────────────────────────────────────────────
   gel(tetri: number | null | undefined): string {
     if (tetri == null) {
@@ -409,7 +432,7 @@ export class StatisticsComponent implements OnInit {
   readonly revenueByFacility = computed<BarRow[]>(
     () =>
       this.revenue()?.byFacility.map((f) => ({
-        label: f.facilityName,
+        label: this.facilityLabelById(f.facilityId, f.facilityName),
         value: f.netTetri,
         display: this.gel(f.netTetri),
       })) ?? [],
@@ -436,7 +459,7 @@ export class StatisticsComponent implements OnInit {
   readonly occupancyByFacility = computed<BarRow[]>(
     () =>
       this.occupancy()?.facilities.map((f) => ({
-        label: f.facilityName,
+        label: this.facilityLabelById(f.facilityId, f.facilityName),
         value: f.occupancy ?? 0,
         display: this.pct(f.occupancy),
       })) ?? [],
@@ -519,8 +542,8 @@ export class StatisticsComponent implements OnInit {
         downloadCsv(
           `occupancy_${range}`,
           data.courts.map((c) => ({
-            facility: c.facilityName,
-            court: c.courtName,
+            facility: this.facilityLabelById(c.facilityId, c.facilityName),
+            court: localizedCourtName(c),
             sport: c.sportType,
             bookedMinutes: c.bookedMinutes,
             blockedMinutes: c.blockedMinutes,

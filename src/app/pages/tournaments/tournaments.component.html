@@ -38,9 +38,9 @@
             @for (t of tournaments(); track t._id) {
               <tr>
                 <td>
-                  <div class="font-medium">{{ t.name }}</div>
+                  <div class="font-medium">{{ tournamentLabel(t) }}</div>
                   <div class="text-xs" style="color: var(--tui-text-secondary)">
-                    {{ t.facilityName }} @if (t.city) { · {{ t.city }} }
+                    {{ facilityLabel(t) }} @if (t.city) { · {{ t.city }} }
                   </div>
                 </td>
                 <td class="text-sm whitespace-nowrap">
@@ -151,9 +151,9 @@
           <div class="ss-card p-4">
             <div class="flex items-start justify-between gap-2 mb-2">
               <div class="min-w-0">
-                <h3 class="font-semibold truncate">{{ t.name }}</h3>
+                <h3 class="font-semibold truncate">{{ tournamentLabel(t) }}</h3>
                 <p class="text-sm truncate" style="color: var(--tui-text-secondary)">
-                  {{ t.facilityName }} · {{ t.startDate }} {{ t.startTime }}
+                  {{ facilityLabel(t) }} · {{ t.startDate }} {{ t.startTime }}
                 </p>
               </div>
               <span

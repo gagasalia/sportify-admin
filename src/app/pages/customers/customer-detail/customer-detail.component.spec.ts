@@ -8,6 +8,7 @@ import { CustomerDetailComponent } from './customer-detail.component';
 import { TPipe } from '../../../shared/i18n/t.pipe';
 import { CustomersService } from '../../../services/http-services/customers.service';
 import { AuthService } from '../../../shared/services/auth.service';
+import { FacilityNamesService } from '../../../shared/i18n/facility-names.service';
 import { SsDialogService } from '../../../shared/ui/dialog.service';
 import { SsToastService } from '../../../shared/ui/toast.service';
 import {
@@ -98,6 +99,16 @@ describe('CustomerDetailComponent', () => {
         },
         { provide: AuthService, useValue: { isSuperAdmin: () => superAdmin } },
         { provide: CustomersService, useValue: customersSpy },
+        // Name lookup is exercised in facility-names.service.spec; here it just
+        // echoes the row snapshot so the labels stay the Georgian fixtures.
+        {
+          provide: FacilityNamesService,
+          useValue: {
+            ensure: () => undefined,
+            ensureFor: () => undefined,
+            label: (_id: string | undefined, fallback: string | undefined) => fallback ?? '',
+          },
+        },
         { provide: SsDialogService, useValue: dialogsSpy },
         {
           provide: SsToastService,

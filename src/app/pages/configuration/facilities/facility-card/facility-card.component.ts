@@ -17,6 +17,7 @@ import { FormsModule } from '@angular/forms';
 import { defaultIfEmpty, take } from 'rxjs';
 import { FacilityService } from '../../../../services/http-services/facility.service';
 import { tr } from '../../../../shared/i18n/lang';
+import { localizedName, localizedText } from '../../../../shared/i18n/localized';
 import { TPipe } from '../../../../shared/i18n/t.pipe';
 
 import { SsDialogService } from '../../../../shared/ui/dialog.service';
@@ -74,12 +75,24 @@ export class FacilityCardComponent implements OnChanges {
   readonly countryName = 'საქართველო';
 
   /**
-   * `tr()` on a confirm message plus the `{name}` fill-in: the facility name is
-   * DATA (never translated) and the placeholder keeps it wherever the translated
-   * sentence puts it.
+   * Operator CONTENT, not dictionary copy: an English session shows `nameEn` /
+   * `descriptionEn` when the operator filled them in, and the Georgian original
+   * otherwise. Read in the template so a language flip re-renders the card.
+   */
+  protected displayName(): string {
+    return localizedName(this.facility);
+  }
+
+  protected displayDescription(): string {
+    return localizedText(this.facility.description, this.facility.descriptionEn) ?? '';
+  }
+
+  /**
+   * `tr()` on a confirm message plus the `{name}` fill-in: the name is DATA, so
+   * the placeholder keeps it wherever the translated sentence puts it.
    */
   private withName(message: string): string {
-    return tr(message).replace('{name}', () => this.facility.name ?? '');
+    return tr(message).replace('{name}', () => this.displayName());
   }
 
   onToggleState(checked: boolean): void {

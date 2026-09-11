@@ -33,6 +33,7 @@ import {
 import { Facility } from '../../../shared/models/facility.model';
 import { Day, DAY_LABELS } from '../../../shared/enums/day.enum';
 import { tr } from '../../../shared/i18n/lang';
+import { localizedName, localizedText } from '../../../shared/i18n/localized';
 import { TPipe } from '../../../shared/i18n/t.pipe';
 
 import { SsToastService } from '../../../shared/ui/toast.service';
@@ -94,7 +95,9 @@ export class WorkingHoursAndPricesComponent implements OnInit {
   facilityLabel(f: Facility): string {
     // The facility's own name is DATA (never translated); only the fallback is UI
     // copy, translated at render time so a language flip re-renders the chip.
-    return f.name || f.description || tr('უსახელო ობიექტი');
+    return (
+      localizedName(f) || localizedText(f.description, f.descriptionEn) || tr('უსახელო ობიექტი')
+    );
   }
 
   // Picked holiday dates as sorted 'YYYY-MM-DD' strings; the server holiday

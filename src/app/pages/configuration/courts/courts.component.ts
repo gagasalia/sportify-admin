@@ -18,6 +18,7 @@ import { CourtFormComponent } from './court-form/court-form.component';
 import { CourtCardComponent } from './court-card/court-card.component';
 import { CommonModule } from '@angular/common';
 import { tr } from '../../../shared/i18n/lang';
+import { localizedName, localizedText } from '../../../shared/i18n/localized';
 import { TPipe } from '../../../shared/i18n/t.pipe';
 
 import { SsToastService } from '../../../shared/ui/toast.service';
@@ -58,7 +59,9 @@ export class CourtsComponent implements OnInit {
   facilityLabel(f: Facility): string {
     // The facility's own name is DATA (never translated); only the fallback is UI
     // copy, translated at render time so a language flip re-renders the chip.
-    return f.name || f.description || tr('უსახელო ობიექტი');
+    return (
+      localizedName(f) || localizedText(f.description, f.descriptionEn) || tr('უსახელო ობიექტი')
+    );
   }
 
   ngOnInit(): void {

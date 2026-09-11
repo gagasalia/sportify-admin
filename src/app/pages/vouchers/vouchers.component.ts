@@ -27,6 +27,7 @@ import { AcademyService } from '../../services/http-services/academy.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { TenantService } from '../../shared/services/tenant.service';
 import { liveLabels, tr } from '../../shared/i18n/lang';
+import { localizedName, localizedText } from '../../shared/i18n/localized';
 import { TPipe } from '../../shared/i18n/t.pipe';
 import { gelToTetri, tetriToGel } from '../../shared/utils/money.util';
 import { formatMemberId } from '../../shared/utils/member-id.util';
@@ -174,7 +175,9 @@ export class VouchersComponent implements OnInit {
   }
 
   facilityLabel(f: Facility): string {
-    return f.name || f.description || tr('უსახელო ობიექტი');
+    return (
+      localizedName(f) || localizedText(f.description, f.descriptionEn) || tr('უსახელო ობიექტი')
+    );
   }
 
   ngOnInit(): void {

@@ -40,7 +40,7 @@
             [attr.aria-checked]="selectedFacilityId() === facilityId(facility)"
             (click)="selectFacility(facilityId(facility))"
           >
-            {{ facility.name }}
+            {{ facilityLabel(facility) }}
           </button>
         }
       </div>

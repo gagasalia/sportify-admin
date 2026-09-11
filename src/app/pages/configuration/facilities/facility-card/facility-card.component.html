@@ -27,7 +27,7 @@
   <div class="relative h-68" style="background: var(--tui-background-neutral-1)">
     <img
       [src]="primaryPhoto"
-      [alt]="facility.description || '--'"
+      [alt]="displayDescription() || '--'"
       class="w-full h-full object-cover"
     />
     @if (hasMultiplePhotos) {
@@ -42,14 +42,14 @@
   <!-- Content Section -->
   <div class="p-4 flex flex-col flex-1">
     <h3 class="text-lg font-bold m-0 georgian-text h-7 line-clamp-1" lang="ka">
-      {{ facility.name || '--' }}
+      {{ displayName() || '--' }}
     </h3>
     <p
       class="text-sm m-0 leading-relaxed georgian-text h-10 line-clamp-2 mt-2 mb-3"
       lang="ka"
       style="color: var(--tui-text-secondary)"
     >
-      {{ facility.description || '--' }}
+      {{ displayDescription() || '--' }}
     </p>
 
     <button

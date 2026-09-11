@@ -35,7 +35,7 @@
                 <td>
                   <div class="font-medium whitespace-nowrap">{{ m.date }} · {{ m.startTime }}</div>
                   <div class="text-xs" style="color: var(--tui-text-secondary)">
-                    {{ m.facilityName }} @if (m.city) { · {{ m.city }} } · {{ m.durationMinutes }}
+                    {{ facilityLabel(m) }} @if (m.city) { · {{ m.city }} } · {{ m.durationMinutes }}
                     {{ 'წთ' | t }}
                   </div>
                 </td>
@@ -104,7 +104,7 @@
               <div class="min-w-0">
                 <h3 class="font-semibold truncate">{{ m.date }} · {{ m.startTime }}</h3>
                 <p class="text-sm truncate" style="color: var(--tui-text-secondary)">
-                  {{ m.facilityName }} · {{ m.ownerName || '—' }}
+                  {{ facilityLabel(m) }} · {{ m.ownerName || '—' }}
                 </p>
               </div>
               <span

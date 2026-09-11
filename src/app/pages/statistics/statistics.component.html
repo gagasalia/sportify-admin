@@ -73,7 +73,7 @@
         >
           <option value="">{{ 'ყველა ობიექტი' | t }}</option>
           @for (facility of facilities(); track facilityIdOf(facility)) {
-            <option [value]="facilityIdOf(facility)">{{ facility.name }}</option>
+            <option [value]="facilityIdOf(facility)">{{ facilityLabel(facility) }}</option>
           }
         </select>
       </label>
@@ -87,7 +87,7 @@
         >
           <option value="">{{ 'ყველა კორტი' | t }}</option>
           @for (court of courts(); track courtIdOf(court)) {
-            <option [value]="courtIdOf(court)">{{ court.name }}</option>
+            <option [value]="courtIdOf(court)">{{ courtLabel(court) }}</option>
           }
         </select>
       </label>
@@ -235,8 +235,8 @@
                   <tbody>
                     @for (row of data.courts; track row.courtId) {
                       <tr>
-                        <td class="georgian-text" lang="ka">{{ row.facilityName }}</td>
-                        <td class="georgian-text whitespace-nowrap" lang="ka">{{ row.courtName }}</td>
+                        <td class="georgian-text" lang="ka">{{ facilityLabelById(row.facilityId, row.facilityName) }}</td>
+                        <td class="georgian-text whitespace-nowrap" lang="ka">{{ localizedCourtName(row) }}</td>
                         <td class="ss-num">{{ hoursOf(row.bookedMinutes) }}</td>
                         <td class="ss-num">{{ hoursOf(row.blockedMinutes) }}</td>
                         <td class="ss-num">{{ hoursOf(row.availableMinutes) }}</td>
@@ -391,7 +391,7 @@
                   <tbody>
                     @for (row of data.perFacility; track row.facilityId) {
                       <tr>
-                        <td class="georgian-text" lang="ka">{{ row.facilityName }}</td>
+                        <td class="georgian-text" lang="ka">{{ facilityLabelById(row.facilityId, row.facilityName) }}</td>
                         <td class="ss-num">{{ num(row.total) }}</td>
                         <td class="ss-num">{{ num(row.cancelled) }}</td>
                         <td class="ss-num">{{ num(row.noShow) }}</td>

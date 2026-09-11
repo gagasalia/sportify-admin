@@ -53,6 +53,7 @@ import { ReservationListComponent } from './reservation-list/reservation-list.co
 import { bookingDisplayName, bookingPlayer } from './booking-display.util';
 import { TPipe } from '../../shared/i18n/t.pipe';
 import { isEnglish, liveList, tr } from '../../shared/i18n/lang';
+import { localizedName, localizedText } from '../../shared/i18n/localized';
 type CalendarTab = 'day' | 'week' | 'list';
 
 /** One chip on the horizontal date rail. */
@@ -156,8 +157,10 @@ export class ReservationsComponent implements OnInit {
       .filter((c) => c.activeState)
       .map((c) => ({
         id: c._id ?? c.id ?? '',
-        name: c.name,
-        label: c.name,
+        // Operator content: an English session reads `nameEn` when it exists.
+        // Inside a computed, so flipping the language re-labels the columns.
+        name: localizedName(c),
+        label: localizedName(c),
       }))
       .sort((a, b) => a.name.localeCompare(b.name)),
   );
@@ -219,7 +222,9 @@ export class ReservationsComponent implements OnInit {
   }
 
   facilityLabel(f: Facility): string {
-    return f.name || f.description || tr('უსახელო ობიექტი');
+    return (
+      localizedName(f) || localizedText(f.description, f.descriptionEn) || tr('უსახელო ობიექტი')
+    );
   }
 
   constructor() {

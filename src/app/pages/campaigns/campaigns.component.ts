@@ -17,6 +17,7 @@ import { CampaignService } from '../../services/http-services/campaign.service';
 import { AcademyService } from '../../services/http-services/academy.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { TenantService } from '../../shared/services/tenant.service';
+import { FacilityNamesService } from '../../shared/i18n/facility-names.service';
 import { Academy } from '../../shared/models/academy.model';
 import {
   CAMPAIGN_STATUS_CLASSES,
@@ -60,6 +61,7 @@ export class CampaignsComponent implements OnInit {
   private readonly academyService = inject(AcademyService);
   private readonly auth = inject(AuthService);
   private readonly tenant = inject(TenantService);
+  private readonly facilityNames = inject(FacilityNamesService);
   private readonly dialogs = inject(SsDialogService);
   private readonly alerts = inject(SsToastService);
   private readonly destroyRef = inject(DestroyRef);
@@ -99,6 +101,7 @@ export class CampaignsComponent implements OnInit {
         .subscribe((academies) => this.academies.set(academies));
     }
 
+    this.facilityNames.ensure();
     this.tenant
       .ensure()
       .pipe(takeUntilDestroyed(this.destroyRef))
@@ -115,6 +118,8 @@ export class CampaignsComponent implements OnInit {
 
   protected onAcademyChange(academyId: string): void {
     this.academyId.set(academyId);
+    // A superadmin switching academies needs that academy's names for the chips.
+    this.facilityNames.ensureFor(academyId);
     this.page.set(1);
     this.load();
   }
@@ -333,10 +338,11 @@ export class CampaignsComponent implements OnInit {
     if (c.facilityNames.length === 0) {
       return c.academy ? tr('ყველა მოედანი') : tr('პლატფორმა');
     }
-    if (c.facilityNames.length <= 2) {
-      return c.facilityNames.join(' · ');
+    const names = c.facilityNames.map((name, i) => this.facilityNames.label(c.facilities[i], name));
+    if (names.length <= 2) {
+      return names.join(' · ');
     }
-    return `${c.facilityNames[0]} +${c.facilityNames.length - 1}`;
+    return `${names[0]} +${names.length - 1}`;
   }
 
   /** 'DD.MM.YY – DD.MM.YY' publication window, or 'უვადო' when unbounded. */

@@ -18,6 +18,7 @@ import { SsDialogService } from '../../../../shared/ui/dialog.service';
 import { SsToastService } from '../../../../shared/ui/toast.service';
 import { SsConfirmComponent, SsConfirmData } from '../../../../shared/ui/confirm.component';
 import { tr } from '../../../../shared/i18n/lang';
+import { localizedName } from '../../../../shared/i18n/localized';
 import { TPipe } from '../../../../shared/i18n/t.pipe';
 @Component({
   selector: 'app-court-card',
@@ -89,9 +90,12 @@ export class CourtCardComponent {
     return this.court.activeState;
   }
 
-  /** Display label — the Georgian court name (matches the card title). */
-  private get courtLabel(): string {
-    return this.court.name;
+  /**
+   * Display label — `nameEn` in an English session when the operator filled it
+   * in, Georgian otherwise. Matches the card title and the confirm dialogs.
+   */
+  protected get courtLabel(): string {
+    return localizedName(this.court);
   }
 
   onToggleState(checked: boolean): void {

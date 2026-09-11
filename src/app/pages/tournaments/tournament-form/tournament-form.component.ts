@@ -18,6 +18,7 @@ import { Facility } from '../../../shared/models/facility.model';
 import { gelToTetri, tetriToGel } from '../../../shared/utils/money.util';
 
 import { liveLabels, tr } from '../../../shared/i18n/lang';
+import { localizedName } from '../../../shared/i18n/localized';
 import { TPipe } from '../../../shared/i18n/t.pipe';
 import { SsToastService } from '../../../shared/ui/toast.service';
 import { SS_DIALOG_CONTEXT, SsDialogContext } from '../../../shared/ui/dialog.service';
@@ -85,6 +86,12 @@ export class TournamentFormComponent implements OnInit {
   private readonly alerts = inject(SsToastService);
 
   protected readonly facilities = signal<Facility[]>([]);
+
+  /** Option label — the operator's English facility name when one exists. */
+  protected facilityLabel(facility: Facility): string {
+    return localizedName(facility);
+  }
+
   protected readonly isSaving = signal(false);
   /** Mirrors the `facility` control for the chip rail (OnPush-friendly). */
   protected readonly selectedFacilityId = signal<string>('');

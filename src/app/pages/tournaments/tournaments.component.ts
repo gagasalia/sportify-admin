@@ -27,6 +27,8 @@ import {
 import { RegistrationsDialogComponent } from './registrations-dialog.component';
 
 import { liveLabels, tr } from '../../shared/i18n/lang';
+import { FacilityNamesService } from '../../shared/i18n/facility-names.service';
+import { localizedName } from '../../shared/i18n/localized';
 import { TPipe } from '../../shared/i18n/t.pipe';
 import { SsToastService } from '../../shared/ui/toast.service';
 import { SsDialogService } from '../../shared/ui/dialog.service';
@@ -60,11 +62,23 @@ const STATUS_CLASSES: Record<TournamentStatus, string> = {
 })
 export class TournamentsComponent implements OnInit {
   private readonly tournamentService = inject(TournamentService);
+  private readonly facilityNames = inject(FacilityNamesService);
   private readonly dialogs = inject(SsDialogService);
   private readonly alerts = inject(SsToastService);
     private readonly destroyRef = inject(DestroyRef);
 
   protected readonly tournaments = signal<Tournament[]>([]);
+
+  /** Operator content: `nameEn` in an English session, Georgian otherwise. */
+  protected tournamentLabel(tournament: Tournament): string {
+    return localizedName(tournament);
+  }
+
+  /** Venue line: the live facility name, falling back to the row snapshot. */
+  protected facilityLabel(tournament: Tournament): string {
+    return this.facilityNames.label(tournament.facility, tournament.facilityName);
+  }
+
   protected readonly isLoading = signal(true);
   protected readonly isMobile = signal(window.innerWidth <= 768);
   protected readonly page = signal(1);
@@ -80,6 +94,7 @@ export class TournamentsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.facilityNames.ensure();
     this.load();
   }
 
@@ -152,7 +167,7 @@ export class TournamentsComponent implements OnInit {
       .open<void>(
         RegistrationsDialogComponent,
         {
-          label: `${tr('რეგისტრაციები')} · ${tournament.name}`,
+          label: `${tr('რეგისტრაციები')} · ${localizedName(tournament)}`,
           size: 'l',
           dismissible: true,
           closable: true,
@@ -168,7 +183,7 @@ export class TournamentsComponent implements OnInit {
       tournament,
       'published',
       tr('ტურნირის გამოქვეყნება'),
-      `${tr('გამოვაქვეყნოთ')} „${tournament.name}"? ${tr('ის ხილული გახდება მოთამაშეებისთვის და გაიხსნება რეგისტრაცია.')}`,
+      `${tr('გამოვაქვეყნოთ')} „${localizedName(tournament)}"? ${tr('ის ხილული გახდება მოთამაშეებისთვის და გაიხსნება რეგისტრაცია.')}`,
       tr('ტურნირი გამოქვეყნდა'),
     );
   }
@@ -178,7 +193,7 @@ export class TournamentsComponent implements OnInit {
       tournament,
       'completed',
       tr('ტურნირის დასრულება'),
-      `${tr('დავასრულოთ')} „${tournament.name}"?`,
+      `${tr('დავასრულოთ')} „${localizedName(tournament)}"?`,
       tr('ტურნირი დასრულდა'),
     );
   }
@@ -188,7 +203,7 @@ export class TournamentsComponent implements OnInit {
       tournament,
       'cancelled',
       tr('ტურნირის გაუქმება'),
-      `${tr('გავაუქმოთ')} „${tournament.name}"? ${tr('ბალანსით გადახდილი საფასურები ავტომატურად დაბრუნდება.')}`,
+      `${tr('გავაუქმოთ')} „${localizedName(tournament)}"? ${tr('ბალანსით გადახდილი საფასურები ავტომატურად დაბრუნდება.')}`,
       tr('ტურნირი გაუქმდა — გადახდილი საფასურები დაბრუნდა'),
     );
   }
@@ -199,7 +214,7 @@ export class TournamentsComponent implements OnInit {
         label: tr('ტურნირის წაშლა'),
         size: 's',
         data: {
-          content: `${tr('ნამდვილად წავშალოთ დრაფტი')} „${tournament.name}"?`,
+          content: `${tr('ნამდვილად წავშალოთ დრაფტი')} „${localizedName(tournament)}"?`,
           yes: tr('წაშლა'),
           no: tr('გაუქმება'),
         } as SsConfirmData,

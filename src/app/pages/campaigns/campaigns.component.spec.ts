@@ -9,6 +9,7 @@ import { CampaignService } from '../../services/http-services/campaign.service';
 import { AcademyService } from '../../services/http-services/academy.service';
 import { AuthService } from '../../shared/services/auth.service';
 import { TenantService } from '../../shared/services/tenant.service';
+import { FacilityNamesService } from '../../shared/i18n/facility-names.service';
 import { Campaign } from '../../shared/models/campaign.model';
 import { TPipe } from '../../shared/i18n/t.pipe';
 
@@ -72,6 +73,16 @@ describe('CampaignsComponent', () => {
         { provide: CampaignService, useValue: campaignSpy },
         { provide: AcademyService, useValue: academySpy },
         { provide: TenantService, useValue: tenantSpy },
+        // Name lookup is exercised in facility-names.service.spec; here it just
+        // echoes the row snapshot so the labels stay the Georgian fixtures.
+        {
+          provide: FacilityNamesService,
+          useValue: {
+            ensure: () => undefined,
+            ensureFor: () => undefined,
+            label: (_id: string | undefined, fallback: string | undefined) => fallback ?? '',
+          },
+        },
         { provide: AuthService, useValue: { isSuperAdmin: () => superAdmin } },
         { provide: SsDialogService, useValue: dialogSpy },
         { provide: SsToastService, useValue: alertSpy },

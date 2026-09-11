@@ -186,9 +186,9 @@
                     <td class="whitespace-nowrap">{{ row.date }}</td>
                     <td class="whitespace-nowrap">{{ row.start }}–{{ row.end }}</td>
                     <td class="text-sm">
-                      {{ row.facilityName || '—' }}
+                      {{ facilityLabel(row) || '—' }}
                       @if (row.courtName) {
-                        · {{ row.courtName }}
+                        · {{ localizedCourtName(row) }}
                       } @else if (row.courtNumber != null) {
                         · {{ 'კორტი' | t }} {{ row.courtNumber }}
                       }

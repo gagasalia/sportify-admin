@@ -28,6 +28,7 @@ import {
 } from '../../../shared/models/campaign.model';
 import { gelToTetri, tetriToGel } from '../../../shared/utils/money.util';
 import { tr } from '../../../shared/i18n/lang';
+import { localizedName } from '../../../shared/i18n/localized';
 import { TPipe } from '../../../shared/i18n/t.pipe';
 import { SsToastService } from '../../../shared/ui/toast.service';
 import { SS_DIALOG_CONTEXT, SsDialogContext } from '../../../shared/ui/dialog.service';
@@ -36,6 +37,8 @@ import { SS_DIALOG_CONTEXT, SsDialogContext } from '../../../shared/ui/dialog.se
 interface FacilityOption {
   _id: string;
   name: string;
+  /** RAW English name; the label picks a side at render time. */
+  nameEn?: string;
 }
 
 /** The raw shape of the campaign form (GEL at the edges, tetri on the wire). */
@@ -95,6 +98,12 @@ export class CampaignFormComponent implements OnInit {
 
   protected readonly academies = signal<Academy[]>([]);
   protected readonly facilities = signal<FacilityOption[]>([]);
+
+  /** Option label — the operator's English facility name when one exists. */
+  protected facilityLabel(facility: FacilityOption): string {
+    return localizedName(facility);
+  }
+
   protected readonly isSaving = signal(false);
 
   /** Mirrors of the controls the live preview + conditional fields read. */
@@ -255,7 +264,7 @@ export class CampaignFormComponent implements OnInit {
           this.facilities.set(
             facilities
               .filter((f) => !!f._id)
-              .map((f) => ({ _id: f._id as string, name: f.name ?? '—' })),
+              .map((f) => ({ _id: f._id as string, name: f.name ?? '—', nameEn: f.nameEn })),
           ),
         error: () => this.facilities.set([]),
       });

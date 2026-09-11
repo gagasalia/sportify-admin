@@ -24,6 +24,7 @@ import { MatchPlayersDialogComponent } from './match-players-dialog.component';
 
 import { liveLabels, tr } from '../../shared/i18n/lang';
 import { TPipe } from '../../shared/i18n/t.pipe';
+import { FacilityNamesService } from '../../shared/i18n/facility-names.service';
 import { SsToastService } from '../../shared/ui/toast.service';
 import { SsDialogService } from '../../shared/ui/dialog.service';
 import { SsConfirmComponent, SsConfirmData } from '../../shared/ui/confirm.component';
@@ -66,6 +67,7 @@ const CATEGORY_LABELS: Record<MatchCategory, string> = liveLabels({
 })
 export class MatchesComponent implements OnInit {
   private readonly matchService = inject(MatchService);
+  private readonly facilityNames = inject(FacilityNamesService);
   private readonly dialogs = inject(SsDialogService);
   private readonly alerts = inject(SsToastService);
     private readonly destroyRef = inject(DestroyRef);
@@ -86,7 +88,16 @@ export class MatchesComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.facilityNames.ensure();
     this.load();
+  }
+
+  /**
+   * Match rows carry a Georgian `facilityName` snapshot; resolve it to the
+   * operator's English name when the facility is still around.
+   */
+  protected facilityLabel(match: { facility?: string; facilityName?: string }): string {
+    return this.facilityNames.label(match.facility, match.facilityName);
   }
 
   protected onPageChange(page: number): void {
@@ -114,7 +125,7 @@ export class MatchesComponent implements OnInit {
       .open<void>(
         MatchPlayersDialogComponent,
         {
-          label: `${tr('მოთამაშეები')} · ${match.facilityName ?? ''} ${match.date} ${match.startTime}`,
+          label: `${tr('მოთამაშეები')} · ${this.facilityLabel(match)} ${match.date} ${match.startTime}`,
           size: 'l',
           dismissible: true,
           closable: true,
@@ -131,7 +142,7 @@ export class MatchesComponent implements OnInit {
         label: tr('თამაშის გაუქმება'),
         size: 's',
         data: {
-          content: `${tr('გავაუქმოთ')} ${match.date} ${match.startTime} ${tr('თამაში')} (${match.facilityName ?? ''})? ${tr('მოთამაშეები დაინახავენ რომ ადმინისტრაციამ გააუქმა.')}`,
+          content: `${tr('გავაუქმოთ')} ${match.date} ${match.startTime} ${tr('თამაში')} (${this.facilityLabel(match)})? ${tr('მოთამაშეები დაინახავენ რომ ადმინისტრაციამ გააუქმა.')}`,
           yes: tr('გაუქმება'),
           no: tr('არა'),
         } as SsConfirmData,

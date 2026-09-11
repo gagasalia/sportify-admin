@@ -12,6 +12,8 @@ import { DatePipe } from '@angular/common';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { filter, switchMap, take } from 'rxjs';
 import { liveLabels, tr } from '../../../shared/i18n/lang';
+import { FacilityNamesService } from '../../../shared/i18n/facility-names.service';
+import { localizedCourtName } from '../../../shared/i18n/localized';
 import { TPipe } from '../../../shared/i18n/t.pipe';
 import { CustomersService } from '../../../services/http-services/customers.service';
 import { AuthService } from '../../../shared/services/auth.service';
@@ -46,6 +48,7 @@ const BOOKINGS_PAGE_SIZE = 10;
 })
 export class CustomerDetailComponent implements OnInit {
   private readonly customersService = inject(CustomersService);
+  private readonly facilityNames = inject(FacilityNamesService);
   private readonly auth = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
   private readonly router = inject(Router);
@@ -57,6 +60,15 @@ export class CustomerDetailComponent implements OnInit {
 
   protected readonly id = signal<string>('');
   protected readonly detail = signal<CustomerDetail | null>(null);
+
+  /** Booking-row court name: the English snapshot in an English session. */
+  protected readonly localizedCourtName = localizedCourtName;
+
+  /** Booking-row venue: the live facility name, falling back to the snapshot. */
+  protected facilityLabel(row: { facility?: string; facilityName?: string }): string {
+    return this.facilityNames.label(row.facility, row.facilityName);
+  }
+
   protected readonly isLoading = signal(true);
   protected readonly hasError = signal(false);
 
