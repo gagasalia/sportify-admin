@@ -1,6 +1,16 @@
-import { ChangeDetectionStrategy, Component, HostListener, inject, signal } from '@angular/core';
-import { Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
-import { take } from 'rxjs';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  HostListener,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
+import { NgTemplateOutlet } from '@angular/common';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router, RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
+import { filter, take } from 'rxjs';
 import { I18nService } from '../shared/i18n/i18n.service';
 import { tr } from '../shared/i18n/lang';
 import { TPipe } from '../shared/i18n/t.pipe';
@@ -10,6 +20,9 @@ import { SsConfirmComponent, SsConfirmData } from '../shared/ui/confirm.componen
 import { SsDialogService } from '../shared/ui/dialog.service';
 import { SsThemeService } from '../shared/ui/theme.service';
 
+/** Routes that own a mobile tab of their own; everything else sits in the sheet. */
+const TAB_ROUTES = ['/reservations', '/statistics', '/customers'];
+
 /**
  * Authenticated application chrome: header, sidebar, mobile tab bar and the
  * dark-mode toggle. Rendered only behind the route-level `authGuard`, so the
@@ -18,13 +31,15 @@ import { SsThemeService } from '../shared/ui/theme.service';
  *
  * The chrome is plain kit markup (ss-* classes + `.ss-ic` mask icons); theming
  * runs through `SsThemeService`, which stamps `[tuiTheme]` on `<html>`.
- * Accordion groups auto-open when the current URL is inside their section; on
- * mobile the config / super-admin groups become bottom sheets over the tab bar.
+ * Accordion groups auto-open when the current URL is inside their section. The
+ * mobile bar carries only the three day-to-day destinations (reservations,
+ * statistics, customers) plus a "Menu" tab: everything else lives in a bottom
+ * sheet, so the bar never degrades into eight truncated labels.
  */
 @Component({
   selector: 'app-shell',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, TPipe],
+  imports: [NgTemplateOutlet, RouterOutlet, RouterLink, RouterLinkActive, TPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './shell.component.html',
   styleUrl: './shell.component.css',
@@ -51,12 +66,46 @@ export class ShellComponent {
   protected configOpen = signal(true);
   protected superOpen = signal(this.router.url.startsWith('/super-admin'));
 
-  /** Mobile bottom sheets (config / super-admin). */
-  protected configDropdownOpen = signal(false);
-  protected superAdminDropdownOpen = signal(false);
+  /** Mobile "Menu" sheet (everything not on the tab bar). */
+  protected menuOpen = signal(false);
+
+  /** Current URL, so the Menu tab can light up for the routes it hides. */
+  private readonly url = signal(this.router.url);
+
+  /** True while the open page is one of the sheet's destinations. */
+  protected readonly inMenuSection = computed(
+    () => !TAB_ROUTES.some((route) => this.url().startsWith(route)),
+  );
 
   constructor() {
     this.checkMobile();
+    this.router.events
+      .pipe(
+        filter((e): e is NavigationEnd => e instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe((e) => {
+        this.url.set(e.urlAfterRedirects);
+        // Back/forward also dismisses the sheet, not just taps on its tiles.
+        this.menuOpen.set(false);
+      });
+
+    // The sheet is modal: freeze the page behind it so a stray drag scrolls the
+    // menu rather than the list underneath.
+    effect(() => {
+      const open = this.menuOpen();
+      if (typeof document !== 'undefined') {
+        // Both elements: with `<html>` left scrollable the body rule alone does
+        // not stop the page from moving under the sheet.
+        document.documentElement.style.overflow = open ? 'hidden' : '';
+        document.body.style.overflow = open ? 'hidden' : '';
+      }
+    });
+  }
+
+  @HostListener('document:keydown.escape')
+  protected onEscape(): void {
+    this.closeMenu();
   }
 
   @HostListener('window:resize')
@@ -74,7 +123,7 @@ export class ShellComponent {
 
   /** Collapsed rail: clicking an accordion first re-expands the rail. */
   protected toggleConfig(): void {
-    if (!this.expanded()) {
+    if (!this.isMobile() && !this.expanded()) {
       this.expanded.set(true);
       this.configOpen.set(true);
       return;
@@ -83,7 +132,7 @@ export class ShellComponent {
   }
 
   protected toggleSuper(): void {
-    if (!this.expanded()) {
+    if (!this.isMobile() && !this.expanded()) {
       this.expanded.set(true);
       this.superOpen.set(true);
       return;
@@ -121,18 +170,11 @@ export class ShellComponent {
       });
   }
 
-  protected toggleConfigDropdown(): void {
-    this.superAdminDropdownOpen.set(false);
-    this.configDropdownOpen.update((open) => !open);
+  protected toggleMenu(): void {
+    this.menuOpen.update((open) => !open);
   }
 
-  protected toggleSuperDropdown(): void {
-    this.configDropdownOpen.set(false);
-    this.superAdminDropdownOpen.update((open) => !open);
-  }
-
-  protected closeSheets(): void {
-    this.configDropdownOpen.set(false);
-    this.superAdminDropdownOpen.set(false);
+  protected closeMenu(): void {
+    this.menuOpen.set(false);
   }
 }

@@ -62,6 +62,30 @@ describe('ShellComponent', () => {
     expect(navigateSpy).toHaveBeenCalledWith(['/login']);
   });
 
+  // The mobile bar hides most destinations behind the Menu sheet; while that
+  // sheet is up the page behind it must not scroll away under the user's drag.
+  it('the menu sheet locks and releases page scrolling', () => {
+    const fixture = TestBed.createComponent(ShellComponent);
+    const shell = fixture.componentInstance as unknown as {
+      toggleMenu(): void;
+      closeMenu(): void;
+      menuOpen(): boolean;
+    };
+    fixture.detectChanges();
+
+    shell.toggleMenu();
+    fixture.detectChanges();
+    expect(shell.menuOpen()).toBeTrue();
+    expect(document.body.style.overflow).toBe('hidden');
+    expect(document.documentElement.style.overflow).toBe('hidden');
+
+    shell.closeMenu();
+    fixture.detectChanges();
+    expect(shell.menuOpen()).toBeFalse();
+    expect(document.body.style.overflow).toBe('');
+    expect(document.documentElement.style.overflow).toBe('');
+  });
+
   it('declined signOut leaves the session untouched', () => {
     dialogStub.open.and.returnValue(of(false));
     const router = TestBed.inject(Router);

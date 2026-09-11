@@ -74,204 +74,205 @@
   </button>
 </header>
 
+<!--
+  One nav definition, two hosts: the desktop rail and the mobile menu sheet
+  render the same list, so a destination added here appears in both. Links call
+  closeMenu(), a no-op on desktop where the sheet never opens.
+-->
+<ng-template #navList>
+  <div class="nav-group">
+    <button automation-id="setting" class="nav-item" type="button" (click)="toggleConfig()">
+      <i class="ss-ic nav-ic" style="--ss-ic: url('assets/taiga-ui/icons/settings.svg')"></i>
+      <span lang="ka" class="georgian-text nav-label">{{ 'კონფიგურაცია' | t }}</span>
+      <i
+        class="ss-ic nav-caret"
+        [class.is-open]="configOpen()"
+        style="--ss-ic: url('assets/taiga-ui/icons/chevron-down.svg')"
+      ></i>
+    </button>
+    @if (configOpen() && (isMobile() || expanded())) {
+      <a
+        class="nav-item nav-sub"
+        routerLink="/configuration/academy"
+        routerLinkActive="is-active"
+        (click)="closeMenu()"
+      >
+        <i class="ss-ic nav-ic" style="--ss-ic: url('assets/taiga-ui/icons/landmark.svg')"></i>
+        <span lang="ka" class="georgian-text nav-label">{{ 'აკადემია' | t }}</span>
+      </a>
+      <a
+        class="nav-item nav-sub"
+        routerLink="/configuration/facilities"
+        routerLinkActive="is-active"
+        (click)="closeMenu()"
+      >
+        <i class="ss-ic nav-ic" style="--ss-ic: url('assets/taiga-ui/icons/map-pin.svg')"></i>
+        <span lang="ka" class="georgian-text nav-label">{{ 'ობიექტები' | t }}</span>
+      </a>
+      <a
+        class="nav-item nav-sub"
+        routerLink="/configuration/courts"
+        routerLinkActive="is-active"
+        (click)="closeMenu()"
+      >
+        <i
+          class="ss-ic nav-ic"
+          style="--ss-ic: url('assets/taiga-ui/icons/table-cells-merge.svg')"
+        ></i>
+        <span lang="ka" class="georgian-text nav-label">{{ 'კორტები' | t }}</span>
+      </a>
+      <a
+        class="nav-item nav-sub"
+        routerLink="/configuration/working-hours"
+        routerLinkActive="is-active"
+        (click)="closeMenu()"
+      >
+        <i class="ss-ic nav-ic" style="--ss-ic: url('assets/taiga-ui/icons/clock.svg')"></i>
+        <span lang="ka" class="georgian-text nav-label">{{ 'საათები და ფასები' | t }}</span>
+      </a>
+    }
+  </div>
+
+  <div class="nav-group">
+    <a
+      automation-id="reservations"
+      class="nav-item"
+      routerLink="/reservations"
+      routerLinkActive="is-active"
+      (click)="closeMenu()"
+    >
+      <i class="ss-ic nav-ic" style="--ss-ic: url('assets/taiga-ui/icons/calendar-check.svg')"></i>
+      <span lang="ka" class="georgian-text nav-label">{{ 'ჯავშნები' | t }}</span>
+    </a>
+    <a
+      automation-id="vouchers"
+      class="nav-item"
+      routerLink="/vouchers"
+      routerLinkActive="is-active"
+      (click)="closeMenu()"
+    >
+      <i class="ss-ic nav-ic" style="--ss-ic: url('assets/taiga-ui/icons/ticket.svg')"></i>
+      <span lang="ka" class="georgian-text nav-label">{{ 'ვაუჩერები' | t }}</span>
+    </a>
+    <a
+      automation-id="promocodes"
+      class="nav-item"
+      routerLink="/promocodes"
+      routerLinkActive="is-active"
+      (click)="closeMenu()"
+    >
+      <i class="ss-ic nav-ic" style="--ss-ic: url('assets/taiga-ui/icons/percent.svg')"></i>
+      <span lang="ka" class="georgian-text nav-label">{{ 'პრომოკოდები' | t }}</span>
+    </a>
+    <a
+      automation-id="campaigns"
+      class="nav-item"
+      routerLink="/campaigns"
+      routerLinkActive="is-active"
+      (click)="closeMenu()"
+    >
+      <i class="ss-ic nav-ic" style="--ss-ic: url('assets/taiga-ui/icons/rocket.svg')"></i>
+      <span lang="ka" class="georgian-text nav-label">{{ 'კამპანიები' | t }}</span>
+    </a>
+    <a
+      automation-id="tournaments"
+      class="nav-item"
+      routerLink="/tournaments"
+      routerLinkActive="is-active"
+      (click)="closeMenu()"
+    >
+      <i class="ss-ic nav-ic" style="--ss-ic: url('assets/taiga-ui/icons/trophy.svg')"></i>
+      <span lang="ka" class="georgian-text nav-label">{{ 'ტურნირები' | t }}</span>
+    </a>
+    <a
+      automation-id="matches"
+      class="nav-item"
+      routerLink="/matches"
+      routerLinkActive="is-active"
+      (click)="closeMenu()"
+    >
+      <i class="ss-ic nav-ic" style="--ss-ic: url('assets/taiga-ui/icons/users.svg')"></i>
+      <span lang="ka" class="georgian-text nav-label">{{ 'თამაშები' | t }}</span>
+    </a>
+    <a
+      automation-id="statistics"
+      class="nav-item"
+      routerLink="/statistics"
+      routerLinkActive="is-active"
+      (click)="closeMenu()"
+    >
+      <i class="ss-ic nav-ic" style="--ss-ic: url('assets/taiga-ui/icons/chart-column.svg')"></i>
+      <span lang="ka" class="georgian-text nav-label">{{ 'სტატისტიკა' | t }}</span>
+    </a>
+    <a
+      automation-id="customers"
+      class="nav-item"
+      routerLink="/customers"
+      routerLinkActive="is-active"
+      (click)="closeMenu()"
+    >
+      <i class="ss-ic nav-ic" style="--ss-ic: url('assets/taiga-ui/icons/user-round.svg')"></i>
+      <span lang="ka" class="georgian-text nav-label">{{ 'მომხმარებლები' | t }}</span>
+    </a>
+  </div>
+
+  @if (isSuperAdmin()) {
+    <div class="nav-group">
+      <button automation-id="super-admin" class="nav-item" type="button" (click)="toggleSuper()">
+        <i class="ss-ic nav-ic" style="--ss-ic: url('assets/taiga-ui/icons/shield.svg')"></i>
+        <span class="nav-label">Super Admin</span>
+        <i
+          class="ss-ic nav-caret"
+          [class.is-open]="superOpen()"
+          style="--ss-ic: url('assets/taiga-ui/icons/chevron-down.svg')"
+        ></i>
+      </button>
+      @if (superOpen() && (isMobile() || expanded())) {
+        <a
+          class="nav-item nav-sub"
+          routerLink="/super-admin/academies-management"
+          routerLinkActive="is-active"
+          (click)="closeMenu()"
+        >
+          <i class="ss-ic nav-ic" style="--ss-ic: url('assets/taiga-ui/icons/building-2.svg')"></i>
+          <span lang="ka" class="georgian-text nav-label">{{ 'აკადემიების მართვა' | t }}</span>
+        </a>
+        <a
+          class="nav-item nav-sub"
+          routerLink="/super-admin/user-management"
+          routerLinkActive="is-active"
+          (click)="closeMenu()"
+        >
+          <i class="ss-ic nav-ic" style="--ss-ic: url('assets/taiga-ui/icons/users.svg')"></i>
+          <span lang="ka" class="georgian-text nav-label">{{ 'იუზერები' | t }}</span>
+        </a>
+      }
+    </div>
+  }
+</ng-template>
+
 <div class="shell-body">
   <!-- Desktop Sidebar -->
   @if (!isMobile()) {
     <aside class="shell-aside" [class.is-collapsed]="!expanded()">
       <nav class="aside-nav">
-        <div class="aside-group">
-          <button
-            automation-id="setting"
-            class="aside-item"
-            type="button"
-            (click)="toggleConfig()"
-          >
-            <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/settings.svg')"></i>
-            <span lang="ka" class="georgian-text aside-label">{{ 'კონფიგურაცია' | t }}</span>
-            <i
-              class="ss-ic aside-caret"
-              [class.is-open]="configOpen()"
-              style="--ss-ic: url('assets/taiga-ui/icons/chevron-down.svg')"
-            ></i>
-          </button>
-          @if (configOpen() && expanded()) {
-            <a
-              class="aside-item aside-sub"
-              routerLink="/configuration/academy"
-              routerLinkActive="is-active"
-            >
-              <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/landmark.svg')"></i>
-              <span lang="ka" class="georgian-text aside-label">{{ 'აკადემია' | t }}</span>
-            </a>
-            <a
-              class="aside-item aside-sub"
-              routerLink="/configuration/facilities"
-              routerLinkActive="is-active"
-            >
-              <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/map-pin.svg')"></i>
-              <span lang="ka" class="georgian-text aside-label">{{ 'ობიექტები' | t }}</span>
-            </a>
-            <a
-              class="aside-item aside-sub"
-              routerLink="/configuration/courts"
-              routerLinkActive="is-active"
-            >
-              <i
-                class="ss-ic aside-ic"
-                style="--ss-ic: url('assets/taiga-ui/icons/table-cells-merge.svg')"
-              ></i>
-              <span lang="ka" class="georgian-text aside-label">{{ 'კორტები' | t }}</span>
-            </a>
-            <a
-              class="aside-item aside-sub"
-              routerLink="/configuration/working-hours"
-              routerLinkActive="is-active"
-            >
-              <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/clock.svg')"></i>
-              <span lang="ka" class="georgian-text aside-label">{{ 'საათები და ფასები' | t }}</span>
-            </a>
-          }
-        </div>
-
-        <div class="aside-group">
-          <a
-            automation-id="reservations"
-            class="aside-item"
-            routerLink="/reservations"
-            routerLinkActive="is-active"
-          >
-            <i
-              class="ss-ic aside-ic"
-              style="--ss-ic: url('assets/taiga-ui/icons/calendar-check.svg')"
-            ></i>
-            <span lang="ka" class="georgian-text aside-label">{{ 'ჯავშნები' | t }}</span>
-          </a>
-          <a
-            automation-id="vouchers"
-            class="aside-item"
-            routerLink="/vouchers"
-            routerLinkActive="is-active"
-          >
-            <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/ticket.svg')"></i>
-            <span lang="ka" class="georgian-text aside-label">{{ 'ვაუჩერები' | t }}</span>
-          </a>
-          <a
-            automation-id="promocodes"
-            class="aside-item"
-            routerLink="/promocodes"
-            routerLinkActive="is-active"
-          >
-            <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/percent.svg')"></i>
-            <span lang="ka" class="georgian-text aside-label">{{ 'პრომოკოდები' | t }}</span>
-          </a>
-          <a
-            automation-id="campaigns"
-            class="aside-item"
-            routerLink="/campaigns"
-            routerLinkActive="is-active"
-          >
-            <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/rocket.svg')"></i>
-            <span lang="ka" class="georgian-text aside-label">{{ 'კამპანიები' | t }}</span>
-          </a>
-          <a
-            automation-id="tournaments"
-            class="aside-item"
-            routerLink="/tournaments"
-            routerLinkActive="is-active"
-          >
-            <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/trophy.svg')"></i>
-            <span lang="ka" class="georgian-text aside-label">{{ 'ტურნირები' | t }}</span>
-          </a>
-          <a
-            automation-id="matches"
-            class="aside-item"
-            routerLink="/matches"
-            routerLinkActive="is-active"
-          >
-            <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/users.svg')"></i>
-            <span lang="ka" class="georgian-text aside-label">{{ 'თამაშები' | t }}</span>
-          </a>
-          <a
-            automation-id="statistics"
-            class="aside-item"
-            routerLink="/statistics"
-            routerLinkActive="is-active"
-          >
-            <i
-              class="ss-ic aside-ic"
-              style="--ss-ic: url('assets/taiga-ui/icons/chart-column.svg')"
-            ></i>
-            <span lang="ka" class="georgian-text aside-label">{{ 'სტატისტიკა' | t }}</span>
-          </a>
-          <a
-            automation-id="customers"
-            class="aside-item"
-            routerLink="/customers"
-            routerLinkActive="is-active"
-          >
-            <i
-              class="ss-ic aside-ic"
-              style="--ss-ic: url('assets/taiga-ui/icons/user-round.svg')"
-            ></i>
-            <span lang="ka" class="georgian-text aside-label">{{ 'მომხმარებლები' | t }}</span>
-          </a>
-        </div>
-
-        @if (isSuperAdmin()) {
-          <div class="aside-group">
-            <button
-              automation-id="super-admin"
-              class="aside-item"
-              type="button"
-              (click)="toggleSuper()"
-            >
-              <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/shield.svg')"></i>
-              <span lang="ka" class="georgian-text aside-label">Super Admin</span>
-              <i
-                class="ss-ic aside-caret"
-                [class.is-open]="superOpen()"
-                style="--ss-ic: url('assets/taiga-ui/icons/chevron-down.svg')"
-              ></i>
-            </button>
-            @if (superOpen() && expanded()) {
-              <a
-                class="aside-item aside-sub"
-                routerLink="/super-admin/academies-management"
-                routerLinkActive="is-active"
-              >
-                <i
-                  class="ss-ic aside-ic"
-                  style="--ss-ic: url('assets/taiga-ui/icons/building-2.svg')"
-                ></i>
-                <span lang="ka" class="georgian-text aside-label">{{ 'აკადემიების მართვა' | t }}</span>
-              </a>
-              <a
-                class="aside-item aside-sub"
-                routerLink="/super-admin/user-management"
-                routerLinkActive="is-active"
-              >
-                <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/users.svg')"></i>
-                <span lang="ka" class="georgian-text aside-label">{{ 'იუზერები' | t }}</span>
-              </a>
-            }
-          </div>
-        }
+        <ng-container [ngTemplateOutlet]="navList" />
       </nav>
 
       <footer class="aside-foot">
-        <button class="aside-item" type="button" (click)="handleToggle()">
+        <button class="nav-item" type="button" (click)="handleToggle()">
           @if (expanded()) {
             <i
-              class="ss-ic aside-ic"
+              class="ss-ic nav-ic"
               style="--ss-ic: url('assets/taiga-ui/icons/chevron-left.svg')"
             ></i>
           } @else {
             <i
-              class="ss-ic aside-ic"
+              class="ss-ic nav-ic"
               style="--ss-ic: url('assets/taiga-ui/icons/chevron-right.svg')"
             ></i>
           }
-          <span lang="ka" class="georgian-text aside-label">
+          <span lang="ka" class="georgian-text nav-label">
             {{ (expanded() ? 'დახურვა' : 'გაფართოება') | t }}
           </span>
         </button>
@@ -288,131 +289,68 @@
   </main>
 </div>
 
-<!-- Mobile TabBar + bottom sheets -->
+<!-- Mobile chrome: three primary tabs + a "Menu" sheet carrying the full nav -->
 @if (isMobile()) {
-  @if (configDropdownOpen() || superAdminDropdownOpen()) {
-    <div class="sheet-backdrop" (click)="closeSheets()"></div>
-  }
+  @if (menuOpen()) {
+    <div class="sheet-backdrop" (click)="closeMenu()"></div>
 
-  @if (configDropdownOpen()) {
-    <div class="tab-sheet" role="menu">
-      <a
-        class="sheet-item"
-        role="menuitem"
-        routerLink="/configuration/academy"
-        (click)="closeSheets()"
-      >
-        <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/landmark.svg')"></i>
-        <span lang="ka" class="georgian-text">{{ 'აკადემია' | t }}</span>
-      </a>
-      <a
-        class="sheet-item"
-        role="menuitem"
-        routerLink="/configuration/facilities"
-        (click)="closeSheets()"
-      >
-        <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/map-pin.svg')"></i>
-        <span lang="ka" class="georgian-text">{{ 'ობიექტები' | t }}</span>
-      </a>
-      <a
-        class="sheet-item"
-        role="menuitem"
-        routerLink="/configuration/courts"
-        (click)="closeSheets()"
-      >
-        <i
-          class="ss-ic aside-ic"
-          style="--ss-ic: url('assets/taiga-ui/icons/table-cells-merge.svg')"
-        ></i>
-        <span lang="ka" class="georgian-text">{{ 'კორტები' | t }}</span>
-      </a>
-      <a
-        class="sheet-item"
-        role="menuitem"
-        routerLink="/configuration/working-hours"
-        (click)="closeSheets()"
-      >
-        <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/clock.svg')"></i>
-        <span lang="ka" class="georgian-text">{{ 'საათები და ფასები' | t }}</span>
-      </a>
-    </div>
-  }
+    <div class="menu-sheet" role="dialog" aria-modal="true" [attr.aria-label]="'მენიუ' | t">
+      <div class="menu-head">
+        <span lang="ka" class="georgian-text menu-title">{{ 'მენიუ' | t }}</span>
+        <button
+          class="menu-close"
+          type="button"
+          (click)="closeMenu()"
+          [attr.aria-label]="'დახურვა' | t"
+        >
+          <i class="ss-ic" style="--ss-ic: url('assets/taiga-ui/icons/x.svg')"></i>
+        </button>
+      </div>
 
-  @if (superAdminDropdownOpen()) {
-    <div class="tab-sheet" role="menu">
-      <a
-        class="sheet-item"
-        role="menuitem"
-        routerLink="/super-admin/academies-management"
-        (click)="closeSheets()"
-      >
-        <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/building-2.svg')"></i>
-        <span lang="ka" class="georgian-text">{{ 'აკადემიების მართვა' | t }}</span>
-      </a>
-      <a
-        class="sheet-item"
-        role="menuitem"
-        routerLink="/super-admin/user-management"
-        (click)="closeSheets()"
-      >
-        <i class="ss-ic aside-ic" style="--ss-ic: url('assets/taiga-ui/icons/users.svg')"></i>
-        <span lang="ka" class="georgian-text">{{ 'იუზერები' | t }}</span>
-      </a>
+      <nav class="menu-nav">
+        <ng-container [ngTemplateOutlet]="navList" />
+      </nav>
     </div>
   }
 
   <nav class="tab-bar">
-    <button
+    <a
+      automation-id="tab-reservations"
       class="tab-item"
-      type="button"
-      [class.is-active]="configDropdownOpen()"
-      (click)="toggleConfigDropdown()"
+      routerLink="/reservations"
+      routerLinkActive="is-active"
     >
-      <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/settings.svg')"></i>
-      <span lang="ka" class="georgian-text">{{ 'კონფიგ.' | t }}</span>
-    </button>
-    <a class="tab-item" routerLink="/reservations" routerLinkActive="is-active">
       <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/calendar-check.svg')"></i>
       <span lang="ka" class="georgian-text">{{ 'ჯავშნები' | t }}</span>
     </a>
-    <a class="tab-item" routerLink="/vouchers" routerLinkActive="is-active">
-      <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/ticket.svg')"></i>
-      <span lang="ka" class="georgian-text">{{ 'ვაუჩერები' | t }}</span>
-    </a>
-    <a class="tab-item" routerLink="/promocodes" routerLinkActive="is-active">
-      <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/percent.svg')"></i>
-      <span lang="ka" class="georgian-text">{{ 'პრომო' | t }}</span>
-    </a>
-    <a class="tab-item" routerLink="/campaigns" routerLinkActive="is-active">
-      <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/rocket.svg')"></i>
-      <span lang="ka" class="georgian-text">{{ 'კამპან.' | t }}</span>
-    </a>
-    <a class="tab-item" routerLink="/tournaments" routerLinkActive="is-active">
-      <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/trophy.svg')"></i>
-      <span lang="ka" class="georgian-text">{{ 'ტურნირები' | t }}</span>
-    </a>
-    <a class="tab-item" routerLink="/matches" routerLinkActive="is-active">
-      <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/users.svg')"></i>
-      <span lang="ka" class="georgian-text">{{ 'თამაშები' | t }}</span>
-    </a>
-    <a class="tab-item" routerLink="/statistics" routerLinkActive="is-active">
+    <a
+      automation-id="tab-statistics"
+      class="tab-item"
+      routerLink="/statistics"
+      routerLinkActive="is-active"
+    >
       <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/chart-column.svg')"></i>
-      <span lang="ka" class="georgian-text">{{ 'სტატ.' | t }}</span>
+      <span lang="ka" class="georgian-text">{{ 'სტატისტიკა' | t }}</span>
     </a>
-    <a class="tab-item" routerLink="/customers" routerLinkActive="is-active">
+    <a
+      automation-id="tab-customers"
+      class="tab-item"
+      routerLink="/customers"
+      routerLinkActive="is-active"
+    >
       <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/user-round.svg')"></i>
-      <span lang="ka" class="georgian-text">{{ 'მომხმ.' | t }}</span>
+      <span lang="ka" class="georgian-text">{{ 'კლიენტები' | t }}</span>
     </a>
-    @if (isSuperAdmin()) {
-      <button
-        class="tab-item"
-        type="button"
-        [class.is-active]="superAdminDropdownOpen()"
-        (click)="toggleSuperDropdown()"
-      >
-        <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/shield.svg')"></i>
-        <span lang="ka" class="georgian-text">Super</span>
-      </button>
-    }
+    <button
+      automation-id="tab-menu"
+      class="tab-item"
+      type="button"
+      [class.is-active]="menuOpen() || inMenuSection()"
+      [attr.aria-expanded]="menuOpen()"
+      (click)="toggleMenu()"
+    >
+      <i class="ss-ic tab-ic" style="--ss-ic: url('assets/taiga-ui/icons/layout-grid.svg')"></i>
+      <span lang="ka" class="georgian-text">{{ 'მენიუ' | t }}</span>
+    </button>
   </nav>
 }

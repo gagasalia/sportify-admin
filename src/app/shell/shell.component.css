@@ -65,7 +65,7 @@
 }
 @media (max-width: 768px) {
   .shell-main {
-    padding: 8px 16px 104px; /* clear the fixed bottom tab bar */
+    padding: 8px 16px 92px; /* clear the fixed bottom tab bar */
   }
 }
 
@@ -92,13 +92,13 @@
   flex-direction: column;
   gap: 2px;
 }
-.aside-group {
+.nav-group {
   display: flex;
   flex-direction: column;
   gap: 2px;
   margin-bottom: 14px;
 }
-.aside-item {
+.nav-item {
   display: flex;
   align-items: center;
   gap: 11px;
@@ -120,38 +120,38 @@
     background var(--dur-2) var(--ease),
     color var(--dur-2) var(--ease);
 }
-.aside-item:hover {
+.nav-item:hover {
   background: var(--surface-2);
   color: var(--text);
 }
-.aside-item.is-active {
+.nav-item.is-active {
   background: var(--accent-soft);
   color: var(--tui-text-action);
 }
-.aside-ic {
+.nav-ic {
   flex: 0 0 auto;
   color: inherit;
   opacity: 0.85;
 }
-.aside-item.is-active .aside-ic {
+.nav-item.is-active .nav-ic {
   opacity: 1;
 }
-.aside-label {
+.nav-label {
   flex: 1 1 auto;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.aside-caret {
+.nav-caret {
   flex: 0 0 auto;
   width: 14px;
   height: 14px;
   color: var(--text-faint);
   transition: transform var(--dur-2) var(--ease);
 }
-.aside-caret.is-open {
+.nav-caret.is-open {
   transform: rotate(180deg);
 }
-.aside-sub {
+.nav-sub {
   min-height: 36px;
   padding-left: 38px;
   font-size: 13px;
@@ -163,16 +163,16 @@
 }
 
 /* Collapsed rail: icons only. */
-.shell-aside.is-collapsed .aside-label,
-.shell-aside.is-collapsed .aside-caret {
+.shell-aside.is-collapsed .nav-label,
+.shell-aside.is-collapsed .nav-caret {
   display: none;
 }
-.shell-aside.is-collapsed .aside-item {
+.shell-aside.is-collapsed .nav-item {
   justify-content: center;
   padding: 9px 0;
 }
 
-/* ── Mobile tab bar + sheets — glass, player-app style ───────────────────── */
+/* ── Mobile tab bar — 4 roomy targets, no truncated labels ───────────────── */
 .tab-bar {
   position: fixed;
   bottom: 0;
@@ -181,7 +181,8 @@
   z-index: 30;
   display: flex;
   align-items: stretch;
-  padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+  gap: 2px;
+  padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
   background: var(--glass);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
@@ -194,32 +195,50 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 3px;
-  padding: 5px 2px;
+  gap: 4px;
+  min-height: 52px;
+  padding: 6px 4px;
   border: none;
   border-radius: var(--r-md);
   background: transparent;
   color: var(--text-faint);
   font: inherit;
-  font-size: 10.5px;
+  font-size: 11px;
   font-weight: 600;
+  letter-spacing: -0.01em;
   text-decoration: none;
   cursor: pointer;
   white-space: nowrap;
   overflow: hidden;
-  transition: color var(--dur-2) var(--ease);
+  transition:
+    color var(--dur-2) var(--ease),
+    background var(--dur-2) var(--ease);
+}
+.tab-item > span {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 .tab-item.is-active {
+  background: var(--accent-soft);
   color: var(--tui-text-action);
 }
 .tab-ic {
-  width: 18px;
-  height: 18px;
+  width: 20px;
+  height: 20px;
   transition: transform var(--dur-2) var(--ease-emph);
 }
 .tab-item.is-active .tab-ic {
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
+/* Narrow phones: drop a notch of type before anything can clip. */
+@media (max-width: 359px) {
+  .tab-item {
+    font-size: 10px;
+  }
+}
+
+/* ── Mobile menu sheet — everything the bar no longer carries ─────────────── */
 .sheet-backdrop {
   position: fixed;
   inset: 0;
@@ -228,38 +247,93 @@
   backdrop-filter: blur(2px);
   animation: ss-fade-in var(--dur-2) var(--ease) both;
 }
-.tab-sheet {
+.menu-sheet {
   position: fixed;
-  left: 12px;
-  right: 12px;
-  bottom: calc(76px + env(safe-area-inset-bottom));
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 32;
   display: flex;
   flex-direction: column;
-  gap: 2px;
-  padding: 8px;
-  border-radius: var(--r-xl);
+  max-height: 82vh;
+  padding: 6px 12px calc(14px + env(safe-area-inset-bottom));
+  border-radius: var(--r-xl) var(--r-xl) 0 0;
   background: var(--bg-2);
-  border: 1px solid var(--hairline-2);
+  border-top: 1px solid var(--hairline-2);
   box-shadow: var(--shadow-lg);
-  animation: ss-modal-pop var(--dur-2) var(--ease-emph) both;
+  animation: ss-sheet-up var(--dur-2) var(--ease-emph) both;
 }
-.sheet-item {
+@keyframes ss-sheet-up {
+  from {
+    transform: translateY(14px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+/* Grab handle — signals "swipe/tap away" without a whole gesture layer. */
+.menu-sheet::before {
+  content: '';
+  flex: 0 0 auto;
+  width: 38px;
+  height: 4px;
+  margin: 2px auto 6px;
+  border-radius: 999px;
+  background: var(--hairline-2);
+}
+.menu-head {
+  flex: 0 0 auto;
   display: flex;
   align-items: center;
-  gap: 11px;
-  min-height: 44px;
-  padding: 11px 12px;
-  border-radius: var(--r-md);
+  justify-content: space-between;
+  padding: 2px 2px 8px;
+}
+.menu-title {
+  font-size: 16px;
+  font-weight: 700;
   color: var(--text);
-  font-size: 14px;
-  font-weight: 500;
-  text-decoration: none;
-  transition: background var(--dur-2) var(--ease);
 }
-.sheet-item:hover {
+.menu-close {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
   background: var(--surface-2);
-}
-.sheet-item .aside-ic {
   color: var(--text-muted);
+  cursor: pointer;
+}
+.menu-close:hover {
+  color: var(--text);
+}
+/* The sheet hosts the same nav as the rail, sized up for thumbs. */
+.menu-nav {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+.menu-nav .nav-group {
+  margin-bottom: 10px;
+}
+.menu-nav .nav-item {
+  min-height: 48px;
+  padding: 12px;
+  font-size: 15px;
+}
+.menu-nav .nav-sub {
+  min-height: 44px;
+  padding-left: 42px;
+  font-size: 14px;
+}
+.menu-nav .nav-ic {
+  width: 20px;
+  height: 20px;
 }
